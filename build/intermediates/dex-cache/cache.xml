@@ -12,21 +12,21 @@
     </item>
     <item
         is-multidex="true"
+        jar="C:\Users\Fernando\Desktop\AndroidStudioProjects\Blackout\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="958f67f8be2df308e82fc077c307114ad001bff7">
+        <dex dex="C:\Users\Fernando\Desktop\AndroidStudioProjects\Blackout\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_c4d2416bdc4711d1e66ff41b3ffe86e176d3b8a3\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="C:\Users\Fernando\.android\build-cache\baa50ff515559a53b232c56db0c9ed898f34a8f3\output\jars\classes.jar"
         jumboMode="true"
         optimize="true"
         revision="26.0.0"
         sha1="5326d9a850d491714fef8cbfaa9ea3416f0bf0d2">
         <dex dex="C:\Users\Fernando\Desktop\AndroidStudioProjects\Blackout\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_5bf7187387f0f11251d27215779621a27bae61ae\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\Fernando\Desktop\AndroidStudioProjects\Blackout\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="26.0.0"
-        sha1="920a3fcf59a3d852ed3684b7b17c3e1b3c69ecf6">
-        <dex dex="C:\Users\Fernando\Desktop\AndroidStudioProjects\Blackout\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_c4d2416bdc4711d1e66ff41b3ffe86e176d3b8a3\classes.dex" />
     </item>
     <item
         is-multidex="true"
