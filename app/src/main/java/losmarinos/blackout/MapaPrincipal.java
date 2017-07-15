@@ -13,10 +13,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.httprequest.HttpRequest;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 
 
-public class MapaPrincipal extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+public class MapaPrincipal extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
+
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +42,11 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+                // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         this.buscarPelicula();
     }
@@ -72,11 +86,22 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         return true;
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Add a marker in Sydney and move the camera
+        LatLng bsas = new LatLng(-34.609069, -58.438683);
+        mMap.addMarker(new MarkerOptions().position(bsas).title("Marcador en Buenos Aires"));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(bsas, 11.0f));
+
+    }
+
     public void buscarPelicula() {
         String titulo = "The Dark Knight";
         String url = String.format(
                 "http://www.omdbapi.com/?t=The+Dark+Knight", titulo);
-        new LoadFilmTask().execute(url);
+        new ConsultorAPI().execute(url);
     }
 
 }
