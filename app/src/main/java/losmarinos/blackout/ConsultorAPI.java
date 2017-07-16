@@ -9,7 +9,7 @@ import com.httprequest.HttpRequest;
  * Created by Fernando on 11/7/2017.
  */
 
-
+// Clase para obtener respuestas a las consultas realizadas a la API
 public class ConsultorAPI extends AsyncTask<String, Long, String> {
 
     protected String doInBackground(String... urls) {

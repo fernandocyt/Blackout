@@ -13,7 +13,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;
 import com.httprequest.HttpRequest;
 
@@ -27,12 +30,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.Observable;
 import java.util.Observer;
 
-
+// Actividad del mapa principal
 public class MapaPrincipal extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
                                                                 OnMapReadyCallback, ObservadorGPS{
     private GoogleMap mMap;
-
     static Marker marcador_posicion_actual = null;
+    private ImageButton btn_centrar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,19 +103,26 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(Constantes.BSAS, 11.0f));
-
     }
 
     @Override
-    public void actualizarPosicionActual(LatLng posicion)
-    {
+    public void actualizarPosicionActual(LatLng posicion) {
         if(marcador_posicion_actual == null) {
-            marcador_posicion_actual = mMap.addMarker(new MarkerOptions().position(posicion));
+            marcador_posicion_actual = mMap.addMarker(new MarkerOptions()
+                    .position(posicion)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_ubicacion_usuario)));
         } else {
             marcador_posicion_actual.setPosition(posicion);
+        }
+    }
+
+    public void centrar(View view)
+    {
+        if(marcador_posicion_actual != null) {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(marcador_posicion_actual.getPosition().latitude,
+                            marcador_posicion_actual.getPosition().longitude),
+                            14.0f));
         }
     }
 

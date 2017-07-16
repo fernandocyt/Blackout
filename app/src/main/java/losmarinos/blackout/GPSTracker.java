@@ -17,9 +17,7 @@ import android.util.Log;
 import java.util.List;
 import java.util.Observer;
 
-/**
- * Created by Joel on 07-Jan-16.
- */
+// Clase para obtener la localizacion del GPS en segundo plano
 public class GPSTracker extends Service implements LocationListener {
 
     static GPSTracker instance = null;
