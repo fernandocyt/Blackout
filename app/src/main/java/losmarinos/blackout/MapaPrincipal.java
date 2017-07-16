@@ -1,5 +1,7 @@
 package losmarinos.blackout;
 
+import android.content.Intent;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -11,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.google.android.gms.maps.model.Marker;
 import com.httprequest.HttpRequest;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -20,17 +24,24 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.Observable;
+import java.util.Observer;
 
 
-
-public class MapaPrincipal extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
-
+public class MapaPrincipal extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+                                                                OnMapReadyCallback, ObservadorGPS{
     private GoogleMap mMap;
+
+    static Marker marcador_posicion_actual = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapa_principal);
+
+        startService(new Intent(this, GPSTracker.class));
+        GPSTracker.addObserver(this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -91,10 +102,18 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng bsas = new LatLng(-34.609069, -58.438683);
-        mMap.addMarker(new MarkerOptions().position(bsas).title("Marcador en Buenos Aires"));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(bsas, 11.0f));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(Constantes.BSAS, 11.0f));
 
+    }
+
+    @Override
+    public void actualizarPosicionActual(LatLng posicion)
+    {
+        if(marcador_posicion_actual == null) {
+            marcador_posicion_actual = mMap.addMarker(new MarkerOptions().position(posicion));
+        } else {
+            marcador_posicion_actual.setPosition(posicion);
+        }
     }
 
     public void buscarPelicula() {
