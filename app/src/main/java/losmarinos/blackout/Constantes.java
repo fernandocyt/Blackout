@@ -9,4 +9,8 @@ public class Constantes {
     public static final long TIEMPOLOCALIZAR = 1000 * 30 * 1;   //30 segundos
     public static final long DISTANCIALOCALIZAR = 50;      // 50 metros
 
+    public enum SERVICIOS
+    {
+        AGUA, ELECTRICIDAD, GAS, INTERNET, TELEFONO
+    }
 }

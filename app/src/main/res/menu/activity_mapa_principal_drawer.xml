@@ -4,7 +4,7 @@
     <item android:title="Agregar">
     <menu>
         <item
-            android:id="@+id/agregar_reporte"
+            android:id="@+id/crear_reporte"
             android:title="Reporte" />
         <item
             android:id="@+id/agregar_punto_interes"

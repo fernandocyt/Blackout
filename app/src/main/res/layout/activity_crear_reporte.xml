@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="losmarinos.blackout.CrearReporte">
+
+
+    <ScrollView
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        tools:layout_editor_absoluteY="8dp"
+        tools:layout_editor_absoluteX="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/lbl_servicio_crear_reporte"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Servicio"
+                android:layout_margin="5dp"
+                android:textSize="20sp"/>
+
+            <Spinner
+                android:id="@+id/spn_servicios_crear_reporte"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:background="#D8D8D8"/>
+
+            <TextView
+                android:id="@+id/lbl_empresa_crear_reporte"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Empresa (opcional)"
+                android:layout_margin="5dp"
+                android:textSize="20sp"/>
+
+            <Spinner
+                android:id="@+id/spn_empresas_crear_reporte"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:background="#D8D8D8"/>
+
+            <TextView
+                android:id="@+id/lbl_ubicacion_crear_reporte"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ubicación"
+                android:layout_margin="5dp"
+                android:textSize="20sp"/>
+
+
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RadioButton
+                    android:id="@+id/rdb_ubicacion_actual_crear_reporte"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ubicación actual"/>
+
+                <RadioButton
+                    android:id="@+id/rdb_seleccionar_ubicacion_crear_reporte"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Seleccionar ubicación"
+                    android:layout_marginBottom="5dp"/>
+
+            </RadioGroup>
+
+            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:map="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/map_crear_reporte"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="fill_parent"
+                android:layout_height="200dp" />
+
+            <TextView
+                android:id="@+id/lbl_radio_crear_reporte"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Radio afectado"
+                android:layout_margin="10dp"
+                android:textSize="20sp"
+                tools:layout_editor_absoluteY="0dp"
+                tools:layout_editor_absoluteX="0dp" />
+
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            <SeekBar
+                    android:id="@+id/skb_radio_crear_reporte"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/lbl_km_radio_crear_reporte"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0km" />
+
+            </TableRow>
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Crear Reporte"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
+    </ScrollView>
+</android.support.constraint.ConstraintLayout>
