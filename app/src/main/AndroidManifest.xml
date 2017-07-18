@@ -42,7 +42,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCntMv7WrlJXgO2jougbsSdbw4GEiK-wyI" />
+            android:value="AIzaSyBGHP6z5DHCouCCXMJiibDstIFZOOWZ-jE" />
 
         <service
             android:name=".GPSTracker"

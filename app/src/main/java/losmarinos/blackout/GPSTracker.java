@@ -14,6 +14,8 @@ import android.support.v4.app.ActivityCompat;
 import com.google.android.gms.maps.model.LatLng;
 
 import android.util.Log;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observer;
 
@@ -37,9 +39,9 @@ public class GPSTracker extends Service implements LocationListener {
     // Declaring a Location Manager
     protected LocationManager locationManager;
 
-    public static LatLng ubicacion_actual;
+    public static LatLng ubicacion_actual = null;
 
-    public static ObservadorGPS observador;
+    public static List<ObservadorGPS> observadores = new ArrayList<ObservadorGPS>();
 
     @Override
     public void onCreate() {
@@ -83,7 +85,13 @@ public class GPSTracker extends Service implements LocationListener {
 
     static void addObserver(ObservadorGPS observador_gps)
     {
-        GPSTracker.observador = observador_gps;
+        GPSTracker.observadores.add(observador_gps);
+
+        // Si ya tenia una posicion actual calculada se la paso al nuevo observador asi no tiene que esperar
+        if(GPSTracker.ubicacion_actual != null)
+        {
+            observador_gps.actualizarPosicionActual(GPSTracker.ubicacion_actual);
+        }
     }
 
 
@@ -92,7 +100,10 @@ public class GPSTracker extends Service implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         ubicacion_actual = new LatLng(location.getLatitude(), location.getLongitude());
-        this.observador.actualizarPosicionActual(ubicacion_actual);
+
+        for(int i = 0; i < GPSTracker.observadores.size(); i++) {
+            GPSTracker.observadores.get(i).actualizarPosicionActual(ubicacion_actual);
+        }
     }
 
 
