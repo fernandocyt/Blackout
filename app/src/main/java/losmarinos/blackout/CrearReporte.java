@@ -99,18 +99,15 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void actualizarPosicionActual(LatLng posicion)
     {
-        if (map_crear_reporte != null) {
-            if (CrearReporte.marcador_posicion_reporte == null) {
+        if (map_crear_reporte != null && CrearReporte.marcador_posicion_reporte == null) {
                 CrearReporte.marcador_posicion_reporte = map_crear_reporte.addMarker(new MarkerOptions().position(posicion));
 
                 CrearReporte.radio_reporte = map_crear_reporte.addCircle(new CircleOptions()
                         .center(new LatLng(posicion.latitude, posicion.longitude))
-                        .radius(0)
-                        .fillColor(Color.BLUE));
-            } else {
-                CrearReporte.marcador_posicion_reporte.setPosition(posicion);
-                CrearReporte.radio_reporte.setCenter(posicion);
-            }
+                        .radius(seekbar_radio.getProgress())
+                        .strokeColor(Color.TRANSPARENT)
+                        .fillColor(0x220000FF)
+                        .strokeWidth(5));
         }
     }
 
