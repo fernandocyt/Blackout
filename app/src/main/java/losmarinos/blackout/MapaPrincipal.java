@@ -1,6 +1,7 @@
 package losmarinos.blackout;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.httprequest.HttpRequest;
 
@@ -27,6 +29,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -35,7 +38,6 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
                                                                 OnMapReadyCallback, ObservadorGPS{
     private GoogleMap mMap;
     static Marker marcador_posicion_actual = null;
-    private ImageButton btn_centrar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +64,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        this.buscarPelicula();
+        //this.buscarPelicula();
     }
 
     @Override
@@ -85,19 +87,6 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             Intent i = new Intent(getApplicationContext(), CrearReporte.class);
             startActivity(i);
         }
-        /*if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -121,7 +110,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         }
     }
 
-    public void centrar(View view)
+    public void centrarMapaPrincipal(View view)
     {
         if(marcador_posicion_actual != null) {
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(marcador_posicion_actual.getPosition().latitude,
@@ -130,10 +119,35 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         }
     }
 
+    public void actualizarMapaPrincipal(View view)
+    {
+        mMap.clear();
+
+        this.marcador_posicion_actual = null;
+        if(GPSTracker.ubicacion_actual != null)
+            this.actualizarPosicionActual(GPSTracker.ubicacion_actual);
+
+        List<Reporte> reportes = ConsultorAPI.reportes;
+        for(int i = 0; i < reportes.size(); i++)
+        {
+            Reporte rep_actual = reportes.get(i);
+
+            mMap.addMarker(new MarkerOptions()
+                    .position(rep_actual.ubicacion));
+
+            mMap.addCircle(new CircleOptions()
+                    .center(rep_actual.ubicacion)
+                    .radius(rep_actual.radio)
+                    .strokeColor(Color.TRANSPARENT)
+                    .fillColor(0x220000FF)
+                    .strokeWidth(5));
+        }
+    }
+
     public void buscarPelicula() {
-        String titulo = "The Dark Knight";
+        String titulo = "";
         String url = String.format(
-                "http://www.omdbapi.com/?t=The+Dark+Knight", titulo);
+                "http://45.79.78.110/usuario", titulo);
         new ConsultorAPI().execute(url);
     }
 

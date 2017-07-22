@@ -23,17 +23,28 @@
             tools:layout_editor_absoluteY="8dp"
             tools:layout_editor_absoluteX="8dp" />
 
-        <ImageButton
-            android:id="@+id/btn_centrar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="20dp"
-            android:layout_marginRight="20dp"
-            app:srcCompat="@android:drawable/ic_menu_mylocation"
-            android:background="@null"
-            android:onClick="centrar"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom|right"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btn_actualizar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@android:drawable/ic_menu_rotate"
+                android:onClick="actualizarMapaPrincipal"/>
+
+            <ImageButton
+                android:id="@+id/btn_centrar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@android:drawable/ic_menu_mylocation"
+                android:onClick="centrarMapaPrincipal"/>
+
+        </LinearLayout>
+
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

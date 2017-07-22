@@ -45,8 +45,6 @@ public class GPSTracker extends Service implements LocationListener {
 
     @Override
     public void onCreate() {
-        if (ubicacion_actual == null)
-            ubicacion_actual = Constantes.BSAS;
         try {
             locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
@@ -125,6 +123,10 @@ public class GPSTracker extends Service implements LocationListener {
 
     @Override
     public void onDestroy() {
+        locationManager.removeUpdates(this);
+
+        List<ObservadorGPS> borrados = new ArrayList<ObservadorGPS>();;
+        observadores.removeAll(borrados);
     }
 
     @Override

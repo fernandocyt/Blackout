@@ -8,12 +8,17 @@ import com.httprequest.HttpRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Fernando on 11/7/2017.
  */
 
 // Clase para obtener respuestas a las consultas realizadas a la API
 public class ConsultorAPI extends AsyncTask<String, Long, String> {
+
+    public static List<Reporte> reportes = new ArrayList<>();
 
     protected String doInBackground(String... urls) {
         try {
@@ -37,7 +42,7 @@ public class ConsultorAPI extends AsyncTask<String, Long, String> {
         //String schema=obj1.getString("schema");
         //String value with key - title
 
-        String errorJ= null;
+        /*String errorJ= null;
         try {
             errorJ = obj1.getString("Error");
         } catch (JSONException e) {
@@ -82,6 +87,6 @@ public class ConsultorAPI extends AsyncTask<String, Long, String> {
         }
 */
 
-        Log.i("PRUEBA", errorJ);
+        //Log.i("PRUEBA", errorJ);
     }
 }
