@@ -81,7 +81,7 @@ public class GPSTracker extends Service implements LocationListener {
         }
     }
 
-    static void addObserver(ObservadorGPS observador_gps)
+    public static void addObserver(ObservadorGPS observador_gps)
     {
         GPSTracker.observadores.add(observador_gps);
 

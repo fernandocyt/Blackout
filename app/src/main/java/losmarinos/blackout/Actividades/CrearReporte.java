@@ -1,4 +1,11 @@
-package losmarinos.blackout;
+package losmarinos.blackout.Actividades;
+
+import losmarinos.blackout.R;
+import losmarinos.blackout.Constantes;
+import losmarinos.blackout.ObservadorGPS;
+import losmarinos.blackout.GPSTracker;
+import losmarinos.blackout.ConsultorAPI;
+import losmarinos.blackout.Objetos.Reporte;
 
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,7 +30,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Semaphore;
 
 public class CrearReporte extends AppCompatActivity implements OnMapReadyCallback,
         ObservadorGPS,
@@ -30,9 +37,9 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
         SeekBar.OnSeekBarChangeListener {
 
     // Mapa
-    private GoogleMap map_crear_reporte = null;
-    static Marker marcador_posicion_reporte = null;
-    static Circle radio_reporte = null;
+    GoogleMap map_crear_reporte = null;
+    Marker marcador_posicion_reporte = null;
+    Circle radio_reporte = null;
 
     // Interfaz
     TextView textview_km_radio;
@@ -64,6 +71,8 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
 
         this.cargarSpinnerServicios();
         this.cargarSpinnerEmpresas();
+
+        Toast.makeText(this, "Para seleccionar ubicación mantener presionado el mapa", Toast.LENGTH_LONG).show();
     }
 
     private void cargarSpinnerServicios()
@@ -122,11 +131,9 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void actualizarPosicionActual(LatLng posicion)
     {
-        if(map_crear_reporte == null)
-        {
-            this.posicion_gps = posicion;
-        }
-        else if (this.marcador_posicion_reporte == null)
+        this.posicion_gps = posicion;
+
+        if (map_crear_reporte != null && this.marcador_posicion_reporte == null)
         {
             this.actualizarMapaCrearReporte(posicion);
         }
@@ -141,9 +148,9 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         this.textview_km_radio.setText(String.valueOf(progress) + "m");
 
-        if(CrearReporte.radio_reporte != null)
+        if(this.radio_reporte != null)
         {
-            CrearReporte.radio_reporte.setRadius(progress);
+            this.radio_reporte.setRadius(progress);
         }
 
     }
@@ -164,26 +171,45 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
             return;
         }
 
-        if(CrearReporte.marcador_posicion_reporte == null) {
+        if(this.marcador_posicion_reporte == null) {
 
             // Si el marcador nunca fue agregado hasta ahora
-            CrearReporte.marcador_posicion_reporte = map_crear_reporte.addMarker(new MarkerOptions()
+            this.marcador_posicion_reporte = map_crear_reporte.addMarker(new MarkerOptions()
                     .position(posicion_marcador));
 
-            CrearReporte.radio_reporte = map_crear_reporte.addCircle(new CircleOptions()
+            this.radio_reporte = map_crear_reporte.addCircle(new CircleOptions()
                     .center(posicion_marcador)
                     .radius(seekbar_radio.getProgress())
-                    .strokeColor(Color.TRANSPARENT)
-                    .fillColor(0x220000FF)
+                    .strokeColor(Constantes.STROKE_COLOR_CIRCLE)
+                    .fillColor(Constantes.COLOR_CIRCLE)
                     .strokeWidth(5));
         }
         else
         {
             // Si el marcador ya fue agregado y solo hay que actualizar posicion
-            CrearReporte.marcador_posicion_reporte.setPosition(posicion_marcador);
+            this.marcador_posicion_reporte.setPosition(posicion_marcador);
 
-            CrearReporte.radio_reporte.setCenter(posicion_marcador);
-            CrearReporte.radio_reporte.setRadius(seekbar_radio.getProgress());
+            this.radio_reporte.setCenter(posicion_marcador);
+            this.radio_reporte.setRadius(seekbar_radio.getProgress());
+        }
+    }
+
+    public void centrarMapaEnMarcador(View view)
+    {
+        if(this.marcador_posicion_reporte != null) {
+            this.map_crear_reporte.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                            new LatLng(this.marcador_posicion_reporte.getPosition().latitude,
+                            this.marcador_posicion_reporte.getPosition().longitude),
+                            14.0f));
+        }
+    }
+
+    public void marcarMapaEnPosicionGPS(View view)
+    {
+        if(this.posicion_gps != null)
+        {
+            this.actualizarMapaCrearReporte(this.posicion_gps);
+            this.centrarMapaEnMarcador(view);
         }
     }
 }

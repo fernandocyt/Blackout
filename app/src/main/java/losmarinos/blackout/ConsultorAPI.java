@@ -1,5 +1,7 @@
 package losmarinos.blackout;
 
+import losmarinos.blackout.Objetos.Reporte;
+
 import android.os.AsyncTask;
 import android.util.Log;
 

@@ -23,7 +23,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MapaPrincipal"
+            android:name=".Actividades.MapaPrincipal"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -48,7 +48,7 @@
             android:name=".GPSTracker"
             android:exported="false" />
 
-        <activity android:name=".CrearReporte"></activity>
+        <activity android:name=".Actividades.CrearReporte"></activity>
     </application>
 
 </manifest>

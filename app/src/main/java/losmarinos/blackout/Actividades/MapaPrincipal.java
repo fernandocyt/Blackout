@@ -1,9 +1,13 @@
-package losmarinos.blackout;
+package losmarinos.blackout.Actividades;
+
+import losmarinos.blackout.R;
+import losmarinos.blackout.Constantes;
+import losmarinos.blackout.ObservadorGPS;
+import losmarinos.blackout.GPSTracker;
+import losmarinos.blackout.ConsultorAPI;
+import losmarinos.blackout.Objetos.Reporte;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -11,16 +15,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.Marker;
-import com.httprequest.HttpRequest;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -30,14 +30,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
 // Actividad del mapa principal
 public class MapaPrincipal extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
                                                                 OnMapReadyCallback, ObservadorGPS{
-    private GoogleMap mMap;
-    static Marker marcador_posicion_actual = null;
+    GoogleMap mMap;
+    Marker marcador_posicion_actual = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,21 +131,20 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             Reporte rep_actual = reportes.get(i);
 
             mMap.addMarker(new MarkerOptions()
-                    .position(rep_actual.ubicacion));
+                    .position(rep_actual.getUbicacion()));
 
             mMap.addCircle(new CircleOptions()
-                    .center(rep_actual.ubicacion)
-                    .radius(rep_actual.radio)
-                    .strokeColor(Color.TRANSPARENT)
-                    .fillColor(0x220000FF)
+                    .center(rep_actual.getUbicacion())
+                    .radius(rep_actual.getRadio())
+                    .strokeColor(Constantes.STROKE_COLOR_CIRCLE)
+                    .fillColor(Constantes.COLOR_CIRCLE)
                     .strokeWidth(5));
         }
     }
 
     public void buscarPelicula() {
         String titulo = "";
-        String url = String.format(
-                "http://45.79.78.110/usuario", titulo);
+        String url = String.format("http://45.79.78.110/usuario", titulo);
         new ConsultorAPI().execute(url);
     }
 
