@@ -1,5 +1,6 @@
 package losmarinos.blackout;
 
+import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Reporte;
 
 import android.os.AsyncTask;
@@ -21,6 +22,7 @@ import java.util.List;
 public class ConsultorAPI extends AsyncTask<String, Long, String> {
 
     public static List<Reporte> reportes = new ArrayList<>();
+    public static List<Corte> cortes = new ArrayList<>();
 
     protected String doInBackground(String... urls) {
         try {

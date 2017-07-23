@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="losmarinos.blackout.CrearReporte">
+    tools:context="losmarinos.blackout.Actividades.CrearReporte">
 
 
     <LinearLayout
@@ -31,9 +31,14 @@
                 android:layout_margin="5dp"
                 android:textSize="20sp"/>
 
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
             <Spinner
                 android:id="@+id/spn_servicios_crear_reporte"
-                android:layout_width="match_parent"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:padding="5dp"
@@ -53,13 +58,18 @@
                     android:id="@+id/lbl_empresa_crear_reporte"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Empresa*"
+                    android:text="Empresa"
                     android:layout_margin="5dp"
                     android:textSize="20sp"/>
 
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
                 <Spinner
                     android:id="@+id/spn_empresas_crear_reporte"
-                    android:layout_width="match_parent"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:padding="5dp"

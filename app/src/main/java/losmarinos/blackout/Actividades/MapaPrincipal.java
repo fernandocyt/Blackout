@@ -1,5 +1,6 @@
 package losmarinos.blackout.Actividades;
 
+import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.R;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ObservadorGPS;
@@ -29,11 +30,15 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.Serializable;
+import java.util.Calendar;
 import java.util.List;
 
 // Actividad del mapa principal
 public class MapaPrincipal extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-                                                                OnMapReadyCallback, ObservadorGPS{
+                                                                OnMapReadyCallback,
+                                                                GoogleMap.OnMarkerClickListener,
+                                                                ObservadorGPS{
     GoogleMap mMap;
     Marker marcador_posicion_actual = null;
 
@@ -95,6 +100,15 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(Constantes.BSAS, 11.0f));
+        mMap.setOnMarkerClickListener(this);
+
+        //TODO: Sacar esto de aca
+        Corte un_corte = new Corte("Agua", "hola", Constantes.BSAS, 200, Calendar.getInstance().getTime(), 40, false);
+        ConsultorAPI.cortes.add(un_corte);
+        Marker corte = mMap.addMarker(new MarkerOptions()
+                .position(un_corte.getUbicacion())
+                .title("Corte"));
+        corte.setTag(un_corte);
     }
 
     @Override
@@ -102,10 +116,30 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         if(marcador_posicion_actual == null) {
             marcador_posicion_actual = mMap.addMarker(new MarkerOptions()
                     .position(posicion)
+                    .title("Usuario")
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_ubicacion_usuario)));
         } else {
             marcador_posicion_actual.setPosition(posicion);
         }
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        if(marker.getTitle().equals("Corte"))
+        {
+            Corte corte_seleccionado = (Corte)marker.getTag();
+
+            Intent i = new Intent(this, PerfilCorte.class);
+            //i.putExtra("Corte", corte_seleccionado);
+            try {
+                startActivity(i);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        return true;
     }
 
     public void centrarMapaPrincipal(View view)
@@ -131,7 +165,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             Reporte rep_actual = reportes.get(i);
 
             mMap.addMarker(new MarkerOptions()
-                    .position(rep_actual.getUbicacion()));
+                    .position(rep_actual.getUbicacion())
+                    .title("Reporte"));
 
             mMap.addCircle(new CircleOptions()
                     .center(rep_actual.getUbicacion())

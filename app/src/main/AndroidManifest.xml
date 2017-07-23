@@ -48,7 +48,8 @@
             android:name=".GPSTracker"
             android:exported="false" />
 
-        <activity android:name=".Actividades.CrearReporte"></activity>
+        <activity android:name=".Actividades.CrearReporte" />
+        <activity android:name=".Actividades.PerfilCorte"></activity>
     </application>
 
 </manifest>
