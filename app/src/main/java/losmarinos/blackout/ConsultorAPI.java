@@ -2,6 +2,8 @@ package losmarinos.blackout;
 
 import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Reporte;
+import losmarinos.blackout.Objetos.Respuesta;
+import losmarinos.blackout.Objetos.Usuario;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -12,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -23,6 +26,26 @@ public class ConsultorAPI extends AsyncTask<String, Long, String> {
 
     public static List<Reporte> reportes = new ArrayList<>();
     public static List<Corte> cortes = new ArrayList<>();
+    public static List<Usuario> usuarios = new ArrayList<>();
+    public static List<Respuesta> respuestas = new ArrayList<>();
+
+    public static void cargarDatosPruebas()
+    {
+        Usuario usuario1 = new Usuario("joelkalt", "1234", "joelkaltman@gmail.com", Constantes.TIPOSUSUARIO.PERSONA);
+        Usuario usuario2 = new Usuario("fernandocyt", "1234", "fernandocyt@gmail.com", Constantes.TIPOSUSUARIO.PERSONA);
+        usuarios.add(usuario1);
+        usuarios.add(usuario2);
+
+        Corte corte_agua = new Corte("Agua", "hola", Constantes.BSAS, 200, Calendar.getInstance().getTime(), 40, false);
+        Respuesta respuesta1_corte_agua = new Respuesta(usuario1, "Todo mal viejo");
+        Respuesta respuesta2_corte_agua = new Respuesta(usuario2, "Sigo esperando son todos putos");
+        corte_agua.addRespuesta(respuesta1_corte_agua);
+        corte_agua.addRespuesta(respuesta2_corte_agua);
+
+        ConsultorAPI.cortes.add(corte_agua);
+    }
+
+
 
     protected String doInBackground(String... urls) {
         try {

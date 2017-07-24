@@ -43,4 +43,12 @@ public class Usuario {
     public void setTipo(Constantes.TIPOSUSUARIO tipo) {
         this.tipo = tipo;
     }
+
+    public Usuario(String nombre, String pass, String mail, Constantes.TIPOSUSUARIO tipo)
+    {
+        this.nombre = nombre;
+        this.pass = pass;
+        this.mail = mail;
+        this.tipo = tipo;
+    }
 }

@@ -3,7 +3,9 @@ package losmarinos.blackout.Objetos;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import losmarinos.blackout.Constantes;
 
@@ -19,6 +21,7 @@ public class Corte implements Serializable{
     private Date fecha_inicio;
     private boolean resuelto;
     private int cantidad_reportes;
+    private List<Respuesta> respuestas;
 
     public String getServicio() {
         return servicio;
@@ -52,11 +55,11 @@ public class Corte implements Serializable{
         this.radio = radio;
     }
 
-    public Date getFecha_inicio() {
+    public Date getFechaInicio() {
         return fecha_inicio;
     }
 
-    public void setFecha_inicio(Date fecha_inicio) {
+    public void setFechaInicio(Date fecha_inicio) {
         this.fecha_inicio = fecha_inicio;
     }
 
@@ -68,12 +71,22 @@ public class Corte implements Serializable{
         this.resuelto = resuelto;
     }
 
-    public int getCantidad_reportes() {
+    public int getCantidadReportes() {
         return cantidad_reportes;
     }
 
-    public void setCantidad_reportes(int cantidad_reportes) {
+    public void setCantidadReportes(int cantidad_reportes) {
         this.cantidad_reportes = cantidad_reportes;
+    }
+
+    public void addRespuesta(Respuesta respuesta)
+    {
+        this.respuestas.add(respuesta);
+    }
+
+    public List<Respuesta> getRespuestas()
+    {
+        return this.respuestas;
     }
 
     public Corte(String servicio, String empresa, LatLng ubicacion, double radio, Date fecha_inicio, int cantidad_reportes, boolean resuelto)
@@ -85,5 +98,7 @@ public class Corte implements Serializable{
         this.fecha_inicio = fecha_inicio;
         this.cantidad_reportes = cantidad_reportes;
         this.resuelto = resuelto;
+        this.respuestas = new ArrayList<>();
     }
+
 }

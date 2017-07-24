@@ -47,6 +47,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapa_principal);
 
+        ConsultorAPI.cargarDatosPruebas();
+
         startService(new Intent(this, GPSTracker.class));
         GPSTracker.addObserver(this);
 
@@ -101,14 +103,6 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         mMap = googleMap;
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(Constantes.BSAS, 11.0f));
         mMap.setOnMarkerClickListener(this);
-
-        //TODO: Sacar esto de aca
-        Corte un_corte = new Corte("Agua", "hola", Constantes.BSAS, 200, Calendar.getInstance().getTime(), 40, false);
-        ConsultorAPI.cortes.add(un_corte);
-        Marker corte = mMap.addMarker(new MarkerOptions()
-                .position(un_corte.getUbicacion())
-                .title("Corte"));
-        corte.setTag(un_corte);
     }
 
     @Override
@@ -159,6 +153,27 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         if(GPSTracker.ubicacion_actual != null)
             this.actualizarPosicionActual(GPSTracker.ubicacion_actual);
 
+        this.cargarCortesEnMapa();
+        this.cargarReportesEnMapa();
+    }
+
+
+    public void cargarCortesEnMapa()
+    {
+        List<Corte> cortes = ConsultorAPI.cortes;
+        for(int i = 0; i < cortes.size(); i++)
+        {
+            Corte corte_actual = cortes.get(i);
+
+            Marker corte = mMap.addMarker(new MarkerOptions()
+                    .position(corte_actual.getUbicacion())
+                    .title("Corte"));
+            corte.setTag(corte_actual);
+        }
+    }
+
+    public void cargarReportesEnMapa()
+    {
         List<Reporte> reportes = ConsultorAPI.reportes;
         for(int i = 0; i < reportes.size(); i++)
         {
