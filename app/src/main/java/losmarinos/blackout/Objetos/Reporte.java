@@ -5,22 +5,24 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.Calendar;
 import java.util.Date;
 
+import losmarinos.blackout.Constantes;
+
 /**
  * Created by garci on 22/7/2017.
  */
 
 public class Reporte {
-    private String servicio;
+    private Constantes.SERVICIO servicio;
     private String empresa;
     private LatLng ubicacion;
     private double radio;
     private Date fecha;
 
-    public String getServicio() {
+    public Constantes.SERVICIO getServicio() {
         return servicio;
     }
 
-    public void setServicio(String servicio) {
+    public void setServicio(Constantes.SERVICIO servicio) {
         this.servicio = servicio;
     }
 
@@ -56,7 +58,7 @@ public class Reporte {
         this.fecha = fecha;
     }
 
-    public Reporte(String servicio, String empresa, LatLng ubicacion, double radio)
+    public Reporte(Constantes.SERVICIO servicio, String empresa, LatLng ubicacion, double radio)
     {
         this.setServicio(servicio);
         this.setEmpresa(empresa);

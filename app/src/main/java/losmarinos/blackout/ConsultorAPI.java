@@ -8,6 +8,7 @@ import losmarinos.blackout.Objetos.Usuario;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.httprequest.HttpRequest;
 
 import org.json.JSONException;
@@ -36,13 +37,25 @@ public class ConsultorAPI extends AsyncTask<String, Long, String> {
         usuarios.add(usuario1);
         usuarios.add(usuario2);
 
-        Corte corte_agua = new Corte("Agua", "hola", Constantes.BSAS, 200, Calendar.getInstance().getTime(), 40, false);
+        Corte corte_agua = new Corte(Constantes.SERVICIO.AGUA, "hola", Constantes.BSAS, 500, Calendar.getInstance().getTime(), 40, false);
         Respuesta respuesta1_corte_agua = new Respuesta(usuario1, "Todo mal viejo");
         Respuesta respuesta2_corte_agua = new Respuesta(usuario2, "Sigo esperando son todos putos");
         corte_agua.addRespuesta(respuesta1_corte_agua);
         corte_agua.addRespuesta(respuesta2_corte_agua);
 
+        Corte corte_luz = new Corte(Constantes.SERVICIO.LUZ, "hola", new LatLng(-34.627954, -58.499451), 1000, Calendar.getInstance().getTime(), 35, false);
+        Corte corte_gas = new Corte(Constantes.SERVICIO.GAS, "hola", new LatLng(-34.565213, -58.482971), 700, Calendar.getInstance().getTime(), 22, false);
+        Corte corte_internet = new Corte(Constantes.SERVICIO.INTERNET, "hola", new LatLng(-34.668060, -58.421173), 1500, Calendar.getInstance().getTime(), 152, false);
+        Corte corte_cable = new Corte(Constantes.SERVICIO.CABLE, "hola", new LatLng(-34.633038, -58.372421), 1000, Calendar.getInstance().getTime(), 53, false);
+        Corte corte_telefono = new Corte(Constantes.SERVICIO.TELEFONO, "hola", new LatLng(-34.595742, -58.420486), 1500, Calendar.getInstance().getTime(), 66, false);
+
+
         ConsultorAPI.cortes.add(corte_agua);
+        ConsultorAPI.cortes.add(corte_luz);
+        ConsultorAPI.cortes.add(corte_gas);
+        ConsultorAPI.cortes.add(corte_internet);
+        ConsultorAPI.cortes.add(corte_cable);
+        ConsultorAPI.cortes.add(corte_telefono);
     }
 
 

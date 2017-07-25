@@ -14,7 +14,7 @@ import losmarinos.blackout.Constantes;
  */
 
 public class Corte implements Serializable{
-    private String servicio;
+    private Constantes.SERVICIO servicio;
     private String empresa;
     private LatLng ubicacion;
     private double radio;
@@ -23,11 +23,11 @@ public class Corte implements Serializable{
     private int cantidad_reportes;
     private List<Respuesta> respuestas;
 
-    public String getServicio() {
+    public Constantes.SERVICIO getServicio() {
         return servicio;
     }
 
-    public void setServicio(String servicio) {
+    public void setServicio(Constantes.SERVICIO servicio) {
         this.servicio = servicio;
     }
 
@@ -89,7 +89,7 @@ public class Corte implements Serializable{
         return this.respuestas;
     }
 
-    public Corte(String servicio, String empresa, LatLng ubicacion, double radio, Date fecha_inicio, int cantidad_reportes, boolean resuelto)
+    public Corte(Constantes.SERVICIO servicio, String empresa, LatLng ubicacion, double radio, Date fecha_inicio, int cantidad_reportes, boolean resuelto)
     {
         this.servicio = servicio;
         this.empresa = empresa;

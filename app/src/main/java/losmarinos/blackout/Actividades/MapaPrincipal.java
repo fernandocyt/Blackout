@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.Marker;
@@ -167,8 +168,16 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
             Marker corte = mMap.addMarker(new MarkerOptions()
                     .position(corte_actual.getUbicacion())
-                    .title("Corte"));
+                    .title("Corte")
+                    .icon(Constantes.getIconoCorte(corte_actual.getServicio())) );
             corte.setTag(corte_actual);
+
+            mMap.addCircle(new CircleOptions()
+                    .center(corte_actual.getUbicacion())
+                    .radius(corte_actual.getRadio())
+                    .strokeColor(Constantes.STROKE_COLOR_CIRCLE)
+                    .fillColor(Constantes.COLOR_CIRCLE)
+                    .strokeWidth(5));
         }
     }
 
@@ -181,7 +190,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
             mMap.addMarker(new MarkerOptions()
                     .position(rep_actual.getUbicacion())
-                    .title("Reporte"));
+                    .title("Reporte")
+                    .icon(Constantes.getIconoReporte(rep_actual.getServicio())));
 
             mMap.addCircle(new CircleOptions()
                     .center(rep_actual.getUbicacion())

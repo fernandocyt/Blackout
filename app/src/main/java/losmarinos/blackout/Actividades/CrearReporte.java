@@ -78,9 +78,12 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
     private void cargarSpinnerServicios()
     {
         List<String> spinnerArray =  new ArrayList<String>();
-        spinnerArray.add("Luz");
-        spinnerArray.add("Gas");
-        spinnerArray.add("Electricidad");
+        spinnerArray.add(Constantes.servicioToString(Constantes.SERVICIO.AGUA));
+        spinnerArray.add(Constantes.servicioToString(Constantes.SERVICIO.LUZ));
+        spinnerArray.add(Constantes.servicioToString(Constantes.SERVICIO.GAS));
+        spinnerArray.add(Constantes.servicioToString(Constantes.SERVICIO.TELEFONO));
+        spinnerArray.add(Constantes.servicioToString(Constantes.SERVICIO.INTERNET));
+        spinnerArray.add(Constantes.servicioToString(Constantes.SERVICIO.CABLE));
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, spinnerArray);
@@ -118,7 +121,7 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
     {
         String servicio = this.spinner_servicios.getSelectedItem().toString();
         String empresa = this.spinner_empresas.getSelectedItem().toString();
-        Reporte nuevo_reporte = new Reporte(servicio, empresa, marcador_posicion_reporte.getPosition(), seekbar_radio.getProgress());
+        Reporte nuevo_reporte = new Reporte(Constantes.stringToServicio(servicio), empresa, marcador_posicion_reporte.getPosition(), seekbar_radio.getProgress());
 
         ConsultorAPI.reportes.add(nuevo_reporte);
 
@@ -173,10 +176,11 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
 
         if(this.marcador_posicion_reporte == null) {
 
-            // Si el marcador nunca fue agregado hasta ahora
+            // Agrego marcador
             this.marcador_posicion_reporte = map_crear_reporte.addMarker(new MarkerOptions()
                     .position(posicion_marcador));
 
+            // Agrego radio
             this.radio_reporte = map_crear_reporte.addCircle(new CircleOptions()
                     .center(posicion_marcador)
                     .radius(seekbar_radio.getProgress())

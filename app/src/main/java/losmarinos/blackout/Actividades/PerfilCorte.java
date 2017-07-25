@@ -11,6 +11,7 @@ import java.text.DateFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 
+import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorAPI;
 import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Respuesta;
@@ -47,7 +48,7 @@ public class PerfilCorte extends AppCompatActivity {
 
     void cargarCorte()
     {
-        textview_servicio.setText(corte.getServicio());
+        textview_servicio.setText(Constantes.servicioToString(corte.getServicio()));
         textview_empresa.setText(corte.getEmpresa());
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         String fecha = df.format(corte.getFechaInicio());
