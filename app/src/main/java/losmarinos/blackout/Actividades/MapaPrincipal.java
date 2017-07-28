@@ -70,7 +70,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        //this.buscarPelicula();
+        this.buscarPelicula();
     }
 
     @Override
@@ -91,6 +91,9 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
         if(id == R.id.crear_reporte) {
             Intent i = new Intent(getApplicationContext(), CrearReporte.class);
+            startActivity(i);
+        }else if(id == R.id.mis_reportes){
+            Intent i = new Intent(getApplicationContext(), MisReportes.class);
             startActivity(i);
         }
 
@@ -124,8 +127,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         {
             Corte corte_seleccionado = (Corte)marker.getTag();
 
-            Intent i = new Intent(this, PerfilCorte.class);
-            //i.putExtra("Corte", corte_seleccionado);
+            Intent i = new Intent(getApplicationContext(), PerfilCorte.class);
+            i.putExtra("idCorte", corte_seleccionado.getId());
             try {
                 startActivity(i);
             }
@@ -188,23 +191,25 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         {
             Reporte rep_actual = reportes.get(i);
 
-            mMap.addMarker(new MarkerOptions()
-                    .position(rep_actual.getUbicacion())
-                    .title("Reporte")
-                    .icon(Constantes.getIconoReporte(rep_actual.getServicio())));
+            if(!rep_actual.isResuelto()) {
+                mMap.addMarker(new MarkerOptions()
+                        .position(rep_actual.getUbicacion())
+                        .title("Reporte")
+                        .icon(Constantes.getIconoReporte(rep_actual.getServicio())));
 
-            mMap.addCircle(new CircleOptions()
-                    .center(rep_actual.getUbicacion())
-                    .radius(rep_actual.getRadio())
-                    .strokeColor(Constantes.STROKE_COLOR_CIRCLE)
-                    .fillColor(Constantes.COLOR_CIRCLE)
-                    .strokeWidth(5));
+                mMap.addCircle(new CircleOptions()
+                        .center(rep_actual.getUbicacion())
+                        .radius(rep_actual.getRadio())
+                        .strokeColor(Constantes.STROKE_COLOR_CIRCLE)
+                        .fillColor(Constantes.COLOR_CIRCLE)
+                        .strokeWidth(5));
+            }
         }
     }
 
     public void buscarPelicula() {
         String titulo = "";
-        String url = String.format("http://45.79.78.110/usuario", titulo);
+        String url = String.format("http://45.79.78.110/empresa", titulo);
         new ConsultorAPI().execute(url);
     }
 

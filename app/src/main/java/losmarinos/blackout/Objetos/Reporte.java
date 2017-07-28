@@ -17,6 +17,7 @@ public class Reporte {
     private LatLng ubicacion;
     private double radio;
     private Date fecha;
+    private boolean resuelto;
 
     public Constantes.SERVICIO getServicio() {
         return servicio;
@@ -58,6 +59,14 @@ public class Reporte {
         this.fecha = fecha;
     }
 
+    public boolean isResuelto() {
+        return resuelto;
+    }
+
+    public void setResuelto(boolean resuelto) {
+        this.resuelto = resuelto;
+    }
+
     public Reporte(Constantes.SERVICIO servicio, String empresa, LatLng ubicacion, double radio)
     {
         this.setServicio(servicio);
@@ -66,5 +75,6 @@ public class Reporte {
         this.setRadio(radio);
         Calendar calenadrio = Calendar.getInstance();
         this.setFecha(calenadrio.getTime());
+        this.resuelto = false;
     }
 }

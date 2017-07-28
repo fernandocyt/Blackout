@@ -14,6 +14,12 @@ import com.httprequest.HttpRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -25,6 +31,7 @@ import java.util.List;
 // Clase para obtener respuestas a las consultas realizadas a la API
 public class ConsultorAPI extends AsyncTask<String, Long, String> {
 
+    //region
     public static List<Reporte> reportes = new ArrayList<>();
     public static List<Corte> cortes = new ArrayList<>();
     public static List<Usuario> usuarios = new ArrayList<>();
@@ -37,17 +44,17 @@ public class ConsultorAPI extends AsyncTask<String, Long, String> {
         usuarios.add(usuario1);
         usuarios.add(usuario2);
 
-        Corte corte_agua = new Corte(Constantes.SERVICIO.AGUA, "hola", Constantes.BSAS, 500, Calendar.getInstance().getTime(), 40, false);
+        Corte corte_agua = new Corte(1, Constantes.SERVICIO.AGUA, "hola", Constantes.BSAS, 500, Calendar.getInstance().getTime(), 40, false);
         Respuesta respuesta1_corte_agua = new Respuesta(usuario1, "Todo mal viejo");
         Respuesta respuesta2_corte_agua = new Respuesta(usuario2, "Sigo esperando son todos putos");
         corte_agua.addRespuesta(respuesta1_corte_agua);
         corte_agua.addRespuesta(respuesta2_corte_agua);
 
-        Corte corte_luz = new Corte(Constantes.SERVICIO.LUZ, "hola", new LatLng(-34.627954, -58.499451), 1000, Calendar.getInstance().getTime(), 35, false);
-        Corte corte_gas = new Corte(Constantes.SERVICIO.GAS, "hola", new LatLng(-34.565213, -58.482971), 700, Calendar.getInstance().getTime(), 22, false);
-        Corte corte_internet = new Corte(Constantes.SERVICIO.INTERNET, "hola", new LatLng(-34.668060, -58.421173), 1500, Calendar.getInstance().getTime(), 152, false);
-        Corte corte_cable = new Corte(Constantes.SERVICIO.CABLE, "hola", new LatLng(-34.633038, -58.372421), 1000, Calendar.getInstance().getTime(), 53, false);
-        Corte corte_telefono = new Corte(Constantes.SERVICIO.TELEFONO, "hola", new LatLng(-34.595742, -58.420486), 1500, Calendar.getInstance().getTime(), 66, false);
+        Corte corte_luz = new Corte(2, Constantes.SERVICIO.LUZ, "hola", new LatLng(-34.627954, -58.499451), 1000, Calendar.getInstance().getTime(), 35, false);
+        Corte corte_gas = new Corte(3, Constantes.SERVICIO.GAS, "hola", new LatLng(-34.565213, -58.482971), 700, Calendar.getInstance().getTime(), 22, false);
+        Corte corte_internet = new Corte(4, Constantes.SERVICIO.INTERNET, "hola", new LatLng(-34.668060, -58.421173), 1500, Calendar.getInstance().getTime(), 152, false);
+        Corte corte_cable = new Corte(5, Constantes.SERVICIO.CABLE, "hola", new LatLng(-34.633038, -58.372421), 1000, Calendar.getInstance().getTime(), 53, false);
+        Corte corte_telefono = new Corte(6, Constantes.SERVICIO.TELEFONO, "hola", new LatLng(-34.595742, -58.420486), 1500, Calendar.getInstance().getTime(), 66, false);
 
 
         ConsultorAPI.cortes.add(corte_agua);
@@ -58,13 +65,48 @@ public class ConsultorAPI extends AsyncTask<String, Long, String> {
         ConsultorAPI.cortes.add(corte_telefono);
     }
 
-
+    //endregion
 
     protected String doInBackground(String... urls) {
-        try {
+        /*try {
             return HttpRequest.get(urls[0]).accept("application/json").body();
         } catch (HttpRequest.HttpRequestException exception) {
             return null;
+        }*/
+        try{
+            String username = "joel";
+            String password = "1234";
+
+            String link=urls[0];//"http://myphpmysqlweb.hostei.com/loginpost.php";
+            String data  = URLEncoder.encode("username", "UTF-8") + "=" +
+                    URLEncoder.encode(username, "UTF-8");
+            data += "&" + URLEncoder.encode("password", "UTF-8") + "=" +
+                    URLEncoder.encode(password, "UTF-8");
+
+            URL url = new URL(link);
+            URLConnection conn = url.openConnection();
+
+            conn.setDoOutput(true);
+            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+
+            wr.write( data );
+            wr.flush();
+
+            BufferedReader reader = new BufferedReader(new
+                    InputStreamReader(conn.getInputStream()));
+
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+
+            // Read Server Response
+            while((line = reader.readLine()) != null) {
+                sb.append(line);
+                break;
+            }
+
+            return sb.toString();
+        } catch(Exception e){
+            return new String("Exception: " + e.getMessage());
         }
     }
 

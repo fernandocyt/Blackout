@@ -14,7 +14,7 @@
     <item android:title="Consultar">
         <menu>
             <item
-                android:id="@+id/consultar_mis_reportes"
+                android:id="@+id/mis_reportes"
                 android:title="Mis Reportes" />
         </menu>
     </item>

@@ -49,7 +49,8 @@
             android:exported="false" />
 
         <activity android:name=".Actividades.CrearReporte" />
-        <activity android:name=".Actividades.PerfilCorte"></activity>
+        <activity android:name=".Actividades.PerfilCorte" />
+        <activity android:name=".Actividades.MisReportes"></activity>
     </application>
 
 </manifest>

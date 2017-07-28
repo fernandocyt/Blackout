@@ -1,5 +1,8 @@
 package losmarinos.blackout.Objetos;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
@@ -13,7 +16,8 @@ import losmarinos.blackout.Constantes;
  * Created by garci on 23/7/2017.
  */
 
-public class Corte implements Serializable{
+public class Corte{
+    private int id;
     private Constantes.SERVICIO servicio;
     private String empresa;
     private LatLng ubicacion;
@@ -89,8 +93,13 @@ public class Corte implements Serializable{
         return this.respuestas;
     }
 
-    public Corte(Constantes.SERVICIO servicio, String empresa, LatLng ubicacion, double radio, Date fecha_inicio, int cantidad_reportes, boolean resuelto)
+    public int getId() {
+        return id;
+    }
+
+    public Corte(int id, Constantes.SERVICIO servicio, String empresa, LatLng ubicacion, double radio, Date fecha_inicio, int cantidad_reportes, boolean resuelto)
     {
+        this.id = id;
         this.servicio = servicio;
         this.empresa = empresa;
         this.ubicacion = ubicacion;

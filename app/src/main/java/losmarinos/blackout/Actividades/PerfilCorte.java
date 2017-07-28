@@ -16,7 +16,7 @@ import losmarinos.blackout.ConsultorAPI;
 import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Respuesta;
 import losmarinos.blackout.R;
-import losmarinos.blackout.RespuestaAdapter;
+import losmarinos.blackout.Adapters.RespuestaAdapter;
 
 public class PerfilCorte extends AppCompatActivity {
 
@@ -34,8 +34,15 @@ public class PerfilCorte extends AppCompatActivity {
         setTitle("Perfil de corte");
         setContentView(R.layout.activity_perfil_corte);
 
-        //corte = (Corte)getIntent().getSerializableExtra("Corte");
-        corte = ConsultorAPI.cortes.get(0);
+        int id_corte = getIntent().getIntExtra("idCorte", 0);
+        for(int i = 0; i < ConsultorAPI.cortes.size(); i++)
+        {
+            if(id_corte == ConsultorAPI.cortes.get(i).getId())
+            {
+                this.corte = ConsultorAPI.cortes.get(i);
+            }
+        }
+        //corte = ConsultorAPI.cortes.get(0);
 
         textview_servicio = (TextView)findViewById(R.id.lbl_servicio_perfil_corte);
         textview_empresa = (TextView)findViewById(R.id.lbl_empresa_perfil_corte);

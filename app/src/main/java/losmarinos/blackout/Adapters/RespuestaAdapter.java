@@ -1,4 +1,5 @@
-package losmarinos.blackout;
+package losmarinos.blackout.Adapters;
+
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import losmarinos.blackout.R;
 import losmarinos.blackout.Actividades.PerfilCorte;
 import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Reporte;
