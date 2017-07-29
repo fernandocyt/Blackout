@@ -1,6 +1,8 @@
 package losmarinos.blackout.Actividades;
 
 import losmarinos.blackout.Objetos.Corte;
+import losmarinos.blackout.Objetos.Empresa;
+import losmarinos.blackout.Objetos.Sucursal;
 import losmarinos.blackout.R;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ObservadorGPS;
@@ -153,12 +155,13 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
     {
         mMap.clear();
 
+        this.cargarCortesEnMapa();
+        this.cargarReportesEnMapa();
+        this.cargarSucursalesEnMapa();
+
         this.marcador_posicion_actual = null;
         if(GPSTracker.ubicacion_actual != null)
             this.actualizarPosicionActual(GPSTracker.ubicacion_actual);
-
-        this.cargarCortesEnMapa();
-        this.cargarReportesEnMapa();
     }
 
 
@@ -203,6 +206,23 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
                         .strokeColor(Constantes.STROKE_COLOR_CIRCLE)
                         .fillColor(Constantes.COLOR_CIRCLE)
                         .strokeWidth(5));
+            }
+        }
+    }
+
+    public void cargarSucursalesEnMapa()
+    {
+        List<Empresa> empresas = ConsultorAPI.empresas;
+        for(int i = 0; i < empresas.size(); i++)
+        {
+            List<Sucursal> sucursales_actual = empresas.get(i).getSucursales();
+
+            for(int j = 0; j < sucursales_actual.size(); j++)
+            {
+                mMap.addMarker(new MarkerOptions()
+                        .position(sucursales_actual.get(j).getUbicacion())
+                        .title("Sucursal " + empresas.get(i).getNombre())
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_sucursal)));
             }
         }
     }

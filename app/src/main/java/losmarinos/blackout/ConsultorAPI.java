@@ -4,6 +4,7 @@ import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.Objetos.Reporte;
 import losmarinos.blackout.Objetos.Respuesta;
+import losmarinos.blackout.Objetos.Sucursal;
 import losmarinos.blackout.Objetos.Usuario;
 
 import android.os.AsyncTask;
@@ -66,7 +67,9 @@ public class ConsultorAPI extends AsyncTask<String, Long, String> {
         ConsultorAPI.cortes.add(corte_telefono);
 
         Empresa empresa1 = new Empresa("Metrogas", "1234", "a", Constantes.SERVICIO.GAS);
+        empresa1.addSucursal(new Sucursal(new LatLng(-34.660718, -58.570862)));
         Empresa empresa2 = new Empresa("Edenor", "1234", "a", Constantes.SERVICIO.LUZ);
+        empresa2.addSucursal(new Sucursal(new LatLng(-34.583871, -58.539276)));
         Empresa empresa3 = new Empresa("Edesur", "1234", "a", Constantes.SERVICIO.LUZ);
         Empresa empresa4 = new Empresa("Telecentro", "1234", "a", Constantes.SERVICIO.CABLE);
         Empresa empresa5 = new Empresa("Cablevision", "1234", "a", Constantes.SERVICIO.CABLE);
