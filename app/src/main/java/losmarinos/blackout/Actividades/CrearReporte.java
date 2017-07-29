@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -34,7 +35,8 @@ import java.util.List;
 public class CrearReporte extends AppCompatActivity implements OnMapReadyCallback,
         ObservadorGPS,
         GoogleMap.OnMapLongClickListener,
-        SeekBar.OnSeekBarChangeListener {
+        SeekBar.OnSeekBarChangeListener,
+        AdapterView.OnItemSelectedListener{
 
     // Mapa
     GoogleMap map_crear_reporte = null;
@@ -65,12 +67,13 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
         this.seekbar_radio.setOnSeekBarChangeListener(this);
         this.seekbar_radio.setMax(500);
         this.spinner_servicios = (Spinner) findViewById(R.id.spn_servicios_crear_reporte);
+        this.spinner_servicios.setOnItemSelectedListener(this);
         this.spinner_empresas = (Spinner) findViewById(R.id.spn_empresas_crear_reporte);
 
         GPSTracker.addObserver(this);
 
         this.cargarSpinnerServicios();
-        this.cargarSpinnerEmpresas();
+        this.cargarSpinnerEmpresas(Constantes.SERVICIO.AGUA);
 
         Toast.makeText(this, "Para seleccionar ubicación mantener presionado el mapa", Toast.LENGTH_LONG).show();
     }
@@ -92,17 +95,35 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
         this.spinner_servicios.setAdapter(adapter);
     }
 
-    private void cargarSpinnerEmpresas()
+    private void cargarSpinnerEmpresas(Constantes.SERVICIO servicio)
     {
         List<String> spinnerArray =  new ArrayList<String>();
-        spinnerArray.add("Edenor");
-        spinnerArray.add("Edesur");
+
+        for(int i = 0; i < ConsultorAPI.empresas.size(); i++)
+        {
+            if(ConsultorAPI.empresas.get(i).getTipoServicio() == servicio)
+            {
+                spinnerArray.add(ConsultorAPI.empresas.get(i).getNombre());
+            }
+        }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, spinnerArray);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         this.spinner_empresas.setAdapter(adapter);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+        String servicio = this.spinner_servicios.getSelectedItem().toString();
+
+        this.cargarSpinnerEmpresas(Constantes.stringToServicio(servicio));
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parentView) {
+        // your code here
     }
 
     @Override

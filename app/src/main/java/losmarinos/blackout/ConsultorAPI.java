@@ -1,6 +1,7 @@
 package losmarinos.blackout;
 
 import losmarinos.blackout.Objetos.Corte;
+import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.Objetos.Reporte;
 import losmarinos.blackout.Objetos.Respuesta;
 import losmarinos.blackout.Objetos.Usuario;
@@ -35,7 +36,7 @@ public class ConsultorAPI extends AsyncTask<String, Long, String> {
     public static List<Reporte> reportes = new ArrayList<>();
     public static List<Corte> cortes = new ArrayList<>();
     public static List<Usuario> usuarios = new ArrayList<>();
-    public static List<Respuesta> respuestas = new ArrayList<>();
+    public static List<Empresa> empresas = new ArrayList<>();
 
     public static void cargarDatosPruebas()
     {
@@ -63,6 +64,24 @@ public class ConsultorAPI extends AsyncTask<String, Long, String> {
         ConsultorAPI.cortes.add(corte_internet);
         ConsultorAPI.cortes.add(corte_cable);
         ConsultorAPI.cortes.add(corte_telefono);
+
+        Empresa empresa1 = new Empresa("Metrogas", "1234", "a", Constantes.SERVICIO.GAS);
+        Empresa empresa2 = new Empresa("Edenor", "1234", "a", Constantes.SERVICIO.LUZ);
+        Empresa empresa3 = new Empresa("Edesur", "1234", "a", Constantes.SERVICIO.LUZ);
+        Empresa empresa4 = new Empresa("Telecentro", "1234", "a", Constantes.SERVICIO.CABLE);
+        Empresa empresa5 = new Empresa("Cablevision", "1234", "a", Constantes.SERVICIO.CABLE);
+        Empresa empresa6 = new Empresa("Aysa", "1234", "a", Constantes.SERVICIO.AGUA);
+        Empresa empresa7 = new Empresa("Telefonica", "1234", "a", Constantes.SERVICIO.TELEFONO);
+        Empresa empresa8 = new Empresa("Fibertel", "1234", "a", Constantes.SERVICIO.INTERNET);
+
+        ConsultorAPI.empresas.add(empresa1);
+        ConsultorAPI.empresas.add(empresa2);
+        ConsultorAPI.empresas.add(empresa3);
+        ConsultorAPI.empresas.add(empresa4);
+        ConsultorAPI.empresas.add(empresa5);
+        ConsultorAPI.empresas.add(empresa6);
+        ConsultorAPI.empresas.add(empresa7);
+        ConsultorAPI.empresas.add(empresa8);
     }
 
     //endregion
