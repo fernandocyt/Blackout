@@ -91,11 +91,14 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if(id == R.id.crear_reporte) {
+        if (id == R.id.crear_reporte) {
             Intent i = new Intent(getApplicationContext(), CrearReporte.class);
             startActivity(i);
-        }else if(id == R.id.mis_reportes){
+        } else if (id == R.id.mis_reportes) {
             Intent i = new Intent(getApplicationContext(), MisReportes.class);
+            startActivity(i);
+        } else if (id == R.id.accion_filtrar){
+            Intent i = new Intent(getApplicationContext(), FiltrarMapaPrincipal.class);
             startActivity(i);
         }
 
@@ -109,6 +112,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         mMap = googleMap;
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(Constantes.BSAS, 11.0f));
         mMap.setOnMarkerClickListener(this);
+
+        this.actualizarMapaPrincipal(null);
     }
 
     @Override
@@ -117,7 +122,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             marcador_posicion_actual = mMap.addMarker(new MarkerOptions()
                     .position(posicion)
                     .title("Usuario")
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_ubicacion_usuario)));
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_ubicacion_usuario))
+                    .zIndex(1));
         } else {
             marcador_posicion_actual.setPosition(posicion);
         }
@@ -155,13 +161,26 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
     {
         mMap.clear();
 
-        this.cargarCortesEnMapa();
-        this.cargarReportesEnMapa();
-        this.cargarSucursalesEnMapa();
+        if(FiltrarMapaPrincipal.mostrar_cortes)
+            this.cargarCortesEnMapa();
+
+        if(FiltrarMapaPrincipal.mostrar_reportes)
+            this.cargarReportesEnMapa();
+
+        if(FiltrarMapaPrincipal.mostrar_sucursales)
+            this.cargarSucursalesEnMapa();
 
         this.marcador_posicion_actual = null;
         if(GPSTracker.ubicacion_actual != null)
             this.actualizarPosicionActual(GPSTracker.ubicacion_actual);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(mMap != null)
+            this.actualizarMapaPrincipal(null);
     }
 
 

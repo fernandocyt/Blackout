@@ -50,7 +50,8 @@
 
         <activity android:name=".Actividades.CrearReporte" />
         <activity android:name=".Actividades.PerfilCorte" />
-        <activity android:name=".Actividades.MisReportes"></activity>
+        <activity android:name=".Actividades.MisReportes" />
+        <activity android:name=".Actividades.FiltrarMapaPrincipal"></activity>
     </application>
 
 </manifest>

@@ -21,7 +21,8 @@
             android:orientation="horizontal"
             tools:layout_editor_absoluteY="8dp"
             tools:layout_editor_absoluteX="8dp"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_marginTop="10dp">
 
             <TextView
                 android:id="@+id/lbl_servicio_crear_reporte"
@@ -40,7 +41,7 @@
                 android:id="@+id/spn_servicios_crear_reporte"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_marginRight="15dp"
                 android:padding="5dp"
                 android:background="#D8D8D8"/>
         </LinearLayout>
@@ -71,23 +72,20 @@
                     android:id="@+id/spn_empresas_crear_reporte"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+                    android:layout_marginRight="15dp"
                     android:padding="5dp"
                     android:background="#D8D8D8"/>
 
         </LinearLayout>
 
 
-
-        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:map="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
+        <fragment
             android:id="@+id/map_crear_reporte"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="5dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -106,6 +104,7 @@
                 android:id="@+id/btn_centrar_gps_crear_reporte"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
                 app:srcCompat="@android:drawable/ic_menu_mylocation"
                 android:onClick="marcarMapaEnPosicionGPS"/>
 

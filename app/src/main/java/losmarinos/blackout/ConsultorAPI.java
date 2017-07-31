@@ -100,10 +100,16 @@ public class ConsultorAPI extends AsyncTask<String, Long, String> {
             String password = "1234";
 
             String link=urls[0];//"http://myphpmysqlweb.hostei.com/loginpost.php";
-            String data  = URLEncoder.encode("username", "UTF-8") + "=" +
+            /*String data  = URLEncoder.encode("username", "UTF-8") + "=" +
                     URLEncoder.encode(username, "UTF-8");
             data += "&" + URLEncoder.encode("password", "UTF-8") + "=" +
-                    URLEncoder.encode(password, "UTF-8");
+                    URLEncoder.encode(password, "UTF-8");*/
+
+            JSONObject obj = new JSONObject();
+            obj.put("usuario", "joel");
+            obj.put("pass", "1234");
+
+            String data = obj.toString();
 
             URL url = new URL(link);
             URLConnection conn = url.openConnection();
