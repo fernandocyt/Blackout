@@ -1,5 +1,6 @@
 package losmarinos.blackout;
 
+import losmarinos.blackout.Excepciones.Excepcion;
 import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.Objetos.Reporte;
@@ -9,6 +10,7 @@ import losmarinos.blackout.Objetos.Usuario;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.httprequest.HttpRequest;
@@ -17,11 +19,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -38,6 +44,9 @@ public class ConsultorAPI extends AsyncTask<String, Long, String> {
     public static List<Corte> cortes = new ArrayList<>();
     public static List<Usuario> usuarios = new ArrayList<>();
     public static List<Empresa> empresas = new ArrayList<>();
+
+    public static JSONObject obj;
+    public static String link;
 
     public static void cargarDatosPruebas()
     {
@@ -90,49 +99,55 @@ public class ConsultorAPI extends AsyncTask<String, Long, String> {
     //endregion
 
     protected String doInBackground(String... urls) {
-        /*try {
-            return HttpRequest.get(urls[0]).accept("application/json").body();
-        } catch (HttpRequest.HttpRequestException exception) {
-            return null;
-        }*/
-        try{
-            String username = "joel";
-            String password = "1234";
 
-            String link=urls[0];//"http://myphpmysqlweb.hostei.com/loginpost.php";
-            /*String data  = URLEncoder.encode("username", "UTF-8") + "=" +
-                    URLEncoder.encode(username, "UTF-8");
-            data += "&" + URLEncoder.encode("password", "UTF-8") + "=" +
-                    URLEncoder.encode(password, "UTF-8");*/
+
+        /*try {
 
             JSONObject obj = new JSONObject();
-            obj.put("usuario", "joel");
-            obj.put("pass", "1234");
+            obj.put("name", "asdasd");
+            obj.put("email", "joelkaltman@gmail.com");
+            obj.put("password", "123456");
+            obj.put("password_confirmation", "123456");
 
-            String data = obj.toString();
+            String data = URLEncoder.encode(obj.toString(), "UTF-8");
+
+            return HttpRequest.post("http://45.79.78.110/api/register").accept("application/json").body(data);
+        } catch (HttpRequest.HttpRequestException exception) {
+            throw exception;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }*/
+
+        try{
 
             URL url = new URL(link);
-            URLConnection conn = url.openConnection();
+            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setUseCaches (false);
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+            connection.setConnectTimeout(30000);
 
-            conn.setDoOutput(true);
-            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+            //Send request
+            DataOutputStream wr = new DataOutputStream (connection.getOutputStream ());
+            wr.write(obj.toString().getBytes("UTF-8"));
+            wr.flush ();
+            wr.close ();
 
-            wr.write( data );
-            wr.flush();
-
-            BufferedReader reader = new BufferedReader(new
-                    InputStreamReader(conn.getInputStream()));
-
-            StringBuilder sb = new StringBuilder();
-            String line = null;
-
-            // Read Server Response
-            while((line = reader.readLine()) != null) {
-                sb.append(line);
-                break;
+            //Get Response
+            InputStream is = connection.getInputStream();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+            String line;
+            StringBuffer response = new StringBuffer();
+            while((line = rd.readLine()) != null) {
+                response.append(line);
+                response.append('\r');
             }
-
-            return sb.toString();
+            rd.close();
+            return response.toString();
         } catch(Exception e){
             return new String("Exception: " + e.getMessage());
         }
