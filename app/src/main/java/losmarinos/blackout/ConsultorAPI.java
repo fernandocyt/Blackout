@@ -1,6 +1,5 @@
 package losmarinos.blackout;
 
-import losmarinos.blackout.Excepciones.Excepcion;
 import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.Objetos.Reporte;
@@ -55,26 +54,6 @@ public class ConsultorAPI extends AsyncTask<String, Long, String> {
         usuarios.add(usuario1);
         usuarios.add(usuario2);
 
-        Corte corte_agua = new Corte(1, Constantes.SERVICIO.AGUA, "hola", Constantes.BSAS, 500, Calendar.getInstance().getTime(), 40, false);
-        Respuesta respuesta1_corte_agua = new Respuesta(usuario1, "Todo mal viejo");
-        Respuesta respuesta2_corte_agua = new Respuesta(usuario2, "Sigo esperando son todos putos");
-        corte_agua.addRespuesta(respuesta1_corte_agua);
-        corte_agua.addRespuesta(respuesta2_corte_agua);
-
-        Corte corte_luz = new Corte(2, Constantes.SERVICIO.LUZ, "hola", new LatLng(-34.627954, -58.499451), 1000, Calendar.getInstance().getTime(), 35, false);
-        Corte corte_gas = new Corte(3, Constantes.SERVICIO.GAS, "hola", new LatLng(-34.565213, -58.482971), 700, Calendar.getInstance().getTime(), 22, false);
-        Corte corte_internet = new Corte(4, Constantes.SERVICIO.INTERNET, "hola", new LatLng(-34.668060, -58.421173), 1500, Calendar.getInstance().getTime(), 152, false);
-        Corte corte_cable = new Corte(5, Constantes.SERVICIO.CABLE, "hola", new LatLng(-34.633038, -58.372421), 1000, Calendar.getInstance().getTime(), 53, false);
-        Corte corte_telefono = new Corte(6, Constantes.SERVICIO.TELEFONO, "hola", new LatLng(-34.595742, -58.420486), 1500, Calendar.getInstance().getTime(), 66, false);
-
-
-        ConsultorAPI.cortes.add(corte_agua);
-        ConsultorAPI.cortes.add(corte_luz);
-        ConsultorAPI.cortes.add(corte_gas);
-        ConsultorAPI.cortes.add(corte_internet);
-        ConsultorAPI.cortes.add(corte_cable);
-        ConsultorAPI.cortes.add(corte_telefono);
-
         Empresa empresa1 = new Empresa("Metrogas", "1234", "a", Constantes.SERVICIO.GAS);
         empresa1.addSucursal(new Sucursal(new LatLng(-34.660718, -58.570862)));
         Empresa empresa2 = new Empresa("Edenor", "1234", "a", Constantes.SERVICIO.LUZ);
@@ -94,6 +73,36 @@ public class ConsultorAPI extends AsyncTask<String, Long, String> {
         ConsultorAPI.empresas.add(empresa6);
         ConsultorAPI.empresas.add(empresa7);
         ConsultorAPI.empresas.add(empresa8);
+
+        Corte corte_agua = new Corte(1, Constantes.SERVICIO.AGUA, empresa6, Constantes.BSAS, 500, Calendar.getInstance().getTime(), 40, false);
+        Respuesta respuesta1_corte_agua = new Respuesta(usuario1, "Todo mal viejo");
+        Respuesta respuesta2_corte_agua = new Respuesta(usuario2, "Sigo esperando son todos putos");
+        corte_agua.addRespuesta(respuesta1_corte_agua);
+        corte_agua.addRespuesta(respuesta2_corte_agua);
+        Corte corte_luz = new Corte(2, Constantes.SERVICIO.LUZ, empresa2, new LatLng(-34.627954, -58.499451), 1000, Calendar.getInstance().getTime(), 35, false);
+        Corte corte_gas = new Corte(3, Constantes.SERVICIO.GAS, empresa1, new LatLng(-34.565213, -58.482971), 700, Calendar.getInstance().getTime(), 22, false);
+        Corte corte_internet = new Corte(4, Constantes.SERVICIO.INTERNET, empresa8, new LatLng(-34.668060, -58.421173), 1500, Calendar.getInstance().getTime(), 152, false);
+        Corte corte_cable = new Corte(5, Constantes.SERVICIO.CABLE, empresa4, new LatLng(-34.633038, -58.372421), 1000, Calendar.getInstance().getTime(), 53, false);
+        Corte corte_telefono = new Corte(6, Constantes.SERVICIO.TELEFONO, empresa7, new LatLng(-34.595742, -58.420486), 1500, Calendar.getInstance().getTime(), 66, false);
+
+        ConsultorAPI.cortes.add(corte_agua);
+        ConsultorAPI.cortes.add(corte_luz);
+        ConsultorAPI.cortes.add(corte_gas);
+        ConsultorAPI.cortes.add(corte_internet);
+        ConsultorAPI.cortes.add(corte_cable);
+        ConsultorAPI.cortes.add(corte_telefono);
+    }
+
+    public static Empresa encontrarEmpresaPorNombre(String nombre)
+    {
+        for(int i = 0; i < ConsultorAPI.empresas.size(); i++)
+        {
+            if(ConsultorAPI.empresas.get(i).getNombre().equals(nombre))
+            {
+                return ConsultorAPI.empresas.get(i);
+            }
+        }
+        return null;
     }
 
     //endregion

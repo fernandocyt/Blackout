@@ -51,7 +51,7 @@ public class MisReportes extends AppCompatActivity implements OnMapReadyCallback
         map_mis_reportes.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion, 13.0f));
     }
 
-    void cargarListView(){
+    public void cargarListView(){
         //Crea el adaptador de alarmas
         ReportesAdapter adapter = new ReportesAdapter(ConsultorAPI.reportes, this, this);
 

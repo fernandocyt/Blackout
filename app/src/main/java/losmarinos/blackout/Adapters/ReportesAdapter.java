@@ -67,7 +67,7 @@ public class ReportesAdapter extends BaseAdapter implements ListAdapter {
 
         //Handle TextView and display string from your list
         textview_texto = (TextView)view.findViewById(R.id.lbl_texto_reporte_mis_reportes);
-        textview_texto.setText(this.generarTextoReporte(list.get(position)));
+        textview_texto.setText(list.get(position).generarTextoReporte());
 
         textview_activo = (TextView)view.findViewById(R.id.lbl_activo_reporte_mis_reportes);
         if(list.get(position).isResuelto()) {
@@ -76,16 +76,17 @@ public class ReportesAdapter extends BaseAdapter implements ListAdapter {
             textview_activo.setText("Pendiente");
         }
 
-        Button button_resolver = (Button)view.findViewById(R.id.btn_resolver_reporte_mis_reportes);
+        button_resolver = (Button)view.findViewById(R.id.btn_resolver_reporte_mis_reportes);
         if(list.get(position).isResuelto()) {
             button_resolver.setVisibility(View.GONE);
         }
         button_resolver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Button button_resolver = (Button)v.findViewById(R.id.btn_resolver_reporte_mis_reportes);
                 button_resolver.setVisibility(View.GONE);
                 list.get(position).setResuelto(true);
+                MisReportes mis_reportes = (MisReportes)context;
+                mis_reportes.cargarListView();
             }
         });
 
@@ -101,15 +102,5 @@ public class ReportesAdapter extends BaseAdapter implements ListAdapter {
         return view;
     }
 
-    String generarTextoReporte(Reporte reporte)
-    {
-        String texto = "";
 
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        String fecha = df.format(reporte.getFecha());
-
-        texto = reporte.getServicio() + " - " + reporte.getEmpresa() + " - " + fecha;
-
-        return texto;
-    }
 }

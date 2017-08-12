@@ -136,21 +136,29 @@
                 android:inputType="textPassword"/>
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_weight="1"
-            android:gravity="center|bottom">
+            android:gravity="center|bottom"
+            android:layout_weight="1">
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
 
             <Button
                 android:id="@+id/btn_registrar_registrar_usuario"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Registrar"
-                android:onClick="registrarUsuario"/>
+                android:layout_weight="1"
+                android:text="Registrar" />
 
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
         </LinearLayout>
 
 

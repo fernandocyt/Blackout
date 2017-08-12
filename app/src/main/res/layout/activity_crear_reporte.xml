@@ -25,7 +25,6 @@
             android:layout_marginTop="10dp">
 
             <TextView
-                android:id="@+id/lbl_servicio_crear_reporte"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Servicio"
@@ -56,7 +55,6 @@
             android:gravity="center">
 
                 <TextView
-                    android:id="@+id/lbl_empresa_crear_reporte"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Empresa"
@@ -119,7 +117,6 @@
             android:gravity="center">
 
             <TextView
-                android:id="@+id/lbl_radio_crear_reporte"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Radio"

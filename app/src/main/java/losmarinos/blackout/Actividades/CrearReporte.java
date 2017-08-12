@@ -1,5 +1,6 @@
 package losmarinos.blackout.Actividades;
 
+import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.R;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ObservadorGPS;
@@ -141,7 +142,8 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
     public void crearReporte(View view)
     {
         String servicio = this.spinner_servicios.getSelectedItem().toString();
-        String empresa = this.spinner_empresas.getSelectedItem().toString();
+        String nombre_empresa = this.spinner_empresas.getSelectedItem().toString();
+        Empresa empresa = ConsultorAPI.encontrarEmpresaPorNombre(nombre_empresa);
         Reporte nuevo_reporte = new Reporte(Constantes.stringToServicio(servicio), empresa, marcador_posicion_reporte.getPosition(), seekbar_radio.getProgress());
 
         ConsultorAPI.reportes.add(nuevo_reporte);

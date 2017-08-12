@@ -194,10 +194,22 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         {
             Corte corte_actual = cortes.get(i);
 
+            if(FiltrarMapaPrincipal.nombre_empresa != null &&
+                !FiltrarMapaPrincipal.nombre_empresa.equals(corte_actual.getEmpresa().getNombre()))
+            {
+                continue;
+            }
+
+            if(FiltrarMapaPrincipal.servicio != null &&
+                    FiltrarMapaPrincipal.servicio != corte_actual.getServicio())
+            {
+                continue;
+            }
+
             Marker corte = mMap.addMarker(new MarkerOptions()
                     .position(corte_actual.getUbicacion())
                     .title("Corte")
-                    .icon(Constantes.getIconoCorte(corte_actual.getServicio())) );
+                    .icon(Constantes.getIconoCorte(corte_actual.getServicio())));
             corte.setTag(corte_actual);
 
             mMap.addCircle(new CircleOptions()
@@ -216,19 +228,33 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         {
             Reporte rep_actual = reportes.get(i);
 
-            if(!rep_actual.isResuelto()) {
-                mMap.addMarker(new MarkerOptions()
-                        .position(rep_actual.getUbicacion())
-                        .title("Reporte")
-                        .icon(Constantes.getIconoReporte(rep_actual.getServicio())));
-
-                mMap.addCircle(new CircleOptions()
-                        .center(rep_actual.getUbicacion())
-                        .radius(rep_actual.getRadio())
-                        .strokeColor(Constantes.STROKE_COLOR_CIRCLE)
-                        .fillColor(Constantes.COLOR_CIRCLE)
-                        .strokeWidth(5));
+            if(FiltrarMapaPrincipal.nombre_empresa != null &&
+                    !FiltrarMapaPrincipal.nombre_empresa.equals(rep_actual.getEmpresa()))
+            {
+                continue;
             }
+
+            if(FiltrarMapaPrincipal.servicio != null &&
+                    FiltrarMapaPrincipal.servicio != rep_actual.getServicio())
+            {
+                continue;
+            }
+
+            if(rep_actual.isResuelto()) {
+                continue;
+            }
+
+            mMap.addMarker(new MarkerOptions()
+                    .position(rep_actual.getUbicacion())
+                    .title("Reporte")
+                    .icon(Constantes.getIconoReporte(rep_actual.getServicio())));
+
+            mMap.addCircle(new CircleOptions()
+                    .center(rep_actual.getUbicacion())
+                    .radius(rep_actual.getRadio())
+                    .strokeColor(Constantes.STROKE_COLOR_CIRCLE)
+                    .fillColor(Constantes.COLOR_CIRCLE)
+                    .strokeWidth(5));
         }
     }
 
@@ -237,6 +263,18 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         List<Empresa> empresas = ConsultorAPI.empresas;
         for(int i = 0; i < empresas.size(); i++)
         {
+            if(FiltrarMapaPrincipal.nombre_empresa != null &&
+                    !FiltrarMapaPrincipal.nombre_empresa.equals(empresas.get(i).getNombre()))
+            {
+                continue;
+            }
+
+            if(FiltrarMapaPrincipal.servicio != null &&
+                    FiltrarMapaPrincipal.servicio != empresas.get(i).getTipoServicio())
+            {
+                continue;
+            }
+
             List<Sucursal> sucursales_actual = empresas.get(i).getSucursales();
 
             for(int j = 0; j < sucursales_actual.size(); j++)

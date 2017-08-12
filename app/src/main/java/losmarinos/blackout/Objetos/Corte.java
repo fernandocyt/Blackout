@@ -19,7 +19,7 @@ import losmarinos.blackout.Constantes;
 public class Corte{
     private int id;
     private Constantes.SERVICIO servicio;
-    private String empresa;
+    private Empresa empresa;
     private LatLng ubicacion;
     private double radio;
     private Date fecha_inicio;
@@ -35,11 +35,11 @@ public class Corte{
         this.servicio = servicio;
     }
 
-    public String getEmpresa() {
+    public Empresa getEmpresa() {
         return empresa;
     }
 
-    public void setEmpresa(String empresa) {
+    public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
     }
 
@@ -97,7 +97,7 @@ public class Corte{
         return id;
     }
 
-    public Corte(int id, Constantes.SERVICIO servicio, String empresa, LatLng ubicacion, double radio, Date fecha_inicio, int cantidad_reportes, boolean resuelto)
+    public Corte(int id, Constantes.SERVICIO servicio, Empresa empresa, LatLng ubicacion, double radio, Date fecha_inicio, int cantidad_reportes, boolean resuelto)
     {
         this.id = id;
         this.servicio = servicio;

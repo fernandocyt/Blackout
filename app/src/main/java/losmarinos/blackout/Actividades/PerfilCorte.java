@@ -56,7 +56,7 @@ public class PerfilCorte extends AppCompatActivity {
     void cargarCorte()
     {
         textview_servicio.setText(Constantes.servicioToString(corte.getServicio()));
-        textview_empresa.setText(corte.getEmpresa());
+        textview_empresa.setText(corte.getEmpresa().getNombre());
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         String fecha = df.format(corte.getFechaInicio());
         textview_fecha.setText(fecha);
