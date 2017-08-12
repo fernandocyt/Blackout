@@ -7,8 +7,10 @@ import losmarinos.blackout.Objetos.Respuesta;
 import losmarinos.blackout.Objetos.Sucursal;
 import losmarinos.blackout.Objetos.Usuario;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -36,7 +38,7 @@ import java.util.List;
  */
 
 // Clase para obtener respuestas a las consultas realizadas a la API
-public class ConsultorAPI extends AsyncTask<String, Long, String> {
+public class ConsultorAPI extends AsyncTask<Void, Long, String> {
 
     //region
     public static List<Reporte> reportes = new ArrayList<>();
@@ -46,6 +48,7 @@ public class ConsultorAPI extends AsyncTask<String, Long, String> {
 
     public static JSONObject obj;
     public static String link;
+    public static ObservadorAPI observador;
 
     public static void cargarDatosPruebas()
     {
@@ -107,28 +110,7 @@ public class ConsultorAPI extends AsyncTask<String, Long, String> {
 
     //endregion
 
-    protected String doInBackground(String... urls) {
-
-
-        /*try {
-
-            JSONObject obj = new JSONObject();
-            obj.put("name", "asdasd");
-            obj.put("email", "joelkaltman@gmail.com");
-            obj.put("password", "123456");
-            obj.put("password_confirmation", "123456");
-
-            String data = URLEncoder.encode(obj.toString(), "UTF-8");
-
-            return HttpRequest.post("http://45.79.78.110/api/register").accept("application/json").body(data);
-        } catch (HttpRequest.HttpRequestException exception) {
-            throw exception;
-        }
-        catch (Exception e)
-        {
-            return null;
-        }*/
-
+    protected String doInBackground(Void... params) {
         try{
 
             URL url = new URL(link);
@@ -155,17 +137,21 @@ public class ConsultorAPI extends AsyncTask<String, Long, String> {
                 response.append(line);
                 response.append('\r');
             }
+
             rd.close();
             return response.toString();
         } catch(Exception e){
+            this.observador.obtenerRespuestaAPI(null, false);
+
             return new String("Exception: " + e.getMessage());
         }
     }
 
     protected void onPostExecute(String response) {
-        JSONObject obj1= null;
+        JSONObject obj_resp= null;
         try {
-            obj1 = new JSONObject(response);
+            obj_resp = new JSONObject(response);
+            this.observador.obtenerRespuestaAPI(obj_resp, true);
         } catch (JSONException e) {
             e.printStackTrace();
         }

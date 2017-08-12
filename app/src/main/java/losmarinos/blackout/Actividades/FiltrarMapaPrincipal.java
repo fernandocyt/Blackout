@@ -35,6 +35,7 @@ public class FiltrarMapaPrincipal extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Filtrar mapa");
         setContentView(R.layout.activity_filtrar_mapa_principal);
 
         switch_cortes = (Switch) findViewById(R.id.switch_cortes_filtrar_mapa_principal);

@@ -71,8 +71,6 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        //this.buscarPelicula();
     }
 
     @Override
@@ -99,9 +97,6 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             startActivity(i);
         } else if (id == R.id.accion_filtrar){
             Intent i = new Intent(getApplicationContext(), FiltrarMapaPrincipal.class);
-            startActivity(i);
-        } else if (id == R.id.agregar_punto_interes) {
-            Intent i = new Intent(getApplicationContext(), RegistrarUsuario.class);
             startActivity(i);
         }
 
@@ -286,12 +281,5 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             }
         }
     }
-
-    public void buscarPelicula() {
-        String titulo = "";
-        String url = String.format("http://45.79.78.110/api/register", titulo);
-        new ConsultorAPI().execute(url);
-    }
-
 }
 

@@ -10,9 +10,10 @@ import org.json.JSONObject;
 
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorAPI;
+import losmarinos.blackout.ObservadorAPI;
 import losmarinos.blackout.R;
 
-public class RegistrarUsuario extends AppCompatActivity {
+public class RegistrarUsuario extends AppCompatActivity implements ObservadorAPI {
     EditText edittext_nombre;
     EditText edittext_email;
     EditText edittext_password;
@@ -22,6 +23,7 @@ public class RegistrarUsuario extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Registrar usuario");
         setContentView(R.layout.activity_registrar_usuario);
 
         edittext_nombre = (EditText)findViewById(R.id.txt_nombre_registrar_usuario);
@@ -49,8 +51,6 @@ public class RegistrarUsuario extends AppCompatActivity {
             return;
         }
 
-        boolean correcto = false;
-
         JSONObject obj = new JSONObject();
         try {
             obj.put("name", nombre);
@@ -61,7 +61,18 @@ public class RegistrarUsuario extends AppCompatActivity {
 
         ConsultorAPI.link = Constantes.LINK_API + "register";
         ConsultorAPI.obj = obj;
+        ConsultorAPI.observador = this;
 
-        new ConsultorAPI().execute("");
+        new ConsultorAPI().execute();
+    }
+
+    @Override
+    public void obtenerRespuestaAPI(JSONObject respuesta, boolean correcto)
+    {
+        if(correcto) {
+            Toast.makeText(this, "Usuario registrado correctamente", Toast.LENGTH_LONG).show();
+
+            super.onBackPressed();
+        }
     }
 }
