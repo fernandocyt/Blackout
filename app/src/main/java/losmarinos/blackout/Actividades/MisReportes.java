@@ -18,6 +18,7 @@ import losmarinos.blackout.Adapters.ReportesAdapter;
 import losmarinos.blackout.Adapters.RespuestaAdapter;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorAPI;
+import losmarinos.blackout.Global;
 import losmarinos.blackout.Objetos.Reporte;
 import losmarinos.blackout.R;
 
@@ -53,7 +54,7 @@ public class MisReportes extends AppCompatActivity implements OnMapReadyCallback
 
     public void cargarListView(){
         //Crea el adaptador de alarmas
-        ReportesAdapter adapter = new ReportesAdapter(ConsultorAPI.reportes, this, this);
+        ReportesAdapter adapter = new ReportesAdapter(Global.reportes, this, this);
 
         //enlaza el list view del layout a la variable
         ListView mi_lista = (ListView)findViewById(R.id.lst_reportes_mis_reportes);
@@ -64,7 +65,7 @@ public class MisReportes extends AppCompatActivity implements OnMapReadyCallback
 
     public void cargarReportesEnMapa()
     {
-        List<Reporte> reportes = ConsultorAPI.reportes;
+        List<Reporte> reportes = Global.reportes;
         for(int i = 0; i < reportes.size(); i++)
         {
             Reporte rep_actual = reportes.get(i);

@@ -7,9 +7,11 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import losmarinos.blackout.Calculos;
 import losmarinos.blackout.Constantes;
 
 /**
@@ -17,6 +19,8 @@ import losmarinos.blackout.Constantes;
  */
 
 public class Corte{
+    public static int proxima_id_corte_global = 0;
+
     private int id;
     private Constantes.SERVICIO servicio;
     private Empresa empresa;
@@ -24,8 +28,8 @@ public class Corte{
     private double radio;
     private Date fecha_inicio;
     private boolean resuelto;
-    private int cantidad_reportes;
     private List<Respuesta> respuestas;
+    private List<Reporte> reportes;
 
     public Constantes.SERVICIO getServicio() {
         return servicio;
@@ -75,14 +79,6 @@ public class Corte{
         this.resuelto = resuelto;
     }
 
-    public int getCantidadReportes() {
-        return cantidad_reportes;
-    }
-
-    public void setCantidadReportes(int cantidad_reportes) {
-        this.cantidad_reportes = cantidad_reportes;
-    }
-
     public void addRespuesta(Respuesta respuesta)
     {
         this.respuestas.add(respuesta);
@@ -93,21 +89,146 @@ public class Corte{
         return this.respuestas;
     }
 
+    public void addReporte(Reporte reporte)
+    {
+        this.reportes.add(reporte);
+    }
+
+    public List<Reporte> getReportes()
+    {
+        return this.reportes;
+    }
+
+    public void setReportes(List<Reporte> reportes) { this.reportes = reportes; }
+
     public int getId() {
         return id;
     }
 
-    public Corte(int id, Constantes.SERVICIO servicio, Empresa empresa, LatLng ubicacion, double radio, Date fecha_inicio, int cantidad_reportes, boolean resuelto)
+    public Corte(Constantes.SERVICIO servicio, Empresa empresa, LatLng ubicacion, double radio, Date fecha_inicio, boolean resuelto)
     {
-        this.id = id;
+        this.id = this.proxima_id_corte_global;
+        this.proxima_id_corte_global++;
+
         this.servicio = servicio;
         this.empresa = empresa;
         this.ubicacion = ubicacion;
         this.radio = radio;
         this.fecha_inicio = fecha_inicio;
-        this.cantidad_reportes = cantidad_reportes;
         this.resuelto = resuelto;
         this.respuestas = new ArrayList<>();
+        this.reportes = new ArrayList<>();
     }
 
+    public Corte(Reporte reporte)
+    {
+        this.id = this.proxima_id_corte_global;
+        this.proxima_id_corte_global++;
+
+        this.servicio = reporte.getServicio();
+        this.empresa = null;
+        this.ubicacion = reporte.getUbicacion();
+        this.radio = 0;
+        this.fecha_inicio = Calendar.getInstance().getTime();
+        this.resuelto = false;
+        this.respuestas = new ArrayList<>();
+        this.reportes = new ArrayList<>();
+        this.reportes.add(reporte);
+        reporte.setAsociado(true);
+    }
+
+    public boolean contieneReporte(Reporte reporte)
+    {
+        for(int i = 0; i < this.reportes.size(); i++)
+        {
+            if(reporte.getId() == this.reportes.get(i).getId())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int cantidadReportes()
+    {
+        return this.reportes.size();
+    }
+
+    public boolean asociar(Reporte reporte)
+    {
+        if (Calculos.hayInterseccion(
+                reporte.getUbicacion(), Constantes.RADIO_SECU,
+                this.ubicacion, Constantes.RADIO_SECU)
+                && reporte.getServicio() == this.servicio) {
+
+            // Asocio al corte con el reporte
+            this.reportes.add(reporte);
+            reporte.setAsociado(true);
+
+            // Modifico la posicion del corte
+            double desplazarse_lat = (reporte.getUbicacion().latitude - this.ubicacion.latitude) / this.cantidadReportes();
+            double desplazarse_long = (reporte.getUbicacion().longitude - this.ubicacion.longitude) / this.cantidadReportes();
+            this.ubicacion = new LatLng(this.ubicacion.latitude + desplazarse_lat, this.ubicacion.longitude + desplazarse_long);
+
+            // Modifico el radio del corte
+            double distancia_mas_lejana = Calculos.calcularDistancia(reporte.getUbicacion(), this.ubicacion) + reporte.getRadio();
+            if(distancia_mas_lejana > this.radio)
+            {
+                this.radio = distancia_mas_lejana;
+            }
+
+            // Modifico empresa responsable
+            //this.recalcularEmpresaResponsable();
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void recalcularEmpresaResponsable()
+    {
+        int indice_empresa = -1;
+        int mayor_cantidad_apariciones = 0;
+
+        // Primero me fijo cantidad de reportes sin empresa
+        for(int i = 0; i < this.reportes.size(); i++)
+        {
+            if(this.reportes.get(i).getEmpresa() == null)
+            {
+                mayor_cantidad_apariciones++;
+            }
+        }
+
+        // Luego busco empresa por empresa
+        for(int i = 0; i < this.reportes.size(); i++)
+        {
+            if(this.reportes.get(i).getEmpresa() != null) {
+
+                int cant_apariciones = 1;
+                for (int j = 0; j < this.reportes.size(); j++) {
+                    if (this.reportes.get(i).getEmpresa().getId() == this.reportes.get(j).getEmpresa().getId()) {
+                        if (i == j) continue;
+                        cant_apariciones++;
+                    }
+                }
+                if (cant_apariciones > mayor_cantidad_apariciones) {
+                    mayor_cantidad_apariciones = cant_apariciones;
+                    indice_empresa = i;
+                }
+            }
+        }
+
+        // Guardo empresa
+        if(indice_empresa != -1)
+        {
+            this.empresa = this.reportes.get(indice_empresa).getEmpresa();
+        }
+        else
+        {
+            this.empresa = null;
+        }
+    }
 }

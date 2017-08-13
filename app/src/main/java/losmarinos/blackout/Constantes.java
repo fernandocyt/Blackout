@@ -18,6 +18,8 @@ public class Constantes {
 
     public static final String LINK_API = "http://45.79.78.110/api/";
 
+    public static final int RADIO_SECU = 1000;
+
     public enum SERVICIO
     {
         AGUA,

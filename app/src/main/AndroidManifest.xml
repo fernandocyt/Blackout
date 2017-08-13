@@ -53,7 +53,8 @@
         <activity android:name=".Actividades.MisReportes" />
         <activity android:name=".Actividades.FiltrarMapaPrincipal" />
         <activity android:name=".Actividades.RegistrarUsuario" />
-        <activity android:name=".Actividades.Login">
+        <activity android:name=".Actividades.Login"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

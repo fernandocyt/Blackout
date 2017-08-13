@@ -1,5 +1,7 @@
 package losmarinos.blackout.Actividades;
 
+import losmarinos.blackout.Calculos;
+import losmarinos.blackout.Global;
 import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.Objetos.Sucursal;
@@ -50,7 +52,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapa_principal);
 
-        ConsultorAPI.cargarDatosPruebas();
+        Global.cargarDatosPruebas();
 
         startService(new Intent(this, GPSTracker.class));
         GPSTracker.addObserver(this);
@@ -121,7 +123,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
                     .position(posicion)
                     .title("Usuario")
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_ubicacion_usuario))
-                    .zIndex(1));
+                    .zIndex(3));
         } else {
             marcador_posicion_actual.setPosition(posicion);
         }
@@ -159,6 +161,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
     {
         mMap.clear();
 
+        Global.calcularNuevosCortes();
+
         if(FiltrarMapaPrincipal.mostrar_cortes)
             this.cargarCortesEnMapa();
 
@@ -184,7 +188,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
     public void cargarCortesEnMapa()
     {
-        List<Corte> cortes = ConsultorAPI.cortes;
+        List<Corte> cortes = Global.cortes;
         for(int i = 0; i < cortes.size(); i++)
         {
             Corte corte_actual = cortes.get(i);
@@ -204,7 +208,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             Marker corte = mMap.addMarker(new MarkerOptions()
                     .position(corte_actual.getUbicacion())
                     .title("Corte")
-                    .icon(Constantes.getIconoCorte(corte_actual.getServicio())));
+                    .icon(Constantes.getIconoCorte(corte_actual.getServicio()))
+                    .zIndex(2));
             corte.setTag(corte_actual);
 
             mMap.addCircle(new CircleOptions()
@@ -218,7 +223,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
     public void cargarReportesEnMapa()
     {
-        List<Reporte> reportes = ConsultorAPI.reportes;
+        List<Reporte> reportes = Global.reportes;
         for(int i = 0; i < reportes.size(); i++)
         {
             Reporte rep_actual = reportes.get(i);
@@ -255,7 +260,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
     public void cargarSucursalesEnMapa()
     {
-        List<Empresa> empresas = ConsultorAPI.empresas;
+        List<Empresa> empresas = Global.empresas;
         for(int i = 0; i < empresas.size(); i++)
         {
             if(FiltrarMapaPrincipal.nombre_empresa != null &&
@@ -277,7 +282,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
                 mMap.addMarker(new MarkerOptions()
                         .position(sucursales_actual.get(j).getUbicacion())
                         .title("Sucursal " + empresas.get(i).getNombre())
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_sucursal)));
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_sucursal))
+                        .zIndex(1));
             }
         }
     }

@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorAPI;
+import losmarinos.blackout.Global;
 import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Respuesta;
 import losmarinos.blackout.R;
@@ -35,11 +36,11 @@ public class PerfilCorte extends AppCompatActivity {
         setContentView(R.layout.activity_perfil_corte);
 
         int id_corte = getIntent().getIntExtra("idCorte", 0);
-        for(int i = 0; i < ConsultorAPI.cortes.size(); i++)
+        for(int i = 0; i < Global.cortes.size(); i++)
         {
-            if(id_corte == ConsultorAPI.cortes.get(i).getId())
+            if(id_corte == Global.cortes.get(i).getId())
             {
-                this.corte = ConsultorAPI.cortes.get(i);
+                this.corte = Global.cortes.get(i);
             }
         }
         //corte = ConsultorAPI.cortes.get(0);
@@ -56,11 +57,15 @@ public class PerfilCorte extends AppCompatActivity {
     void cargarCorte()
     {
         textview_servicio.setText(Constantes.servicioToString(corte.getServicio()));
-        textview_empresa.setText(corte.getEmpresa().getNombre());
+
+        if(corte.getEmpresa() != null)
+            textview_empresa.setText(corte.getEmpresa().getNombre());
+
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         String fecha = df.format(corte.getFechaInicio());
         textview_fecha.setText(fecha);
-        textview_cantidad_reportes.setText(Integer.toString(corte.getCantidadReportes()));
+
+        textview_cantidad_reportes.setText(Integer.toString(corte.cantidadReportes()));
 
         this.cargarListView();
     }
@@ -80,7 +85,7 @@ public class PerfilCorte extends AppCompatActivity {
     public void agregarRespuesta(View view)
     {
         String respuesta = edittext_respuesta.getText().toString();
-        Respuesta nueva_respuesta = new Respuesta(ConsultorAPI.usuarios.get(0), respuesta);
+        Respuesta nueva_respuesta = new Respuesta(Global.usuarios.get(0), respuesta);
 
         corte.addRespuesta(nueva_respuesta);
         this.cargarListView();

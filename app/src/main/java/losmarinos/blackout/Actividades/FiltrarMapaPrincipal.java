@@ -14,6 +14,7 @@ import java.util.List;
 
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorAPI;
+import losmarinos.blackout.Global;
 import losmarinos.blackout.R;
 
 public class FiltrarMapaPrincipal extends AppCompatActivity
@@ -113,10 +114,10 @@ public class FiltrarMapaPrincipal extends AppCompatActivity
         List<String> spinnerArray =  new ArrayList<String>();
         spinnerArray.add("No");
 
-        for(int i = 0; i < ConsultorAPI.empresas.size(); i++)
+        for(int i = 0; i < Global.empresas.size(); i++)
         {
-            if(ConsultorAPI.empresas.get(i).getTipoServicio() == servicio) {
-                spinnerArray.add(ConsultorAPI.empresas.get(i).getNombre());
+            if(Global.empresas.get(i).getTipoServicio() == servicio) {
+                spinnerArray.add(Global.empresas.get(i).getNombre());
             }
         }
 

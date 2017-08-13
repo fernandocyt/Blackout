@@ -1,5 +1,6 @@
 package losmarinos.blackout.Actividades;
 
+import losmarinos.blackout.Global;
 import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.R;
 import losmarinos.blackout.Constantes;
@@ -99,12 +100,13 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
     private void cargarSpinnerEmpresas(Constantes.SERVICIO servicio)
     {
         List<String> spinnerArray =  new ArrayList<String>();
+        spinnerArray.add("No especificar");
 
-        for(int i = 0; i < ConsultorAPI.empresas.size(); i++)
+        for(int i = 0; i < Global.empresas.size(); i++)
         {
-            if(ConsultorAPI.empresas.get(i).getTipoServicio() == servicio)
+            if(Global.empresas.get(i).getTipoServicio() == servicio)
             {
-                spinnerArray.add(ConsultorAPI.empresas.get(i).getNombre());
+                spinnerArray.add(Global.empresas.get(i).getNombre());
             }
         }
 
@@ -143,10 +145,15 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
     {
         String servicio = this.spinner_servicios.getSelectedItem().toString();
         String nombre_empresa = this.spinner_empresas.getSelectedItem().toString();
-        Empresa empresa = ConsultorAPI.encontrarEmpresaPorNombre(nombre_empresa);
+        Empresa empresa = null;
+        if (!nombre_empresa.equals("No especificar")) {
+            empresa = Global.encontrarEmpresaPorNombre(nombre_empresa);
+        }
         Reporte nuevo_reporte = new Reporte(Constantes.stringToServicio(servicio), empresa, marcador_posicion_reporte.getPosition(), seekbar_radio.getProgress());
 
-        ConsultorAPI.reportes.add(nuevo_reporte);
+        Global.asociarReporteACortes(nuevo_reporte);
+
+        Global.reportes.add(nuevo_reporte);
 
         this.radio_reporte = null;
         this.marcador_posicion_reporte = null;

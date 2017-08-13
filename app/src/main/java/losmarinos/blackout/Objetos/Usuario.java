@@ -7,6 +7,9 @@ import losmarinos.blackout.Constantes;
  */
 
 public class Usuario {
+    public static int proxima_id_usuario_global = 0;
+
+    private int id;
     private String nombre;
     private String pass;
     private String mail;
@@ -44,11 +47,23 @@ public class Usuario {
         this.tipo = tipo;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public Usuario(String nombre, String pass, String mail, Constantes.TIPOSUSUARIO tipo)
     {
+        this.id = this.proxima_id_usuario_global;
+        this.proxima_id_usuario_global++;
+
         this.nombre = nombre;
         this.pass = pass;
         this.mail = mail;
         this.tipo = tipo;
     }
+
 }
