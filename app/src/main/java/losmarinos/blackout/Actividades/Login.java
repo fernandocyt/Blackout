@@ -13,6 +13,8 @@ import org.json.JSONObject;
 
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorAPI;
+import losmarinos.blackout.Global;
+import losmarinos.blackout.Objetos.Usuario;
 import losmarinos.blackout.ObservadorAPI;
 import losmarinos.blackout.R;
 
@@ -62,6 +64,8 @@ public class Login extends AppCompatActivity implements ObservadorAPI {
     {
         if(correcto) {
             Toast.makeText(this, "Logeado correctamente", Toast.LENGTH_LONG).show();
+
+            Global.usuario_actual = new Usuario(usuario.getText().toString(), password.getText().toString(), usuario.getText().toString(), Constantes.TIPOSUSUARIO.PERSONA);
 
             Intent i = new Intent(getApplicationContext(), MapaPrincipal.class);
             startActivity(i);

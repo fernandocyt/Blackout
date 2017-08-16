@@ -4,6 +4,7 @@ import losmarinos.blackout.Calculos;
 import losmarinos.blackout.Global;
 import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Empresa;
+import losmarinos.blackout.Objetos.PuntoInteres;
 import losmarinos.blackout.Objetos.Sucursal;
 import losmarinos.blackout.R;
 import losmarinos.blackout.Constantes;
@@ -11,7 +12,10 @@ import losmarinos.blackout.ObservadorGPS;
 import losmarinos.blackout.GPSTracker;
 import losmarinos.blackout.ConsultorAPI;
 import losmarinos.blackout.Objetos.Reporte;
+import losmarinos.blackout.ServicioPeriodico;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -54,7 +58,11 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
         Global.cargarDatosPruebas();
 
-        startService(new Intent(this, GPSTracker.class));
+        if(!isMyServiceRunning(ServicioPeriodico.class))
+            startService(new Intent(this, ServicioPeriodico.class));
+
+        if(!isMyServiceRunning(GPSTracker.class))
+            startService(new Intent(this, GPSTracker.class));
         GPSTracker.addObserver(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -74,6 +82,17 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -99,6 +118,9 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             startActivity(i);
         } else if (id == R.id.accion_filtrar){
             Intent i = new Intent(getApplicationContext(), FiltrarMapaPrincipal.class);
+            startActivity(i);
+        } else if (id == R.id.agregar_punto_interes){
+            Intent i = new Intent(getApplicationContext(), CrearPuntoInteres.class);
             startActivity(i);
         }
 
@@ -172,6 +194,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         if(FiltrarMapaPrincipal.mostrar_sucursales)
             this.cargarSucursalesEnMapa();
 
+        this.cargarPuntosInteres();
+
         this.marcador_posicion_actual = null;
         if(GPSTracker.ubicacion_actual != null)
             this.actualizarPosicionActual(GPSTracker.ubicacion_actual);
@@ -185,6 +209,28 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             this.actualizarMapaPrincipal(null);
     }
 
+
+    public void cargarPuntosInteres()
+    {
+        List<PuntoInteres> puntos = Global.usuario_actual.getPuntosInteres();
+        for(int i = 0; i < puntos.size(); i++) {
+            PuntoInteres punto_actual = puntos.get(i);
+
+            Marker punto = mMap.addMarker(new MarkerOptions()
+                    .position(punto_actual.getUbicacion())
+                    .title("punto")
+                    .zIndex(3));
+            punto.setTag(punto_actual);
+
+            mMap.addCircle(new CircleOptions()
+                    .center(punto_actual.getUbicacion())
+                    .radius(punto_actual.getRadio())
+                    .strokeColor(Constantes.STROKE_COLOR_CIRCLE)
+                    .fillColor(0x30ff0000)
+                    .strokeWidth(5));
+        }
+
+    }
 
     public void cargarCortesEnMapa()
     {

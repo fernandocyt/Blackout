@@ -1,5 +1,8 @@
 package losmarinos.blackout.Objetos;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import losmarinos.blackout.Constantes;
 
 /**
@@ -14,6 +17,7 @@ public class Usuario {
     private String pass;
     private String mail;
     private Constantes.TIPOSUSUARIO tipo;
+    private List<PuntoInteres> puntos_interes;
 
     public String getNombre() {
         return nombre;
@@ -55,6 +59,14 @@ public class Usuario {
         this.id = id;
     }
 
+    public List<PuntoInteres> getPuntosInteres() {
+        return puntos_interes;
+    }
+
+    public void addPuntoInteres(PuntoInteres punto_interes) {
+        this.puntos_interes.add(punto_interes);
+    }
+
     public Usuario(String nombre, String pass, String mail, Constantes.TIPOSUSUARIO tipo)
     {
         this.id = this.proxima_id_usuario_global;
@@ -64,6 +76,7 @@ public class Usuario {
         this.pass = pass;
         this.mail = mail;
         this.tipo = tipo;
+        this.puntos_interes = new ArrayList<>();
     }
 
 }

@@ -10,9 +10,7 @@
         android:layout_width="368dp"
         android:layout_height="551dp"
         android:orientation="vertical"
-        android:gravity="center|center_vertical"
-        tools:layout_editor_absoluteY="8dp"
-        tools:layout_editor_absoluteX="8dp">
+        android:gravity="center|center_vertical">
 
 
         <ImageView
@@ -55,7 +53,7 @@
             android:layout_height="wrap_content"
             android:textSize="15sp"
             android:onClick="registrarUsuario"
-            android:text="Registrar"
+            android:text="Registrar nuevo usuario"
             android:layout_gravity="center"
             android:textStyle="italic"
             android:layout_marginTop="20dp"/>

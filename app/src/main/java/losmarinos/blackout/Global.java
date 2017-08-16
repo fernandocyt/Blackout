@@ -10,6 +10,7 @@ import java.util.List;
 
 import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Empresa;
+import losmarinos.blackout.Objetos.PuntoInteres;
 import losmarinos.blackout.Objetos.Reporte;
 import losmarinos.blackout.Objetos.Respuesta;
 import losmarinos.blackout.Objetos.Sucursal;
@@ -20,14 +21,27 @@ import losmarinos.blackout.Objetos.Usuario;
  */
 
 public class Global {
+    public static Usuario usuario_actual = null;
+
     public static List<Reporte> reportes = new ArrayList<>();
     public static List<Corte> cortes = new ArrayList<>();
     public static List<Usuario> usuarios = new ArrayList<>();
     public static List<Empresa> empresas = new ArrayList<>();
 
+    public static boolean cargo_datos = false;
+
 
     public static void cargarDatosPruebas()
     {
+        if(cargo_datos)
+            return;
+
+        /*if(usuario_actual != null)
+        {
+            PuntoInteres punto = new PuntoInteres(Constantes.SERVICIO.LUZ, null, new LatLng(-34.627954, -58.499451), 1000);
+            usuario_actual.addPuntoInteres(punto);
+        }*/
+
         Usuario usuario1 = new Usuario("joelkalt", "1234", "joelkaltman@gmail.com", Constantes.TIPOSUSUARIO.PERSONA);
         Usuario usuario2 = new Usuario("fernandocyt", "1234", "fernandocyt@gmail.com", Constantes.TIPOSUSUARIO.PERSONA);
         usuarios.add(usuario1);
@@ -70,6 +84,8 @@ public class Global {
         Global.cortes.add(corte_internet);
         Global.cortes.add(corte_cable);
         Global.cortes.add(corte_telefono);
+
+        cargo_datos = true;
     }
 
     public static Empresa encontrarEmpresaPorNombre(String nombre)

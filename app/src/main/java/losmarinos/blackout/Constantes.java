@@ -9,15 +9,22 @@ import com.google.android.gms.maps.model.LatLng;
 // En esta clase van los valores constantes que pueden ser usados en toda la app
 public class Constantes {
 
+    // GPS
     public static final LatLng BSAS = new LatLng(-34.6229419,-58.4491101);
     public static final long TIEMPOLOCALIZAR = 1000 * 30 * 1;   //30 segundos
     public static final long DISTANCIALOCALIZAR = 50;      // 50 metros
 
+    // SERVICIO PERIODICO
+    public static final int TIEMPO_CHECKEO_SERVICIO = 1000 * 30 * 1; //30 segundos
+
+    // MAPA
     public static final int STROKE_COLOR_CIRCLE = Color.TRANSPARENT;
     public static final int COLOR_CIRCLE = 0x220000FF;
 
+    // API
     public static final String LINK_API = "http://45.79.78.110/api/";
 
+    // CALCULOS
     public static final int RADIO_SECU = 1000;
 
     public enum SERVICIO
