@@ -47,16 +47,17 @@ public class Global {
         usuarios.add(usuario1);
         usuarios.add(usuario2);
 
-        Empresa empresa1 = new Empresa("Metrogas", "1234", "a", Constantes.SERVICIO.GAS);
+        //Empresa empresa1 = new Empresa("Metrogas", "1234", "a", Constantes.SERVICIO.GAS);
+        Empresa empresa1 = new Empresa("Metrogas", "1234", "a", "1532323287", "Loyola 20", Constantes.SERVICIO.GAS, "www.metrogas.com");
         empresa1.addSucursal(new Sucursal(new LatLng(-34.660718, -58.570862)));
-        Empresa empresa2 = new Empresa("Edenor", "1234", "a", Constantes.SERVICIO.LUZ);
+        Empresa empresa2 = new Empresa("Edenor", "1234", "a", "1532323288", "Loyola 21", Constantes.SERVICIO.LUZ, "www.edenor.com");
         empresa2.addSucursal(new Sucursal(new LatLng(-34.583871, -58.539276)));
-        Empresa empresa3 = new Empresa("Edesur", "1234", "a", Constantes.SERVICIO.LUZ);
-        Empresa empresa4 = new Empresa("Telecentro", "1234", "a", Constantes.SERVICIO.CABLE);
-        Empresa empresa5 = new Empresa("Cablevision", "1234", "a", Constantes.SERVICIO.CABLE);
-        Empresa empresa6 = new Empresa("Aysa", "1234", "a", Constantes.SERVICIO.AGUA);
-        Empresa empresa7 = new Empresa("Telefonica", "1234", "a", Constantes.SERVICIO.TELEFONO);
-        Empresa empresa8 = new Empresa("Fibertel", "1234", "a", Constantes.SERVICIO.INTERNET);
+        Empresa empresa3 = new Empresa("Edesur", "1234", "a", "1532323289", "Loyola 22", Constantes.SERVICIO.LUZ, "www.edesur.com");
+        Empresa empresa4 = new Empresa("Telecentro", "1234", "a", "1532323290", "Loyola 23", Constantes.SERVICIO.CABLE, "www.telecentro.com");
+        Empresa empresa5 = new Empresa("Cablevision", "1234", "a", "1532323291", "Loyola 24", Constantes.SERVICIO.CABLE, "www.cablevision.com");
+        Empresa empresa6 = new Empresa("Aysa", "1234", "a", "1532323292", "Loyola 25", Constantes.SERVICIO.AGUA, "www.aysa.com");
+        Empresa empresa7 = new Empresa("Telefonica", "1234", "a", "1532323293", "Loyola 26", Constantes.SERVICIO.TELEFONO, "www.telefonica.com");
+        Empresa empresa8 = new Empresa("Fibertel", "1234", "a", "1532323294", "Loyola 27", Constantes.SERVICIO.INTERNET, "www.fibertel.com");
 
         Global.empresas.add(empresa1);
         Global.empresas.add(empresa2);

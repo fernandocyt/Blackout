@@ -12,8 +12,30 @@ import losmarinos.blackout.Constantes;
  */
 
 public class Empresa extends Usuario {
+
+    private String telefono;
+    private String direccion;
     private Constantes.SERVICIO tipo_servicio;
+    private double calificacion;
     private List<Sucursal> sucursales;
+    private String pagina;
+    private List<Comentario> comentarios;
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
 
     public Constantes.SERVICIO getTipoServicio() {
         return tipo_servicio;
@@ -21,6 +43,14 @@ public class Empresa extends Usuario {
 
     public void setTipoServicio(Constantes.SERVICIO tipo_servicio) {
         this.tipo_servicio = tipo_servicio;
+    }
+
+    public double getCalificacion() {
+        return calificacion;
+    }
+
+    public void setCalificacion(double calificacion) {
+        this.calificacion = calificacion;
     }
 
     public List<Sucursal> getSucursales() {
@@ -32,11 +62,35 @@ public class Empresa extends Usuario {
         this.sucursales.add(sucursal);
     }
 
-    public Empresa(String nombre, String pass, String mail, Constantes.SERVICIO tipo_servicio)
+    public String getPagina() {
+        return pagina;
+    }
+
+    public void setPagina(String pagina) {
+        this.pagina = pagina;
+    }
+
+    public void addComentario(Comentario comentario)
+    {
+        this.comentarios.add(comentario);
+    }
+
+    public List<Comentario> getComentarios()
+    {
+        return this.comentarios;
+    }
+
+    public Empresa(String nombre, String pass, String mail,String telefono, String direccion, Constantes.SERVICIO tipo_servicio, String pagina)
     {
         super(nombre, pass, mail, Constantes.TIPOSUSUARIO.EMPRESA);
+        this.telefono = telefono;
+        this.direccion = direccion;
         this.tipo_servicio = tipo_servicio;
+        this.calificacion = 0;
         this.sucursales = new ArrayList<>();
+        this.pagina = pagina;
+        this.comentarios = new ArrayList<>();
+
     }
 
 }
