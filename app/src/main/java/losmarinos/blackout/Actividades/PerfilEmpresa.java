@@ -2,14 +2,18 @@ package losmarinos.blackout.Actividades;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import losmarinos.blackout.Adapters.ComentarioAdapter;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.Global;
+import losmarinos.blackout.Objetos.Comentario;
 import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.R;
 
@@ -62,8 +66,29 @@ public class PerfilEmpresa extends AppCompatActivity {
         textview_pagina.setText(empresa.getPagina());
 
 
-        //this.cargarListView();
+        this.cargarListView();
     }
 
+    void cargarListView(){
+
+        //Crea el adaptador de alarmas
+        ComentarioAdapter adapter = new ComentarioAdapter(empresa.getComentarios(), this, this);
+
+        //enlaza el list view del layout a la variable
+        ListView mi_lista = (ListView)findViewById(R.id.lst_comentario_perfil_empresa);
+
+        //Le setea el adaptador a la lista
+        mi_lista.setAdapter(adapter);
+    }
+
+    public void agregarComentario(View view)
+    {
+        String comentario = edittext_comentario.getText().toString();
+        Comentario nuevo_comentario = new Comentario(Global.usuarios.get(0), comentario);
+
+        empresa.addComentario(nuevo_comentario);
+        this.cargarListView();
+
+    }
 
 }

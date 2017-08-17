@@ -1,5 +1,6 @@
 package losmarinos.blackout.Actividades;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -90,5 +91,17 @@ public class PerfilCorte extends AppCompatActivity {
         corte.addRespuesta(nueva_respuesta);
         this.cargarListView();
 
+    }
+
+    public void irAPerfilEmpresa(){
+        Intent i = new Intent(getApplicationContext(), PerfilEmpresa.class);
+        i.putExtra("idEmpresa", corte.getEmpresa().getId());
+        try {
+            startActivity(i);
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
     }
 }
