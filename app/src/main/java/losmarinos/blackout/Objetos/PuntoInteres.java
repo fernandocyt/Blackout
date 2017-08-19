@@ -2,6 +2,8 @@ package losmarinos.blackout.Objetos;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -86,5 +88,23 @@ public class PuntoInteres {
             }
         }
         return false;
+    }
+
+    public String generarTexto()
+    {
+        String str_ubicacion = "(" + String.valueOf((int)this.ubicacion.latitude) + "," + String.valueOf((int)this.ubicacion.longitude) +")";
+        String str_empresa = "";
+        String str_servicio = "";
+
+        if(this.empresa != null) {
+            str_empresa = this.empresa.getNombre() + " - ";
+        }
+        if(this.servicio != null) {
+            str_servicio = Constantes.servicioToString(this.servicio) + " - ";
+        }
+
+        String texto = str_servicio + str_empresa + str_ubicacion;
+
+        return texto;
     }
 }

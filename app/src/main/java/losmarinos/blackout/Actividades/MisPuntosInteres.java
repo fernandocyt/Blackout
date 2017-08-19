@@ -14,22 +14,24 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
+import losmarinos.blackout.Adapters.PuntoInteresAdapter;
 import losmarinos.blackout.Adapters.ReportesAdapter;
 import losmarinos.blackout.Adapters.RespuestaAdapter;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorAPI;
 import losmarinos.blackout.Global;
+import losmarinos.blackout.Objetos.PuntoInteres;
 import losmarinos.blackout.Objetos.Reporte;
 import losmarinos.blackout.R;
 
-public class MisReportes extends AppCompatActivity implements OnMapReadyCallback {
+public class MisPuntosInteres extends AppCompatActivity implements OnMapReadyCallback {
 
-    GoogleMap map_mis_reportes;
+    GoogleMap map_mis_puntos_interes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle("Mis Reportes");
+        setTitle("Mis Puntos de Interes");
         setContentView(R.layout.activity_mis_objetos);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -41,45 +43,39 @@ public class MisReportes extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        map_mis_reportes = googleMap;
-        map_mis_reportes.animateCamera(CameraUpdateFactory.newLatLngZoom(Constantes.BSAS, 11.0f));
+        map_mis_puntos_interes = googleMap;
+        map_mis_puntos_interes.animateCamera(CameraUpdateFactory.newLatLngZoom(Constantes.BSAS, 11.0f));
 
         this.cargarMapa();
     }
 
     public void centrarMapaEnPosicion(LatLng posicion)
     {
-        map_mis_reportes.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion, 13.0f));
+        map_mis_puntos_interes.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion, 13.0f));
     }
 
     public void cargarListView(){
-        //Crea el adaptador de alarmas
-        ReportesAdapter adapter = new ReportesAdapter(Global.usuario_actual.getReportes(), this, this);
-
-        //enlaza el list view del layout a la variable
+        PuntoInteresAdapter adapter = new PuntoInteresAdapter(Global.usuario_actual.getPuntosInteres(), this, this);
         ListView mi_lista = (ListView)findViewById(R.id.lst_objetos_mis_objetos);
-
-        //Le setea el adaptador a la lista
         mi_lista.setAdapter(adapter);
     }
 
     public void cargarMapa()
     {
-        map_mis_reportes.clear();
+        map_mis_puntos_interes.clear();
 
-        List<Reporte> reportes = Global.usuario_actual.getReportes();
-        for(int i = 0; i < reportes.size(); i++)
+        List<PuntoInteres> puntos_interes = Global.usuario_actual.getPuntosInteres();
+        for(int i = 0; i < puntos_interes.size(); i++)
         {
-            Reporte rep_actual = reportes.get(i);
+            PuntoInteres pi_actual = puntos_interes.get(i);
 
-            map_mis_reportes.addMarker(new MarkerOptions()
-                    .position(rep_actual.getUbicacion())
-                    .title("Reporte")
-                    .icon(Constantes.getIconoReporte(rep_actual.getServicio())));
+            map_mis_puntos_interes.addMarker(new MarkerOptions()
+                    .position(pi_actual.getUbicacion())
+                    .title("PuntoInteres"));
 
-            map_mis_reportes.addCircle(new CircleOptions()
-                    .center(rep_actual.getUbicacion())
-                    .radius(rep_actual.getRadio())
+            map_mis_puntos_interes.addCircle(new CircleOptions()
+                    .center(pi_actual.getUbicacion())
+                    .radius(pi_actual.getRadio())
                     .strokeColor(Constantes.STROKE_COLOR_CIRCLE)
                     .fillColor(Constantes.COLOR_CIRCLE)
                     .strokeWidth(5));

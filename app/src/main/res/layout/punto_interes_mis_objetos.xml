@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:id="@+id/punto_interes_mis_objetos"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="15dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="left|center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/lbl_texto_punto_interes_mis_objetos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/lbl_activo_punto_interes_mis_objetos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textStyle="italic" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_activar_punto_interes_mis_objetos"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="Activar"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/btn_borrar_punto_interes_mis_objetos"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="Borrar"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -104,7 +104,7 @@ public class Reporte {
         this.asociado = false;
     }
 
-    public String generarTextoReporte()
+    public String generarTexto()
     {
         String texto = "";
 

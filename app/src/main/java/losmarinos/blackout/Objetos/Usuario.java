@@ -18,6 +18,7 @@ public class Usuario {
     private String mail;
     private Constantes.TIPOSUSUARIO tipo;
     private List<PuntoInteres> puntos_interes;
+    private List<Reporte> reportes;
 
     public String getNombre() {
         return nombre;
@@ -67,6 +68,20 @@ public class Usuario {
         this.puntos_interes.add(punto_interes);
     }
 
+    public List<Reporte> getReportes() {
+        return reportes;
+    }
+
+    public void addReporte(Reporte reporte) {
+        this.reportes.add(reporte);
+    }
+
+
+    public void removePuntoInteres(int pos)
+    {
+        this.puntos_interes.remove(pos);
+    }
+
     public Usuario(String nombre, String pass, String mail, Constantes.TIPOSUSUARIO tipo)
     {
         this.id = this.proxima_id_usuario_global;
@@ -77,6 +92,7 @@ public class Usuario {
         this.mail = mail;
         this.tipo = tipo;
         this.puntos_interes = new ArrayList<>();
+        this.reportes = new ArrayList<>();
     }
 
 }

@@ -153,7 +153,7 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
 
         Global.asociarReporteACortes(nuevo_reporte);
 
-        Global.reportes.add(nuevo_reporte);
+        Global.usuario_actual.addReporte(nuevo_reporte);
 
         this.radio_reporte = null;
         this.marcador_posicion_reporte = null;

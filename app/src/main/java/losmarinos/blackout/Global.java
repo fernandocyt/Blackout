@@ -23,7 +23,6 @@ import losmarinos.blackout.Objetos.Usuario;
 public class Global {
     public static Usuario usuario_actual = null;
 
-    public static List<Reporte> reportes = new ArrayList<>();
     public static List<Corte> cortes = new ArrayList<>();
     public static List<Usuario> usuarios = new ArrayList<>();
     public static List<Empresa> empresas = new ArrayList<>();
@@ -115,7 +114,7 @@ public class Global {
     public static void calcularNuevosCortes()
     {
         List<Corte> cortes = new ArrayList<>();
-        List<Reporte> reportes = new ArrayList<>(Global.reportes);
+        List<Reporte> reportes = new ArrayList<>(Global.usuario_actual.getReportes());
 
         for(int i = 0; i < reportes.size(); i++){
             List<Reporte> reportes_fundadores = new ArrayList<>();
