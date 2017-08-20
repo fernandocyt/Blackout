@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item
+        android:id="@+id/accion_filtrar"
+        android:title="FILTRAR MAPA" />
+
     <item android:title="Agregar">
     <menu>
         <item
@@ -16,13 +20,13 @@
             <item
                 android:id="@+id/mis_reportes"
                 android:title="Mis Reportes" />
+            <item
+                android:id="@+id/mis_puntos_interes"
+                android:title="Mis Puntos de Interes" />
         </menu>
     </item>
     <item android:title="Acciones">
         <menu>
-            <item
-                android:id="@+id/accion_filtrar"
-                android:title="Filtrar Mapa" />
             <item
                 android:id="@+id/accion_buscar_empresa"
                 android:title="Buscar Empresa" />
@@ -32,6 +36,9 @@
             <item
                 android:id="@+id/accion_preferencias"
                 android:title="Preferencias" />
+            <item
+                android:id="@+id/cerrar_sesion"
+                android:title="Cerrar Sesion" />
         </menu>
     </item>
 </menu>

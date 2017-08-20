@@ -22,6 +22,7 @@ import losmarinos.blackout.Objetos.Usuario;
 
 public class Global {
     public static Usuario usuario_actual = null;
+    public static String token_usuario_actual = null;
 
     public static List<Corte> cortes = new ArrayList<>();
     public static List<Usuario> usuarios = new ArrayList<>();

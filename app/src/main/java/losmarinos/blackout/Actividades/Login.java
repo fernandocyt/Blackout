@@ -11,9 +11,12 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorAPI;
 import losmarinos.blackout.Global;
+import losmarinos.blackout.LocalDB;
 import losmarinos.blackout.Objetos.Usuario;
 import losmarinos.blackout.ObservadorAPI;
 import losmarinos.blackout.R;
@@ -22,6 +25,7 @@ public class Login extends AppCompatActivity implements ObservadorAPI {
 
     EditText usuario;
     EditText password;
+    public static boolean cerro_sesion = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +38,15 @@ public class Login extends AppCompatActivity implements ObservadorAPI {
 
         usuario.setText("jajaja\u0040gmail.com");
         password.setText("jajaja");
+
+        if(LocalDB.existeXML(getApplicationContext()) && !Login.cerro_sesion) {
+            ArrayList<String> info_user = LocalDB.leerXML(getApplicationContext());
+            Global.usuario_actual = new Usuario(info_user.get(0), info_user.get(1), info_user.get(2), Constantes.TIPOSUSUARIO.PERSONA);
+            Global.token_usuario_actual = info_user.get(3);
+
+            Intent i = new Intent(getApplicationContext(), MapaPrincipal.class);
+            startActivity(i);
+        }
     }
 
 
@@ -65,10 +78,25 @@ public class Login extends AppCompatActivity implements ObservadorAPI {
         if(correcto) {
             Toast.makeText(this, "Logeado correctamente", Toast.LENGTH_LONG).show();
 
+            String access_token = "";
+            try{
+                access_token = respuesta.getString("access_token");
+            }catch (Exception e){}
+
+            LocalDB.crearXML(this.getApplicationContext(),
+                    usuario.getText().toString(),
+                    password.getText().toString(),
+                    usuario.getText().toString(),
+                    access_token);
+
             Global.usuario_actual = new Usuario(usuario.getText().toString(), password.getText().toString(), usuario.getText().toString(), Constantes.TIPOSUSUARIO.PERSONA);
 
-            Intent i = new Intent(getApplicationContext(), MapaPrincipal.class);
-            startActivity(i);
+            if(cerro_sesion){
+                super.onBackPressed();
+            }else{
+                Intent i = new Intent(getApplicationContext(), MapaPrincipal.class);
+                startActivity(i);
+            }
         }
     }
 
