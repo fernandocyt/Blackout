@@ -26,6 +26,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -77,6 +78,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -124,6 +126,10 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             startActivity(i);
         } else if (id == R.id.agregar_punto_interes){
             Intent i = new Intent(getApplicationContext(), CrearPuntoInteres.class);
+            startActivity(i);
+        } else if (id == R.id.cerrar_sesion){
+            Login.cerro_sesion = true;
+            Intent i = new Intent(getApplicationContext(), Login.class);
             startActivity(i);
         }
 

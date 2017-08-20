@@ -121,24 +121,22 @@
             </TableRow>
         </TableLayout>
 
+        <Button
+            android:id="@+id/btn_corte_interes_perfil_corte"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Marcar de interes"
+            android:layout_gravity="center"
+            android:onClick="marcarCorteDeInteres"/>
+
         <TextView
-            android:id="@+id/lbl5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textSize="25sp"
             android:text="Respuestas"
-            tools:layout_editor_absoluteY="0dp"
-            tools:layout_editor_absoluteX="0dp" />
-
-
-        <ListView
-            android:id="@+id/lst_respuesta_perfil_corte"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_margin="10dp"
-            android:background="#2408" />
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"/>
 
 
         <LinearLayout
@@ -162,6 +160,16 @@
                 android:onClick="agregarRespuesta"/>
 
         </LinearLayout>
+
+        <ListView
+            android:id="@+id/lst_respuesta_perfil_corte"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:background="#2408" />
+
+
 
     </LinearLayout>
 
