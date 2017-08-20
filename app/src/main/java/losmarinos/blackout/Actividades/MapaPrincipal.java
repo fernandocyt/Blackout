@@ -116,9 +116,9 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         } else if (id == R.id.mis_reportes) {
             Intent i = new Intent(getApplicationContext(), MisReportes.class);
             startActivity(i);
-        } else if (id == R.id.mis_puntos_interes) {
-            Intent i = new Intent(getApplicationContext(), MisPuntosInteres.class);
-            startActivity(i);
+        //} else if (id == R.id.mis_puntos_interes) {
+            //   Intent i = new Intent(getApplicationContext(), MisPuntosInteres.class);
+            //  startActivity(i);
         } else if (id == R.id.accion_filtrar){
             Intent i = new Intent(getApplicationContext(), FiltrarMapaPrincipal.class);
             startActivity(i);

@@ -81,6 +81,7 @@ public class PerfilCorte extends AppCompatActivity {
 
         //Le setea el adaptador a la lista
         mi_lista.setAdapter(adapter);
+
     }
 
     public void agregarRespuesta(View view)
@@ -93,7 +94,7 @@ public class PerfilCorte extends AppCompatActivity {
 
     }
 
-    public void irAPerfilEmpresa(){
+    public void irAPerfilEmpresa(View view){
         Intent i = new Intent(getApplicationContext(), PerfilEmpresa.class);
         i.putExtra("idEmpresa", corte.getEmpresa().getId());
         try {
