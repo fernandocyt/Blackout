@@ -78,6 +78,11 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        View header = navigationView.getHeaderView(0);
+        TextView username_header = (TextView)header.findViewById(R.id.lbl_username_nav_header_mapa_principal);
+        TextView mail_header = (TextView)header.findViewById(R.id.lbl_mail_nav_header_mapa_principal);
+        username_header.setText(Global.usuario_actual.getNombre());
+        mail_header.setText(Global.usuario_actual.getMail());
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -128,14 +133,18 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             Intent i = new Intent(getApplicationContext(), CrearPuntoInteres.class);
             startActivity(i);
         } else if (id == R.id.cerrar_sesion){
-            Login.cerro_sesion = true;
-            Intent i = new Intent(getApplicationContext(), Login.class);
-            startActivity(i);
+            this.finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onDestroy() {
+        GPSTracker.removeObserver(this);
+        super.onDestroy();
     }
 
     @Override
@@ -149,14 +158,16 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
     @Override
     public void actualizarPosicionActual(LatLng posicion) {
-        if(marcador_posicion_actual == null) {
-            marcador_posicion_actual = mMap.addMarker(new MarkerOptions()
-                    .position(posicion)
-                    .title("Usuario")
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_ubicacion_usuario))
-                    .zIndex(3));
-        } else {
-            marcador_posicion_actual.setPosition(posicion);
+        if(mMap != null) {
+            if (marcador_posicion_actual == null) {
+                marcador_posicion_actual = mMap.addMarker(new MarkerOptions()
+                        .position(posicion)
+                        .title("Usuario")
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_ubicacion_usuario))
+                        .zIndex(3));
+            } else {
+                marcador_posicion_actual.setPosition(posicion);
+            }
         }
     }
 

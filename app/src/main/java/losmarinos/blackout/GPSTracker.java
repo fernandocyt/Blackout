@@ -92,6 +92,11 @@ public class GPSTracker extends Service implements LocationListener {
         }
     }
 
+    public static void removeObserver(ObservadorGPS observador_gps)
+    {
+        GPSTracker.observadores.remove(observador_gps);
+    }
+
 
     //overrides locationListener
 

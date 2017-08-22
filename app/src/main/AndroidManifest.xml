@@ -30,7 +30,8 @@
         <activity
             android:name=".Actividades.MapaPrincipal"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -50,14 +51,15 @@
             android:name=".ServicioPeriodico"
             android:exported="false" />
 
-        <activity android:name=".Actividades.CrearReporte" />
-        <activity android:name=".Actividades.PerfilCorte" />
-        <activity android:name=".Actividades.MisReportes" />
-        <activity android:name=".Actividades.MisPuntosInteres" />
-        <activity android:name=".Actividades.FiltrarMapaPrincipal" />
-        <activity android:name=".Actividades.RegistrarUsuario" />
+        <activity android:name=".Actividades.CrearReporte" android:screenOrientation="portrait"/>
+        <activity android:name=".Actividades.PerfilCorte" android:screenOrientation="portrait"/>
+        <activity android:name=".Actividades.MisReportes" android:screenOrientation="portrait"/>
+        <activity android:name=".Actividades.MisPuntosInteres" android:screenOrientation="portrait"/>
+        <activity android:name=".Actividades.FiltrarMapaPrincipal" android:screenOrientation="portrait"/>
+        <activity android:name=".Actividades.RegistrarUsuario" android:screenOrientation="portrait"/>
         <activity
             android:name=".Actividades.Login"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -65,8 +67,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Actividades.CrearPuntoInteres" />
-        <activity android:name=".Actividades.PerfilEmpresa"></activity>
+        <activity android:name=".Actividades.CrearPuntoInteres" android:screenOrientation="portrait"/>
+        <activity android:name=".Actividades.PerfilEmpresa" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
