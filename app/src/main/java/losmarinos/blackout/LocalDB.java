@@ -33,25 +33,12 @@ import static java.security.AccessController.getContext;
  */
 
 public class LocalDB {
-
-    public static boolean existeXML(Context context)
-    {
-        try {
-            FileOutputStream file = new FileOutputStream(context.getFilesDir().getAbsolutePath() + "userData");
-        }
-        catch (FileNotFoundException e)
-        {
-            return false;
-        }
-        return true;
-    }
+    static String file_name = "userData";
 
     public static void crearXML(Context contexto, String nombre, String pass, String mail, String token)
     {
-        final String xmlFile = "userData";
-
         try {
-            FileOutputStream fileos= contexto.openFileOutput(xmlFile, Context.MODE_PRIVATE);
+            FileOutputStream fileos= contexto.openFileOutput(file_name, Context.MODE_PRIVATE);
             XmlSerializer xmlSerializer = Xml.newSerializer();
             StringWriter writer = new StringWriter();
             xmlSerializer.setOutput(writer);
@@ -104,14 +91,13 @@ public class LocalDB {
 
     public static ArrayList<String> leerXML(Context context)
     {
-        final String xmlFile = "userData";
         ArrayList<String> userData = new ArrayList<String>();
         FileInputStream fis;
         InputStreamReader isr;
         char[] inputBuffer;
         String data = null;
         try {
-            fis = context.openFileInput(xmlFile);
+            fis = context.openFileInput(file_name);
             isr = new InputStreamReader(fis);
             inputBuffer = new char[fis.available()];
             isr.read(inputBuffer);
@@ -120,13 +106,13 @@ public class LocalDB {
             fis.close();
         }
         catch (FileNotFoundException e3) {
-            // TODO Auto-generated catch block
-            e3.printStackTrace();
+            return userData;
         }
         catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
         XmlPullParserFactory factory = null;
         try {
             factory = XmlPullParserFactory.newInstance();
