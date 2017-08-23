@@ -49,9 +49,9 @@ public class Global {
 
         //Empresa empresa1 = new Empresa("Metrogas", "1234", "a", Constantes.SERVICIO.GAS);
         Empresa empresa1 = new Empresa("Metrogas", "1234", "a", "1532323287", "Loyola 20", Constantes.SERVICIO.GAS, "www.metrogas.com");
-        empresa1.addSucursal(new Sucursal(new LatLng(-34.660718, -58.570862)));
+        empresa1.addSucursal(new Sucursal(new LatLng(-34.660718, -58.570862), "4983-9271", "Av. Medrano 900"));
         Empresa empresa2 = new Empresa("Edenor", "1234", "a", "1532323288", "Loyola 21", Constantes.SERVICIO.LUZ, "www.edenor.com");
-        empresa2.addSucursal(new Sucursal(new LatLng(-34.583871, -58.539276)));
+        empresa2.addSucursal(new Sucursal(new LatLng(-34.583871, -58.539276), "48547559", "Corrientes 5225"));
         Empresa empresa3 = new Empresa("Edesur", "1234", "a", "1532323289", "Loyola 22", Constantes.SERVICIO.LUZ, "www.edesur.com");
         Empresa empresa4 = new Empresa("Telecentro", "1234", "a", "1532323290", "Loyola 23", Constantes.SERVICIO.CABLE, "www.telecentro.com");
         Empresa empresa5 = new Empresa("Cablevision", "1234", "a", "1532323291", "Loyola 24", Constantes.SERVICIO.CABLE, "www.cablevision.com");
