@@ -9,7 +9,7 @@ import android.widget.Toast;
 import org.json.JSONObject;
 
 import losmarinos.blackout.Constantes;
-import losmarinos.blackout.ConsultorAPI;
+import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.ObservadorAPI;
 import losmarinos.blackout.R;
 
@@ -59,18 +59,14 @@ public class RegistrarUsuario extends AppCompatActivity implements ObservadorAPI
             obj.put("password_confirmation", pass1);
         }catch (Exception e){}
 
-        ConsultorAPI.link = Constantes.LINK_API + "register";
-        ConsultorAPI.obj = obj;
-        ConsultorAPI.observador = this;
-
-        new ConsultorAPI().execute();
+        new ConsultorPOSTAPI("register", obj, Constantes.TAGAPI.REGISTRAR_USUARIO, this).execute();
     }
 
     @Override
-    public void obtenerRespuestaAPI(JSONObject respuesta, boolean correcto)
+    public void obtenerRespuestaAPI(String respuesta, Constantes.TAGAPI tag, boolean correcto)
     {
         if(correcto) {
-            Toast.makeText(this, "Usuario registrado correctamente", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "Usuario registrado correctamente", Toast.LENGTH_LONG).show();
 
             super.onBackPressed();
         }

@@ -38,16 +38,26 @@ import java.util.List;
  */
 
 // Clase para obtener respuestas a las consultas realizadas a la API
-public class ConsultorAPI extends AsyncTask<Void, Long, String> {
+public class ConsultorPOSTAPI extends AsyncTask<Void, Long, String> {
 
-    public static JSONObject obj;
-    public static String link;
-    public static ObservadorAPI observador;
+    JSONObject obj;
+    String link;
+    ObservadorAPI observador;
+    Constantes.TAGAPI tag;
+
+    public ConsultorPOSTAPI(String link, JSONObject obj, Constantes.TAGAPI tag, ObservadorAPI observador)
+    {
+        super();
+        this.link = link;
+        this.obj = obj;
+        this.observador = observador;
+        this.tag = tag;
+    }
 
     protected String doInBackground(Void... params) {
         try{
 
-            URL url = new URL(link);
+            URL url = new URL(Constantes.LINK_API + link);
             HttpURLConnection connection = (HttpURLConnection)url.openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/json");
@@ -73,9 +83,12 @@ public class ConsultorAPI extends AsyncTask<Void, Long, String> {
             }
 
             rd.close();
+
+            this.observador.obtenerRespuestaAPI(response.toString(), this.tag, true);
+
             return response.toString();
         } catch(Exception e){
-            this.observador.obtenerRespuestaAPI(null, false);
+            this.observador.obtenerRespuestaAPI("", this.tag, false);
 
             return new String("Exception: " + e.getMessage());
         }
@@ -85,7 +98,7 @@ public class ConsultorAPI extends AsyncTask<Void, Long, String> {
         JSONObject obj_resp= null;
         try {
             obj_resp = new JSONObject(response);
-            this.observador.obtenerRespuestaAPI(obj_resp, true);
+            //this.observador.obtenerRespuestaAPI(obj_resp, true);
         } catch (JSONException e) {
             e.printStackTrace();
         }

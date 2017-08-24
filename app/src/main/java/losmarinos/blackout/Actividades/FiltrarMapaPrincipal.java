@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import losmarinos.blackout.Constantes;
-import losmarinos.blackout.ConsultorAPI;
+import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.Global;
 import losmarinos.blackout.R;
 

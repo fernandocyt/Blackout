@@ -18,7 +18,7 @@ import losmarinos.blackout.Adapters.PuntoInteresAdapter;
 import losmarinos.blackout.Adapters.ReportesAdapter;
 import losmarinos.blackout.Adapters.RespuestaAdapter;
 import losmarinos.blackout.Constantes;
-import losmarinos.blackout.ConsultorAPI;
+import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.Global;
 import losmarinos.blackout.Objetos.PuntoInteres;
 import losmarinos.blackout.Objetos.Reporte;

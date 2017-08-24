@@ -9,17 +9,21 @@ import android.view.Window;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 import losmarinos.blackout.Constantes;
-import losmarinos.blackout.ConsultorAPI;
+import losmarinos.blackout.ConsultorGETAPI;
+import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.Global;
 import losmarinos.blackout.LocalDB;
 import losmarinos.blackout.Objetos.Usuario;
 import losmarinos.blackout.ObservadorAPI;
 import losmarinos.blackout.R;
+
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_USUARIO_POR_TOKEN;
 
 public class Login extends AppCompatActivity implements ObservadorAPI {
 
@@ -39,7 +43,7 @@ public class Login extends AppCompatActivity implements ObservadorAPI {
 
         if(info_user.size() > 0)
         {
-            usuario.setText(info_user.get(0));
+            usuario.setText(info_user.get(2));
             password.setText(info_user.get(1));
         }
 
@@ -61,34 +65,53 @@ public class Login extends AppCompatActivity implements ObservadorAPI {
             obj.put("password", str_password);
         }catch (Exception e){}
 
-        ConsultorAPI.link = Constantes.LINK_API + "login";
-        ConsultorAPI.obj = obj;
-        ConsultorAPI.observador = this;
-
-        new ConsultorAPI().execute();
+        new ConsultorPOSTAPI("login", obj, Constantes.TAGAPI.LOGUEAR_USUARIO, this).execute();
     }
 
     @Override
-    public void obtenerRespuestaAPI(JSONObject respuesta, boolean correcto)
+    public void obtenerRespuestaAPI(String respuesta, Constantes.TAGAPI tag, boolean correcto)
     {
-        if(correcto) {
-            Toast.makeText(this, "Logeado correctamente", Toast.LENGTH_LONG).show();
 
-            String access_token = "";
-            try{
-                access_token = respuesta.getString("access_token");
-            }catch (Exception e){}
+        if (!correcto)
+            return;
 
-            LocalDB.crearXML(this.getApplicationContext(),
-                    usuario.getText().toString(),
-                    password.getText().toString(),
-                    usuario.getText().toString(),
-                    access_token);
+        switch (tag) {
+            case LOGUEAR_USUARIO:
+                //Toast.makeText(this, "Logeado correctamente", Toast.LENGTH_LONG).show();
 
-            Global.usuario_actual = new Usuario(usuario.getText().toString(), password.getText().toString(), usuario.getText().toString(), Constantes.TIPOSUSUARIO.PERSONA);
+                try {
+                    JSONObject obj_resp = new JSONObject(respuesta);
+                    Global.token_usuario_actual = obj_resp.getString("access_token");
+                } catch (Exception e) {
+                }
 
-            Intent i = new Intent(getApplicationContext(), MapaPrincipal.class);
-            startActivity(i);
+                new ConsultorGETAPI("user", Global.token_usuario_actual, Constantes.TAGAPI.OBTENER_USUARIO_POR_TOKEN, this).execute();
+
+                break;
+            case OBTENER_USUARIO_POR_TOKEN:
+
+                int usu_id = 0;
+                String usu_nombre = "";
+                String usu_email = "";
+                try {
+                    JSONObject obj_resp = new JSONObject(respuesta);
+                    usu_id = Integer.parseInt(obj_resp.getString("id"));
+                    usu_nombre = obj_resp.getString("nombre");
+                    usu_email = obj_resp.getString("email");
+                } catch (Exception e) {
+                }
+
+                Global.usuario_actual = new Usuario(usu_nombre, password.getText().toString(), usu_email, Constantes.TIPOSUSUARIO.PERSONA);
+
+                LocalDB.crearXML(this.getApplicationContext(),
+                        Global.usuario_actual.getNombre(),
+                        Global.usuario_actual.getPass(),
+                        Global.usuario_actual.getMail(),
+                        Global.token_usuario_actual);
+
+                Intent i = new Intent(getApplicationContext(), MapaPrincipal.class);
+                startActivity(i);
+                break;
         }
     }
 

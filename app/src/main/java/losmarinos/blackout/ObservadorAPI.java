@@ -9,5 +9,5 @@ import org.json.JSONObject;
  */
 
 public interface ObservadorAPI {
-    void obtenerRespuestaAPI(JSONObject respuesta, boolean correcto);
+    void obtenerRespuestaAPI(String respuesta, Constantes.TAGAPI tag, boolean correcto);
 }

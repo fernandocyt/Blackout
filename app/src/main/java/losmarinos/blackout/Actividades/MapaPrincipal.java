@@ -10,7 +10,7 @@ import losmarinos.blackout.R;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ObservadorGPS;
 import losmarinos.blackout.GPSTracker;
-import losmarinos.blackout.ConsultorAPI;
+import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.Objetos.Reporte;
 import losmarinos.blackout.ServicioPeriodico;
 

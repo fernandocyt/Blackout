@@ -27,6 +27,14 @@ public class Constantes {
     // CALCULOS
     public static final int RADIO_SECU = 1000;
 
+    public enum TAGAPI
+    {
+        LOGUEAR_USUARIO,
+        REGISTRAR_USUARIO,
+        OBTENER_USUARIO_POR_TOKEN,
+
+    }
+
     public enum SERVICIO
     {
         AGUA,

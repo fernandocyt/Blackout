@@ -13,7 +13,7 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 
 import losmarinos.blackout.Constantes;
-import losmarinos.blackout.ConsultorAPI;
+import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.Global;
 import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Respuesta;
