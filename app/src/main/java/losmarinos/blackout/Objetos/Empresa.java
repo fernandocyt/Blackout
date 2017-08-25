@@ -80,9 +80,9 @@ public class Empresa extends Usuario {
         return this.comentarios;
     }
 
-    public Empresa(String nombre, String pass, String mail,String telefono, String direccion, Constantes.SERVICIO tipo_servicio, String pagina)
+    public Empresa(int id, String nombre, String pass, String mail,String telefono, String direccion, Constantes.SERVICIO tipo_servicio, String pagina)
     {
-        super(nombre, pass, mail, Constantes.TIPOSUSUARIO.EMPRESA);
+        super(id, nombre, pass, mail, Constantes.TIPOSUSUARIO.EMPRESA);
         this.telefono = telefono;
         this.direccion = direccion;
         this.tipo_servicio = tipo_servicio;

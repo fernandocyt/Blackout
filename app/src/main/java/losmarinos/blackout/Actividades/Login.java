@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import losmarinos.blackout.API.APIObtenerUsuarioPorToken;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorGETAPI;
 import losmarinos.blackout.ConsultorPOSTAPI;
@@ -21,11 +22,13 @@ import losmarinos.blackout.Global;
 import losmarinos.blackout.LocalDB;
 import losmarinos.blackout.Objetos.Usuario;
 import losmarinos.blackout.ObservadorAPI;
+import losmarinos.blackout.ParserJSON;
 import losmarinos.blackout.R;
 
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_USUARIO_POR_TOKEN;
+import static losmarinos.blackout.Constantes.TAGAPI.LOGUEAR_USUARIO;
 
-public class Login extends AppCompatActivity implements ObservadorAPI {
+public class Login extends AppCompatActivity {
 
     EditText usuario;
     EditText password;
@@ -49,7 +52,6 @@ public class Login extends AppCompatActivity implements ObservadorAPI {
 
     }
 
-
     public void loguearUsuario(View view){
         String str_usuario = usuario.getText().toString();
         String str_password = password.getText().toString();
@@ -59,60 +61,45 @@ public class Login extends AppCompatActivity implements ObservadorAPI {
             return;
         }
 
-        JSONObject obj = new JSONObject();
         try {
+            // Logeo usuario y obtengo token
+            JSONObject obj = new JSONObject();
             obj.put("username", str_usuario);
             obj.put("password", str_password);
-        }catch (Exception e){}
 
-        new ConsultorPOSTAPI("login", obj, Constantes.TAGAPI.LOGUEAR_USUARIO, this).execute();
-    }
+            String respuesta = new ConsultorPOSTAPI("login", obj, LOGUEAR_USUARIO, null).execute().get();
+            String access_token = ParserJSON.obtenerAccessToken(respuesta);
+            if(access_token == null){
+                Toast.makeText(this, "Error: usuario inexistente", Toast.LENGTH_LONG).show();
+                return;
+            }
 
-    @Override
-    public void obtenerRespuestaAPI(String respuesta, Constantes.TAGAPI tag, boolean correcto)
-    {
+            Global.token_usuario_actual = access_token;
 
-        if (!correcto)
-            return;
+            // Obtengo datos de usuario
+            respuesta = new APIObtenerUsuarioPorToken("user", Global.token_usuario_actual, OBTENER_USUARIO_POR_TOKEN, null).execute().get();
+            Usuario nuevo_usuario = ParserJSON.obtenerUsuario(respuesta);
+            if(access_token == null){
+                Toast.makeText(this, "Error: usuario inexistente", Toast.LENGTH_LONG).show();
+                return;
+            }
 
-        switch (tag) {
-            case LOGUEAR_USUARIO:
-                //Toast.makeText(this, "Logeado correctamente", Toast.LENGTH_LONG).show();
+            Global.usuario_actual = nuevo_usuario;
 
-                try {
-                    JSONObject obj_resp = new JSONObject(respuesta);
-                    Global.token_usuario_actual = obj_resp.getString("access_token");
-                } catch (Exception e) {
-                }
-
-                new ConsultorGETAPI("user", Global.token_usuario_actual, Constantes.TAGAPI.OBTENER_USUARIO_POR_TOKEN, this).execute();
-
-                break;
-            case OBTENER_USUARIO_POR_TOKEN:
-
-                int usu_id = 0;
-                String usu_nombre = "";
-                String usu_email = "";
-                try {
-                    JSONObject obj_resp = new JSONObject(respuesta);
-                    usu_id = Integer.parseInt(obj_resp.getString("id"));
-                    usu_nombre = obj_resp.getString("nombre");
-                    usu_email = obj_resp.getString("email");
-                } catch (Exception e) {
-                }
-
-                Global.usuario_actual = new Usuario(usu_nombre, password.getText().toString(), usu_email, Constantes.TIPOSUSUARIO.PERSONA);
-
-                LocalDB.crearXML(this.getApplicationContext(),
-                        Global.usuario_actual.getNombre(),
-                        Global.usuario_actual.getPass(),
-                        Global.usuario_actual.getMail(),
-                        Global.token_usuario_actual);
-
-                Intent i = new Intent(getApplicationContext(), MapaPrincipal.class);
-                startActivity(i);
-                break;
+            LocalDB.crearXML(this.getApplicationContext(),
+                    Global.usuario_actual.getNombre(),
+                    password.getText().toString(),
+                    Global.usuario_actual.getMail(),
+                    Global.token_usuario_actual);
         }
+        catch (Exception e)
+        {
+            Toast.makeText(this, "Se ah producido un error", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        Intent i = new Intent(getApplicationContext(), MapaPrincipal.class);
+        startActivity(i);
     }
 
     public void registrarUsuario(View view)

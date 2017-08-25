@@ -11,9 +11,12 @@ import org.json.JSONObject;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.ObservadorAPI;
+import losmarinos.blackout.ParserJSON;
 import losmarinos.blackout.R;
 
-public class RegistrarUsuario extends AppCompatActivity implements ObservadorAPI {
+import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_USUARIO;
+
+public class RegistrarUsuario extends AppCompatActivity {
     EditText edittext_nombre;
     EditText edittext_email;
     EditText edittext_password;
@@ -51,24 +54,29 @@ public class RegistrarUsuario extends AppCompatActivity implements ObservadorAPI
             return;
         }
 
-        JSONObject obj = new JSONObject();
         try {
+            JSONObject obj = new JSONObject();
             obj.put("name", nombre);
             obj.put("email", email);
             obj.put("password", pass1);
             obj.put("password_confirmation", pass1);
-        }catch (Exception e){}
 
-        new ConsultorPOSTAPI("register", obj, Constantes.TAGAPI.REGISTRAR_USUARIO, this).execute();
-    }
+            String respuesta = new ConsultorPOSTAPI("register", obj, Constantes.TAGAPI.REGISTRAR_USUARIO, null).execute().get();
+            String msj_error = "";
+            if(ParserJSON.esError(respuesta, msj_error))
+            {
+                Toast.makeText(this, "Error al registrar usuario", Toast.LENGTH_LONG).show();
+                return;
+            }
+            else
+            {
+                Toast.makeText(this, "Usuario registrado correctamente", Toast.LENGTH_LONG).show();
+                super.onBackPressed();
+            }
 
-    @Override
-    public void obtenerRespuestaAPI(String respuesta, Constantes.TAGAPI tag, boolean correcto)
-    {
-        if(correcto) {
-            //Toast.makeText(this, "Usuario registrado correctamente", Toast.LENGTH_LONG).show();
-
-            super.onBackPressed();
+        }catch (Exception e){
+            Toast.makeText(this, "Ha surgido un problema", Toast.LENGTH_LONG).show();
         }
+
     }
 }

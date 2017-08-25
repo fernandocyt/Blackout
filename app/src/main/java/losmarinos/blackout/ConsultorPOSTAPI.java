@@ -84,13 +84,18 @@ public class ConsultorPOSTAPI extends AsyncTask<Void, Long, String> {
 
             rd.close();
 
-            this.observador.obtenerRespuestaAPI(response.toString(), this.tag, true);
+            if(this.observador != null) {
+                this.observador.obtenerRespuestaAPI(response.toString(), this.tag, true);
+            }
 
             return response.toString();
         } catch(Exception e){
-            this.observador.obtenerRespuestaAPI("", this.tag, false);
 
-            return new String("Exception: " + e.getMessage());
+            if(this.observador != null) {
+                this.observador.obtenerRespuestaAPI("", this.tag, false);
+            }
+
+            return new String(e.getMessage());
         }
     }
 

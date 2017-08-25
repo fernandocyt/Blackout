@@ -82,11 +82,9 @@ public class Usuario {
         this.puntos_interes.remove(pos);
     }
 
-    public Usuario(String nombre, String pass, String mail, Constantes.TIPOSUSUARIO tipo)
+    public Usuario(int id, String nombre, String pass, String mail, Constantes.TIPOSUSUARIO tipo)
     {
-        this.id = this.proxima_id_usuario_global;
-        this.proxima_id_usuario_global++;
-
+        this.id = id;
         this.nombre = nombre;
         this.pass = pass;
         this.mail = mail;

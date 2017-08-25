@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:onClick="loguearUsuario"
-            android:text="Login" />
+            android:text="Ingresar" />
 
         <TextView
             android:id="@+id/lbl_registrar_login"

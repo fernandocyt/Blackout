@@ -63,22 +63,21 @@ public class ConsultorGETAPI extends AsyncTask<Void, Long, String> {
 
             rd.close();
 
-            this.observador.obtenerRespuestaAPI(response.toString(), this.tag, true);
+            if(this.observador != null) {
+                this.observador.obtenerRespuestaAPI(response.toString(), this.tag, true);
+            }
 
             return response.toString();
         } catch(Exception e){
-            this.observador.obtenerRespuestaAPI("", this.tag, false);
 
-            return new String("Exception: " + e.getMessage());
+            if(this.observador != null) {
+                this.observador.obtenerRespuestaAPI("", this.tag, false);
+            }
+
+            return new String(e.getMessage());
         }
     }
 
     protected void onPostExecute(String response) {
-        JSONObject obj_resp= null;
-        try {
-            obj_resp = new JSONObject(response);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 }
