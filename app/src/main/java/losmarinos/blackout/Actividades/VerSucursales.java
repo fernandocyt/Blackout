@@ -8,6 +8,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -87,9 +88,10 @@ public class VerSucursales extends AppCompatActivity implements OnMapReadyCallba
             map_sucursales.addMarker(new MarkerOptions()
                     .position(sucursal_actual.getUbicacion())
                     .title("Sucursal")
-                    .icon(Constantes.getIconoReporte(empresa.getTipoServicio()))); //Poner el de sucursales
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_sucursal)));
 
         }
     }
+
 
 }

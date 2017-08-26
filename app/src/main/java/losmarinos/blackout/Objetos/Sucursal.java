@@ -43,4 +43,10 @@ public class Sucursal {
         this.telefono = telefono;
         this.direccion = direccion;
     }
+
+    public String generarTexto()
+    {
+        String texto = this.direccion + " (" + this.telefono + ")";
+        return texto;
+    }
 }

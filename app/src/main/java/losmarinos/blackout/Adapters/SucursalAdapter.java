@@ -28,6 +28,7 @@ public class SucursalAdapter extends BaseAdapter implements ListAdapter {
     private List<Sucursal> list = new ArrayList<Sucursal>();
     private Context context;
     static VerSucursales actividad;
+    TextView textview_texto;
 
     public SucursalAdapter(List<Sucursal> list, Context context, VerSucursales actividad) {
         this.list = list;
@@ -57,16 +58,18 @@ public class SucursalAdapter extends BaseAdapter implements ListAdapter {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.reporte_mis_objetos, null);
+            view = inflater.inflate(R.layout.sucursal_mis_objetos, null);
         }
 
         //Handle TextView and display string from your list
+        textview_texto = (TextView)view.findViewById(R.id.lbl_texto_sucursal_mis_objetos);
+        textview_texto.setText(list.get(position).generarTexto());
 
-        LinearLayout linea_reporte = (LinearLayout)view.findViewById(R.id.reporte_mis_objetos);
+        LinearLayout linea_reporte = (LinearLayout)view.findViewById(R.id.sucursal_mis_objetos);
         linea_reporte.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ReportesAdapter.actividad.centrarMapaEnPosicion(list.get(position).getUbicacion());
+                SucursalAdapter.actividad.centrarMapaEnPosicion(list.get(position).getUbicacion());
             }
         });
 

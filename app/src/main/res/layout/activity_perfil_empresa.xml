@@ -154,31 +154,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
-                    android:text="Sucursales:" />
-
-                <Space
-                    android:layout_width="20dp"
-                    android:layout_height="wrap_content" />
-                <!--
-                <TextView
-                    android:id="@+id/lbl_sucursales_perfil_empresa"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="-" />
-                 -->
-
-            </TableRow>
-
-            <TableRow
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
                     android:text="Sitio web:" />
 
                 <Space
@@ -190,10 +165,45 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
-                    android:text="-" />
+                    android:text="-"
+                    android:autoLink="web"/>
 
             </TableRow>
 
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="Sucursales:" />
+
+                <Space
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <Button
+                        android:id="@+id/lbl_sucursales_perfil_empresa"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:text="Ver sucursales"
+                        android:onClick="verSucursales"/>
+
+                </LinearLayout>
+
+
+            </TableRow>
         </TableLayout>
 
         <TextView

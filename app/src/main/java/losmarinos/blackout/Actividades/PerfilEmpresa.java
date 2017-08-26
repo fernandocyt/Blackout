@@ -1,5 +1,6 @@
 package losmarinos.blackout.Actividades;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -89,6 +90,13 @@ public class PerfilEmpresa extends AppCompatActivity {
         empresa.addComentario(nuevo_comentario);
         this.cargarListView();
 
+    }
+
+    public void verSucursales(View view)
+    {
+        Intent i = new Intent(this, VerSucursales.class);
+        i.putExtra("idEmpresa", empresa.getId());
+        startActivity(i);
     }
 
 }
