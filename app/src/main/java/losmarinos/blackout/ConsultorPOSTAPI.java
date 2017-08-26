@@ -21,6 +21,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -40,15 +41,17 @@ import java.util.List;
 // Clase para obtener respuestas a las consultas realizadas a la API
 public class ConsultorPOSTAPI extends AsyncTask<Void, Long, String> {
 
-    JSONObject obj;
-    String link;
-    ObservadorAPI observador;
-    Constantes.TAGAPI tag;
+    JSONObject obj = null;
+    String link = null;
+    String token = null;
+    ObservadorAPI observador = null;
+    Constantes.TAGAPI tag = null;
 
-    public ConsultorPOSTAPI(String link, JSONObject obj, Constantes.TAGAPI tag, ObservadorAPI observador)
+    public ConsultorPOSTAPI(String link, String token, JSONObject obj, Constantes.TAGAPI tag, ObservadorAPI observador)
     {
         super();
         this.link = link;
+        this.token = token;
         this.obj = obj;
         this.observador = observador;
         this.tag = tag;
@@ -61,6 +64,10 @@ public class ConsultorPOSTAPI extends AsyncTask<Void, Long, String> {
             HttpURLConnection connection = (HttpURLConnection)url.openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/json");
+            if(token != null){
+                connection.setRequestProperty("Authorization",  "Bearer " + token);
+            }
+
             connection.setUseCaches (false);
             connection.setDoInput(true);
             connection.setDoOutput(true);
@@ -73,7 +80,12 @@ public class ConsultorPOSTAPI extends AsyncTask<Void, Long, String> {
             wr.close ();
 
             //Get Response
-            InputStream is = connection.getInputStream();
+            InputStream is = null;
+            try {
+                is = connection.getInputStream();
+            }catch (IOException exception){
+                is = connection.getErrorStream();
+            }
             BufferedReader rd = new BufferedReader(new InputStreamReader(is));
             String line;
             StringBuffer response = new StringBuffer();

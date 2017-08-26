@@ -11,13 +11,22 @@ import losmarinos.blackout.Objetos.Usuario;
 
 public class ParserJSON {
 
-    public static boolean esError(String json, String mensaje_error)
+    public static boolean esError(String json, StringBuilder mensaje_error)
     {
         try {
             JSONObject obj_resp = new JSONObject(json);
+
+            if(obj_resp.has("error")) {
+                mensaje_error.append(obj_resp.getString("message"));
+                return true;
+            }
+
             return false;
         } catch (JSONException e) {
-            mensaje_error = "Error";
+            mensaje_error.append("Error");
+            return true;
+        } catch (Exception e) {
+            mensaje_error.append("Error");
             return true;
         }
     }

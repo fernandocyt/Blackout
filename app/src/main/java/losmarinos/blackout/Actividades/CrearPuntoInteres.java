@@ -20,17 +20,24 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import losmarinos.blackout.Constantes;
+import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.GPSTracker;
 import losmarinos.blackout.Global;
 import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.Objetos.PuntoInteres;
 import losmarinos.blackout.Objetos.Reporte;
 import losmarinos.blackout.ObservadorGPS;
+import losmarinos.blackout.ParserJSON;
 import losmarinos.blackout.R;
+
+import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_PUNTO_DE_INTERES;
+import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_REPORTE;
 
 public class CrearPuntoInteres extends AppCompatActivity implements OnMapReadyCallback,
         ObservadorGPS,
@@ -144,6 +151,11 @@ public class CrearPuntoInteres extends AppCompatActivity implements OnMapReadyCa
 
     public void crearPuntoInteres(View view)
     {
+        if(this.marcador_posicion_punto_interes == null){
+            Toast.makeText(this, "Debe marcar una posicion en el mapa", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         String nombre_servicio = this.spinner_servicios.getSelectedItem().toString();
         Constantes.SERVICIO servicio = Constantes.stringToServicio(nombre_servicio);
 
@@ -154,6 +166,26 @@ public class CrearPuntoInteres extends AppCompatActivity implements OnMapReadyCa
         }
 
         PuntoInteres nuevo_punto_interes = new PuntoInteres(servicio, empresa, marcador_posicion_punto_interes.getPosition(), seekbar_radio.getProgress());
+
+        try{
+            JSONObject nuevo_pto_interes = new JSONObject();
+            nuevo_pto_interes.put("persona_id", 1);
+            nuevo_pto_interes.put("ubicacion", "(" + Double.toString(nuevo_punto_interes.getUbicacion().latitude) + "," + Double.toString(nuevo_punto_interes.getUbicacion().longitude) + ")");
+            nuevo_pto_interes.put("radio", nuevo_punto_interes.getRadio());
+            if(nuevo_punto_interes.getEmpresa() == null) {
+                nuevo_pto_interes.put("empresa_id", Constantes.ID_EMPRESA_NO_ESPECIFICA);
+            }else{
+                nuevo_pto_interes.put("empresa_id", nuevo_punto_interes.getEmpresa().getId());
+            }
+
+            String resultado = new ConsultorPOSTAPI("punto-de-interes", Global.token_usuario_actual, nuevo_pto_interes, REGISTRAR_PUNTO_DE_INTERES, null).execute().get();
+            StringBuilder mensaje_error = new StringBuilder();
+            if(ParserJSON.esError(resultado, mensaje_error)){
+                Toast.makeText(this, mensaje_error, Toast.LENGTH_LONG).show();
+            }
+        }catch (Exception e){
+            Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
+        }
 
         Global.usuario_actual.addPuntoInteres(nuevo_punto_interes);
 

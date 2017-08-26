@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -14,7 +15,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import losmarinos.blackout.API.APIObtenerUsuarioPorToken;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorGETAPI;
 import losmarinos.blackout.ConsultorPOSTAPI;
@@ -48,8 +48,8 @@ public class Login extends AppCompatActivity {
         {
             usuario.setText(info_user.get(2));
             password.setText(info_user.get(1));
+            this.loguearUsuario(findViewById(R.id.btn_ingresar_login));
         }
-
     }
 
     public void loguearUsuario(View view){
@@ -67,30 +67,44 @@ public class Login extends AppCompatActivity {
             obj.put("username", str_usuario);
             obj.put("password", str_password);
 
-            String respuesta = new ConsultorPOSTAPI("login", obj, LOGUEAR_USUARIO, null).execute().get();
-            String access_token = ParserJSON.obtenerAccessToken(respuesta);
-            if(access_token == null){
-                Toast.makeText(this, "Error: usuario inexistente", Toast.LENGTH_LONG).show();
+            String respuesta = new ConsultorPOSTAPI("login", null, obj, LOGUEAR_USUARIO, null).execute().get();
+            StringBuilder msg_error = new StringBuilder();
+            if(ParserJSON.esError(respuesta, msg_error)){
+                Toast.makeText(this, msg_error.toString(), Toast.LENGTH_LONG).show();
                 return;
+            }else{
+                String access_token = ParserJSON.obtenerAccessToken(respuesta);
+                if(access_token == null){
+                    Toast.makeText(this, "Error: usuario inexistente", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                Global.token_usuario_actual = access_token;
+
+                // Obtengo datos de usuario
+                respuesta = new ConsultorGETAPI("user", Global.token_usuario_actual, OBTENER_USUARIO_POR_TOKEN, null).execute().get();
+
+                if(ParserJSON.esError(respuesta, msg_error)){
+                    Toast.makeText(this, msg_error.toString(), Toast.LENGTH_LONG).show();
+                    return;
+                } else {
+                    Usuario nuevo_usuario = ParserJSON.obtenerUsuario(respuesta);
+                    if (nuevo_usuario == null) {
+                        Toast.makeText(this, "Error: usuario inexistente", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    Global.usuario_actual = nuevo_usuario;
+
+                    LocalDB.crearXML(this.getApplicationContext(),
+                            Global.usuario_actual.getNombre(),
+                            password.getText().toString(),
+                            Global.usuario_actual.getMail(),
+                            Global.token_usuario_actual);
+
+                    Intent i = new Intent(getApplicationContext(), MapaPrincipal.class);
+                    startActivity(i);
+                }
             }
 
-            Global.token_usuario_actual = access_token;
-
-            // Obtengo datos de usuario
-            respuesta = new APIObtenerUsuarioPorToken("user", Global.token_usuario_actual, OBTENER_USUARIO_POR_TOKEN, null).execute().get();
-            Usuario nuevo_usuario = ParserJSON.obtenerUsuario(respuesta);
-            if(access_token == null){
-                Toast.makeText(this, "Error: usuario inexistente", Toast.LENGTH_LONG).show();
-                return;
-            }
-
-            Global.usuario_actual = nuevo_usuario;
-
-            LocalDB.crearXML(this.getApplicationContext(),
-                    Global.usuario_actual.getNombre(),
-                    password.getText().toString(),
-                    Global.usuario_actual.getMail(),
-                    Global.token_usuario_actual);
         }
         catch (Exception e)
         {
@@ -98,8 +112,6 @@ public class Login extends AppCompatActivity {
             return;
         }
 
-        Intent i = new Intent(getApplicationContext(), MapaPrincipal.class);
-        startActivity(i);
     }
 
     public void registrarUsuario(View view)

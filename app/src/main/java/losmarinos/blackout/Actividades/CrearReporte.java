@@ -2,6 +2,7 @@ package losmarinos.blackout.Actividades;
 
 import losmarinos.blackout.Global;
 import losmarinos.blackout.Objetos.Empresa;
+import losmarinos.blackout.ParserJSON;
 import losmarinos.blackout.R;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ObservadorGPS;
@@ -31,8 +32,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_REPORTE;
 
 public class CrearReporte extends AppCompatActivity implements OnMapReadyCallback,
         ObservadorGPS,
@@ -143,15 +149,47 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
 
     public void crearReporte(View view)
     {
-        String servicio = this.spinner_servicios.getSelectedItem().toString();
+        if(this.marcador_posicion_reporte == null){
+            Toast.makeText(this, "Debe marcar una posicion en el mapa", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        String nombre_servicio = this.spinner_servicios.getSelectedItem().toString();
+        Constantes.SERVICIO servicio = Constantes.stringToServicio(nombre_servicio);
+
         String nombre_empresa = this.spinner_empresas.getSelectedItem().toString();
         Empresa empresa = null;
         if (!nombre_empresa.equals("No especificar")) {
             empresa = Global.encontrarEmpresaPorNombre(nombre_empresa);
         }
-        Reporte nuevo_reporte = new Reporte(Constantes.stringToServicio(servicio), empresa, marcador_posicion_reporte.getPosition(), seekbar_radio.getProgress());
+
+        LatLng posicion = marcador_posicion_reporte.getPosition();
+        double radio = seekbar_radio.getProgress();
+
+        Reporte nuevo_reporte = new Reporte(servicio, empresa, posicion, radio);
 
         Global.asociarReporteACortes(nuevo_reporte);
+
+        try{
+            JSONObject nuevo_rep = new JSONObject();
+            nuevo_rep.put("persona_id", 1);
+            nuevo_rep.put("ubicacion", "(" + Double.toString(nuevo_reporte.getUbicacion().latitude) + "," + Double.toString(nuevo_reporte.getUbicacion().longitude) + ")");
+            nuevo_rep.put("radio", nuevo_reporte.getRadio());
+            nuevo_rep.put("servicio_id", Constantes.getIdServicio(nuevo_reporte.getServicio()));
+            if(nuevo_reporte.getEmpresa() == null) {
+                nuevo_rep.put("empresa_id", Constantes.ID_EMPRESA_NO_ESPECIFICA);
+            }else{
+                nuevo_rep.put("empresa_id", nuevo_reporte.getEmpresa().getId());
+            }
+
+            String resultado = new ConsultorPOSTAPI("reporte", Global.token_usuario_actual, nuevo_rep, REGISTRAR_REPORTE, null).execute().get();
+            StringBuilder mensaje_error = new StringBuilder();
+            if(ParserJSON.esError(resultado, mensaje_error)){
+                Toast.makeText(this, mensaje_error, Toast.LENGTH_LONG).show();
+            }
+        }catch (Exception e){
+            Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
+        }
 
         Global.usuario_actual.addReporte(nuevo_reporte);
 

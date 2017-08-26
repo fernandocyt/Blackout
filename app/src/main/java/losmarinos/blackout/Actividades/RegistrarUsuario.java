@@ -61,11 +61,11 @@ public class RegistrarUsuario extends AppCompatActivity {
             obj.put("password", pass1);
             obj.put("password_confirmation", pass1);
 
-            String respuesta = new ConsultorPOSTAPI("register", obj, Constantes.TAGAPI.REGISTRAR_USUARIO, null).execute().get();
-            String msj_error = "";
+            String respuesta = new ConsultorPOSTAPI("register", null, obj, Constantes.TAGAPI.REGISTRAR_USUARIO, null).execute().get();
+            StringBuilder msj_error = new StringBuilder();
             if(ParserJSON.esError(respuesta, msj_error))
             {
-                Toast.makeText(this, "Error al registrar usuario", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, msj_error, Toast.LENGTH_LONG).show();
                 return;
             }
             else

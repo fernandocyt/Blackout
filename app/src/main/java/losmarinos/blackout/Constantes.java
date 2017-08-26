@@ -27,12 +27,16 @@ public class Constantes {
     // CALCULOS
     public static final int RADIO_SECU = 1000;
 
+    // CONSTANTES BASE
+    public static final int ID_EMPRESA_NO_ESPECIFICA = 3;
+
     public enum TAGAPI
     {
         LOGUEAR_USUARIO,
         REGISTRAR_USUARIO,
+        REGISTRAR_REPORTE,
+        REGISTRAR_PUNTO_DE_INTERES,
         OBTENER_USUARIO_POR_TOKEN,
-
     }
 
     public enum SERVICIO
@@ -56,7 +60,21 @@ public class Constantes {
             case TELEFONO: return "Telefono";
             case CABLE: return "Cable";
         }
-        return "";
+        return null;
+    }
+
+    public static int getIdServicio(SERVICIO servicio)
+    {
+        switch (servicio)
+        {
+            case AGUA: return 1;
+            case LUZ: return 2;
+            case GAS: return 3;
+            case CABLE: return 4;
+            case TELEFONO: return 5;
+            case INTERNET: return 6;
+        }
+        return 0;
     }
 
     public static SERVICIO stringToServicio(String servicio)
@@ -72,6 +90,25 @@ public class Constantes {
         }else if(servicio.equals("Telefono")){
             return SERVICIO.TELEFONO;
         }else if(servicio.equals("Cable")){
+            return SERVICIO.CABLE;
+        }else {
+            return null;
+        }
+    }
+
+    public static SERVICIO getServicioById(int id_servicio)
+    {
+        if(id_servicio == 1){
+            return SERVICIO.AGUA;
+        }else if(id_servicio == 2){
+            return SERVICIO.LUZ;
+        }else if(id_servicio == 3){
+            return SERVICIO.GAS;
+        }else if(id_servicio == 6){
+            return SERVICIO.INTERNET;
+        }else if(id_servicio == 5){
+            return SERVICIO.TELEFONO;
+        }else if(id_servicio == 4){
             return SERVICIO.CABLE;
         }
         return null;
