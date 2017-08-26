@@ -211,9 +211,6 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         if(FiltrarMapaPrincipal.mostrar_reportes)
             this.cargarReportesEnMapa();
 
-        if(FiltrarMapaPrincipal.mostrar_sucursales)
-            this.cargarSucursalesEnMapa();
-
         this.cargarPuntosInteres();
 
         this.marcador_posicion_actual = null;
@@ -324,6 +321,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         }
     }
 
+    // OJO QUE ESTA NO SE ESTA USANDO
     public void cargarSucursalesEnMapa()
     {
         List<Empresa> empresas = Global.empresas;

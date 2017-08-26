@@ -23,7 +23,6 @@ public class FiltrarMapaPrincipal extends AppCompatActivity
 
     public static boolean mostrar_cortes = true;
     public static boolean mostrar_reportes = true;
-    public static boolean mostrar_sucursales = true;
     public static String nombre_empresa = null;
     public static Constantes.SERVICIO servicio = null;
 
@@ -46,10 +45,6 @@ public class FiltrarMapaPrincipal extends AppCompatActivity
         switch_reportes = (Switch) findViewById(R.id.switch_reportes_filtrar_mapa_principal);
         switch_reportes.setChecked(FiltrarMapaPrincipal.mostrar_reportes);
         switch_reportes.setOnCheckedChangeListener(this);
-
-        switch_sucursales = (Switch) findViewById(R.id.switch_sucursales_filtrar_mapa_principal);
-        switch_sucursales.setChecked(FiltrarMapaPrincipal.mostrar_sucursales);
-        switch_sucursales.setOnCheckedChangeListener(this);
 
         spinner_servicios = (Spinner) findViewById(R.id.spn_servicios_filtrar_mapa_principal);
         spinner_servicios.setOnItemSelectedListener(this);
@@ -157,11 +152,6 @@ public class FiltrarMapaPrincipal extends AppCompatActivity
             FiltrarMapaPrincipal.mostrar_reportes = true;
         }else{
             FiltrarMapaPrincipal.mostrar_reportes = false;
-        }
-        if(switch_sucursales.isChecked()){
-            FiltrarMapaPrincipal.mostrar_sucursales = true;
-        }else{
-            FiltrarMapaPrincipal.mostrar_sucursales = false;
         }
 
         if(this.spinner_empresas.getSelectedItem().toString().equals("No")) {

@@ -85,7 +85,8 @@
         <activity
             android:name=".Actividades.PerfilEmpresa"
             android:screenOrientation="portrait" />
-        <activity android:name=".Actividades.VerSucursales"></activity>
+        <activity android:name=".Actividades.VerSucursales"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
