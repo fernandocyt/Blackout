@@ -134,6 +134,9 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         } else if (id == R.id.agregar_punto_interes){
             Intent i = new Intent(getApplicationContext(), CrearPuntoInteres.class);
             startActivity(i);
+        } else if (id == R.id.buscar_empresa){
+            Intent i = new Intent(getApplicationContext(), BuscarEmpresa.class);
+            startActivity(i);
         } else if (id == R.id.cerrar_sesion){
             this.finish();
         }

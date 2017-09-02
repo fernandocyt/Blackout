@@ -94,8 +94,8 @@ public class ParserJSON {
         // OJO, lo que se retorna es un array cuyo primer elemento es el array "empresa"
         List<Empresa> empresas_retornar = new ArrayList<>();
         try {
-            JSONArray array_resp = new JSONArray(json);
-            JSONArray obj_empresas = array_resp.getJSONArray(1);
+            JSONArray obj_empresas = new JSONArray(json);
+            //JSONArray obj_empresas = array_resp.getJSONArray(0);
             for(int i = 0; i < obj_empresas.length(); i++)
             {
                 JSONObject obj_empresa = obj_empresas.getJSONObject(i);
@@ -118,7 +118,10 @@ public class ParserJSON {
             int id = Integer.parseInt(obj_resp.getString("id"));
             int id_persona = Integer.parseInt(obj_resp.getString("persona_id"));
             int id_servicio = Integer.parseInt(obj_resp.getString("servicio_id"));
-            int id_empresa = Integer.parseInt(obj_resp.getString("empresa_id"));
+            int id_empresa = -1;
+            if(!obj_resp.isNull("empresa_id")) {
+                id_empresa = Integer.parseInt(obj_resp.getString("empresa_id"));
+            }
             String ubicacion = obj_resp.getString("ubicacion");
             int radio = Integer.parseInt(obj_resp.getString("radio"));
             int resuelto = Integer.parseInt(obj_resp.getString("resuelto"));
@@ -171,8 +174,14 @@ public class ParserJSON {
         try {
             JSONObject obj_resp = new JSONObject(json);
             int id = Integer.parseInt(obj_resp.getString("id"));
-            int id_servicio = 1; //Ver que lo traiga de la base
-            int id_empresa = Integer.parseInt(obj_resp.getString("empresa_id"));
+            int id_servicio = -1;
+            if(!obj_resp.isNull("servicio_id")) { // ESTO LO PONGO PA QUE NO EZPLOTE
+                id_servicio = Integer.parseInt(obj_resp.getString("servicio_id"));
+            }
+            int id_empresa = -1;
+            if(!obj_resp.isNull("empresa_id")) {
+                id_empresa = Integer.parseInt(obj_resp.getString("empresa_id"));
+            }
             String ubicacion = obj_resp.getString("ubicacion");
             int radio = Integer.parseInt(obj_resp.getString("radio"));
             //No traigo cantidad de reportes ya que lo calculo

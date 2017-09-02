@@ -28,13 +28,13 @@
     <item android:title="Acciones">
         <menu>
             <item
-                android:id="@+id/accion_buscar_empresa"
+                android:id="@+id/buscar_empresa"
                 android:title="Buscar Empresa" />
             <item
-                android:id="@+id/accion_estadisticas"
+                android:id="@+id/estadisticas"
                 android:title="Consultar Estadisticas" />
             <item
-                android:id="@+id/accion_preferencias"
+                android:id="@+id/preferencias"
                 android:title="Preferencias" />
             <item
                 android:id="@+id/cerrar_sesion"
