@@ -39,6 +39,7 @@ public class Constantes {
         OBTENER_USUARIO_POR_TOKEN,
         OBTENER_EMPRESAS,
         OBTENER_REPORTES,
+        OBTENER_CORTES
     }
 
     public enum SERVICIO

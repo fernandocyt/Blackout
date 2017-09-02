@@ -59,8 +59,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
         Global.cargarDatosPruebas();
 
-        if(!isMyServiceRunning(ServicioPeriodico.class))
-            startService(new Intent(this, ServicioPeriodico.class));
+        //if(!isMyServiceRunning(ServicioPeriodico.class))
+            //startService(new Intent(this, ServicioPeriodico.class));
 
         if(!isMyServiceRunning(GPSTracker.class))
             startService(new Intent(this, GPSTracker.class));
@@ -90,7 +90,6 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         mapFragment.getMapAsync(this);
 
         Global.actualizarEmpresas(this);
-        Global.actualizarReportes(this);
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
@@ -206,7 +205,10 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
     {
         mMap.clear();
 
-        Global.calcularNuevosCortes();
+        Global.actualizarReportes(this);
+        Global.actualizarCortes(this);
+
+        //Global.calcularNuevosCortes();
 
         if(FiltrarMapaPrincipal.mostrar_cortes)
             this.cargarCortesEnMapa();
@@ -289,7 +291,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
     public void cargarReportesEnMapa()
     {
-        List<Reporte> reportes = Global.usuario_actual.getReportes();
+        List<Reporte> reportes = Global.reportes;
         for(int i = 0; i < reportes.size(); i++)
         {
             Reporte rep_actual = reportes.get(i);

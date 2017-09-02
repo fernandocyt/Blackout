@@ -13,6 +13,7 @@ import java.util.List;
 
 import losmarinos.blackout.Calculos;
 import losmarinos.blackout.Constantes;
+import losmarinos.blackout.Global;
 
 /**
  * Created by garci on 23/7/2017.
@@ -23,11 +24,11 @@ public class Corte{
 
     private int id;
     private Constantes.SERVICIO servicio;
-    private Empresa empresa;
+    private int id_empresa;
     private LatLng ubicacion;
-    private double radio;
+    private int radio;
     private Date fecha_inicio;
-    private boolean resuelto;
+    private int resuelto;
     private List<Respuesta> respuestas;
     private List<Reporte> reportes;
 
@@ -39,12 +40,12 @@ public class Corte{
         this.servicio = servicio;
     }
 
-    public Empresa getEmpresa() {
-        return empresa;
+    public int getIdEmpresa() {
+        return id_empresa;
     }
 
-    public void setEmpresa(Empresa empresa) {
-        this.empresa = empresa;
+    public void setIdEmpresa(int id_empresa) {
+        this.id_empresa = id_empresa;
     }
 
     public LatLng getUbicacion() {
@@ -59,7 +60,7 @@ public class Corte{
         return radio;
     }
 
-    public void setRadio(double radio) {
+    public void setRadio(int radio) {
         this.radio = radio;
     }
 
@@ -72,10 +73,10 @@ public class Corte{
     }
 
     public boolean isResuelto() {
-        return resuelto;
+        return (resuelto == 1);
     }
 
-    public void setResuelto(boolean resuelto) {
+    public void setResuelto(int resuelto) {
         this.resuelto = resuelto;
     }
 
@@ -105,13 +106,11 @@ public class Corte{
         return id;
     }
 
-    public Corte(Constantes.SERVICIO servicio, Empresa empresa, LatLng ubicacion, double radio, Date fecha_inicio, boolean resuelto)
+    public Corte(int id, Constantes.SERVICIO servicio, int id_empresa, LatLng ubicacion, int radio, Date fecha_inicio, int resuelto)
     {
-        this.id = this.proxima_id_corte_global;
-        this.proxima_id_corte_global++;
-
+        this.id = id;
         this.servicio = servicio;
-        this.empresa = empresa;
+        this.id_empresa = id_empresa;
         this.ubicacion = ubicacion;
         this.radio = radio;
         this.fecha_inicio = fecha_inicio;
@@ -120,17 +119,20 @@ public class Corte{
         this.reportes = new ArrayList<>();
     }
 
+    public Empresa getEmpresa()
+    {
+        return Global.encontrarEmpresaPorId(this.id_empresa);
+    }
+
     public Corte(Reporte reporte)
     {
-        this.id = this.proxima_id_corte_global;
-        this.proxima_id_corte_global++;
-
+        this.id = 0;
         this.servicio = reporte.getServicio();
-        this.empresa = null;
+        this.id_empresa = -1;
         this.ubicacion = reporte.getUbicacion();
         this.radio = 0;
         this.fecha_inicio = Calendar.getInstance().getTime();
-        this.resuelto = false;
+        this.resuelto = 0;
         this.respuestas = new ArrayList<>();
         this.reportes = new ArrayList<>();
         this.reportes.add(reporte);
@@ -174,7 +176,7 @@ public class Corte{
             double distancia_mas_lejana = Calculos.calcularDistancia(reporte.getUbicacion(), this.ubicacion) + reporte.getRadio();
             if(distancia_mas_lejana > this.radio)
             {
-                this.radio = distancia_mas_lejana;
+                this.radio = (int)distancia_mas_lejana;
             }
 
             // Modifico empresa responsable
@@ -224,11 +226,11 @@ public class Corte{
         // Guardo empresa
         if(indice_empresa != -1)
         {
-            this.empresa = this.reportes.get(indice_empresa).getEmpresa();
+            this.id_empresa = this.reportes.get(indice_empresa).getEmpresa().getId();
         }
         else
         {
-            this.empresa = null;
+            this.id_empresa = -1;
         }
     }
 }

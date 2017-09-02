@@ -160,30 +160,22 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
         Constantes.SERVICIO servicio = Constantes.stringToServicio(nombre_servicio);
 
         String nombre_empresa = this.spinner_empresas.getSelectedItem().toString();
-        Empresa empresa = null;
+
+        int id_empresa = Constantes.ID_EMPRESA_NO_ESPECIFICA;
         if (!nombre_empresa.equals("No especificar")) {
-            empresa = Global.encontrarEmpresaPorNombre(nombre_empresa);
+            id_empresa = Global.encontrarEmpresaPorNombre(nombre_empresa).getId();
         }
 
         LatLng posicion = marcador_posicion_reporte.getPosition();
         double radio = seekbar_radio.getProgress();
 
-        Date fecha = Calendar.getInstance().getTime();
-        Reporte nuevo_reporte = new Reporte(0,servicio, empresa.getId(), 1, posicion, radio, fecha, 0);
-
-        Global.asociarReporteACortes(nuevo_reporte);
-
         try{
             JSONObject nuevo_rep = new JSONObject();
-            nuevo_rep.put("persona_id", nuevo_reporte.getIdPersona());
-            nuevo_rep.put("ubicacion", Double.toString(nuevo_reporte.getUbicacion().latitude) + ";" + Double.toString(nuevo_reporte.getUbicacion().longitude));
-            nuevo_rep.put("radio", nuevo_reporte.getRadio());
-            nuevo_rep.put("servicio_id", Constantes.getIdServicio(nuevo_reporte.getServicio()));
-            if(empresa == null) {
-                nuevo_rep.put("empresa_id", Constantes.ID_EMPRESA_NO_ESPECIFICA);
-            }else{
-                nuevo_rep.put("empresa_id", nuevo_reporte.getIdEmpresa());
-            }
+            nuevo_rep.put("persona_id", 1);
+            nuevo_rep.put("ubicacion", Double.toString(posicion.latitude) + ";" + Double.toString(posicion.longitude));
+            nuevo_rep.put("radio", radio);
+            nuevo_rep.put("servicio_id", Constantes.getIdServicio(servicio));
+            nuevo_rep.put("empresa_id", id_empresa);
 
             String resultado = new ConsultorPOSTAPI("reporte", Global.token_usuario_actual, nuevo_rep, REGISTRAR_REPORTE, null).execute().get();
             StringBuilder mensaje_error = new StringBuilder();
@@ -193,8 +185,6 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
         }catch (Exception e){
             Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
         }
-
-        Global.usuario_actual.addReporte(nuevo_reporte);
 
         this.radio_reporte = null;
         this.marcador_posicion_reporte = null;

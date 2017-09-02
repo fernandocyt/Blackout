@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.Objetos.Reporte;
 import losmarinos.blackout.Objetos.Usuario;
@@ -73,22 +74,15 @@ public class ParserJSON {
 
     public static Empresa obtenerEmpresa(String json)
     {
-        int id = 0;
-        String nombre = null;
-        String password = null;
-        String email = null;
-        String telefono = null;
-        String direccion = null;
-        String website = null;
         try {
             JSONObject obj_resp = new JSONObject(json);
-            id = Integer.parseInt(obj_resp.getString("id"));
-            nombre = obj_resp.getString("nombre");
-            password = obj_resp.getString("password");
-            email = obj_resp.getString("email");
-            telefono = obj_resp.getString("telefono");
-            direccion = obj_resp.getString("direccion");
-            website = obj_resp.getString("website");
+            int id = Integer.parseInt(obj_resp.getString("id"));
+            String nombre = obj_resp.getString("nombre");
+            String password = obj_resp.getString("password");
+            String email = obj_resp.getString("email");
+            String telefono = obj_resp.getString("telefono");
+            String direccion = obj_resp.getString("direccion");
+            String website = obj_resp.getString("website");
             return new Empresa(id, nombre, password, email, telefono, direccion, Constantes.SERVICIO.AGUA, website);
         } catch (JSONException e) {
             return null;
@@ -119,24 +113,16 @@ public class ParserJSON {
 
     public static Reporte obtenerReporte(String json)
     {
-        int id = 0;
-        int id_persona = 0;
-        int id_servicio = 0;
-        int id_empresa = 0;
-        String ubicacion = null;
-        int radio = 0;
-        String fecha = null;
-        int resuelto = 0;
         try {
             JSONObject obj_resp = new JSONObject(json);
-            id = Integer.parseInt(obj_resp.getString("id"));
-            id_persona = Integer.parseInt(obj_resp.getString("persona_id"));
-            id_servicio = Integer.parseInt(obj_resp.getString("servicio_id"));
-            id_empresa = Integer.parseInt(obj_resp.getString("empresa_id"));
-            ubicacion = obj_resp.getString("ubicacion");
-            radio = Integer.parseInt(obj_resp.getString("radio"));
-            resuelto = Integer.parseInt(obj_resp.getString("resuelto"));
-            fecha = obj_resp.getString("created_at");
+            int id = Integer.parseInt(obj_resp.getString("id"));
+            int id_persona = Integer.parseInt(obj_resp.getString("persona_id"));
+            int id_servicio = Integer.parseInt(obj_resp.getString("servicio_id"));
+            int id_empresa = Integer.parseInt(obj_resp.getString("empresa_id"));
+            String ubicacion = obj_resp.getString("ubicacion");
+            int radio = Integer.parseInt(obj_resp.getString("radio"));
+            int resuelto = Integer.parseInt(obj_resp.getString("resuelto"));
+            String fecha = obj_resp.getString("created_at");
 
             // SI NO ES HH es kk
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -175,6 +161,54 @@ public class ParserJSON {
                 }
             }
             return reportes_retornar;
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
+    public static Corte obtenerCorte(String json)
+    {
+        try {
+            JSONObject obj_resp = new JSONObject(json);
+            int id = Integer.parseInt(obj_resp.getString("id"));
+            int id_servicio = 1; //Ver que lo traiga de la base
+            int id_empresa = Integer.parseInt(obj_resp.getString("empresa_id"));
+            String ubicacion = obj_resp.getString("ubicacion");
+            int radio = Integer.parseInt(obj_resp.getString("radio"));
+            //No traigo cantidad de reportes ya que lo calculo
+            //No traigo duración
+            int resuelto = Integer.parseInt(obj_resp.getString("resuelto"));
+            String fecha_inicio = obj_resp.getString("fecha_inicio");
+
+            // SI NO ES HH es kk
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = format.parse(fecha_inicio);
+
+            return new Corte(id, Constantes.getServicioById(id_servicio), id_empresa, Constantes.stringToLatLng(ubicacion), radio, date, resuelto);
+
+        } catch (JSONException e) {
+            return null;
+        } catch (ParseException e){
+            return null;
+        }
+    }
+
+    public static List<Corte> obtenerCortes(String json)
+    {
+        List<Corte> cortes_retornar = new ArrayList<>();
+        try {
+            JSONObject obj_resp = new JSONObject(json);
+            JSONArray obj_cortes = obj_resp.getJSONArray("cortes");
+            for(int i = 0; i < obj_cortes.length(); i++)
+            {
+                JSONObject obj_corte = obj_cortes.getJSONObject(i);
+                Corte corte = ParserJSON.obtenerCorte(obj_corte.toString());
+
+                if(corte != null){
+                    cortes_retornar.add(corte);
+                }
+            }
+            return cortes_retornar;
         } catch (JSONException e) {
             return null;
         }

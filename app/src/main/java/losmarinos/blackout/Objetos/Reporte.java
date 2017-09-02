@@ -22,7 +22,7 @@ public class Reporte {
     private int id_empresa;
     private int id_persona;
     private LatLng ubicacion;
-    private double radio;
+    private int radio;
     private Date fecha;
     private int resuelto;
     private boolean asociado;
@@ -63,7 +63,7 @@ public class Reporte {
         return radio;
     }
 
-    public void setRadio(double radio) {
+    public void setRadio(int radio) {
         this.radio = radio;
     }
 
@@ -99,7 +99,7 @@ public class Reporte {
         this.asociado = asociado;
     }
 
-    public Reporte(int id, Constantes.SERVICIO servicio, int id_empresa, int id_persona, LatLng ubicacion, double radio, Date fecha, int resuelto)
+    public Reporte(int id, Constantes.SERVICIO servicio, int id_empresa, int id_persona, LatLng ubicacion, int radio, Date fecha, int resuelto)
     {
         this.id = id;
         this.servicio = servicio;

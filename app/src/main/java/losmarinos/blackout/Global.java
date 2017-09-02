@@ -20,6 +20,7 @@ import losmarinos.blackout.Objetos.Respuesta;
 import losmarinos.blackout.Objetos.Sucursal;
 import losmarinos.blackout.Objetos.Usuario;
 
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_CORTES;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_EMPRESAS;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_REPORTES;
 
@@ -34,6 +35,7 @@ public class Global {
     public static List<Corte> cortes = new ArrayList<>();
     public static List<Usuario> usuarios = new ArrayList<>();
     public static List<Empresa> empresas = new ArrayList<>();
+    public static List<Reporte> reportes = new ArrayList<>();
 
     public static boolean cargo_datos = false;
 
@@ -75,7 +77,7 @@ public class Global {
         Global.empresas.add(empresa7);
         Global.empresas.add(empresa8);
 
-        Corte corte_agua = new Corte(Constantes.SERVICIO.AGUA, empresa6, Constantes.BSAS, 500, Calendar.getInstance().getTime(), false);
+        /*Corte corte_agua = new Corte(Constantes.SERVICIO.AGUA, empresa6, Constantes.BSAS, 500, Calendar.getInstance().getTime(), false);
         Respuesta respuesta1_corte_agua = new Respuesta(usuario1, "Todo mal viejo");
         Respuesta respuesta2_corte_agua = new Respuesta(usuario2, "Sigo esperando son todos putos");
         corte_agua.addRespuesta(respuesta1_corte_agua);
@@ -91,7 +93,7 @@ public class Global {
         Global.cortes.add(corte_gas);
         Global.cortes.add(corte_internet);
         Global.cortes.add(corte_cable);
-        Global.cortes.add(corte_telefono);
+        Global.cortes.add(corte_telefono);*/
 
         cargo_datos = true;
     }
@@ -107,7 +109,7 @@ public class Global {
                 }
                 return;
             }else{
-                List<Empresa> empresas = ParserJSON.obtenerEmpresas(respuesta);
+                Global.empresas = ParserJSON.obtenerEmpresas(respuesta);
             }
         }catch (Exception e){}
     }
@@ -123,8 +125,23 @@ public class Global {
                 }
                 return;
             }else{
-                List<Reporte> reportes = ParserJSON.obtenerReportes(respuesta);
-                int a = 0;
+                Global.reportes = ParserJSON.obtenerReportes(respuesta);
+            }
+        }catch (Exception e){}
+    }
+
+    public static void actualizarCortes(Context context)
+    {
+        try {
+            String respuesta = new ConsultorGETAPI("cortes", Global.token_usuario_actual, OBTENER_CORTES, null).execute().get();
+            StringBuilder msg_error = new StringBuilder();
+            if(ParserJSON.esError(respuesta, msg_error)){
+                if(context != null) {
+                    Toast.makeText(context, msg_error.toString(), Toast.LENGTH_LONG).show();
+                }
+                return;
+            }else{
+                Global.cortes = ParserJSON.obtenerCortes(respuesta);
             }
         }catch (Exception e){}
     }
