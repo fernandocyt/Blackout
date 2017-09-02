@@ -1,9 +1,13 @@
 package losmarinos.blackout;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -15,6 +19,9 @@ import losmarinos.blackout.Objetos.Reporte;
 import losmarinos.blackout.Objetos.Respuesta;
 import losmarinos.blackout.Objetos.Sucursal;
 import losmarinos.blackout.Objetos.Usuario;
+
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_EMPRESAS;
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_REPORTES;
 
 /**
  * Created by garci on 13/8/2017.
@@ -89,11 +96,56 @@ public class Global {
         cargo_datos = true;
     }
 
+    public static void actualizarEmpresas(Context context)
+    {
+        try {
+            String respuesta = new ConsultorGETAPI("empresa", Global.token_usuario_actual, OBTENER_EMPRESAS, null).execute().get();
+            StringBuilder msg_error = new StringBuilder();
+            if(ParserJSON.esError(respuesta, msg_error)){
+                if(context != null) {
+                    Toast.makeText(context, msg_error.toString(), Toast.LENGTH_LONG).show();
+                }
+                return;
+            }else{
+                List<Empresa> empresas = ParserJSON.obtenerEmpresas(respuesta);
+            }
+        }catch (Exception e){}
+    }
+
+    public static void actualizarReportes(Context context)
+    {
+        try {
+            String respuesta = new ConsultorGETAPI("reporte", Global.token_usuario_actual, OBTENER_REPORTES, null).execute().get();
+            StringBuilder msg_error = new StringBuilder();
+            if(ParserJSON.esError(respuesta, msg_error)){
+                if(context != null) {
+                    Toast.makeText(context, msg_error.toString(), Toast.LENGTH_LONG).show();
+                }
+                return;
+            }else{
+                List<Reporte> reportes = ParserJSON.obtenerReportes(respuesta);
+                int a = 0;
+            }
+        }catch (Exception e){}
+    }
+
     public static Empresa encontrarEmpresaPorNombre(String nombre)
     {
         for(int i = 0; i < Global.empresas.size(); i++)
         {
             if(Global.empresas.get(i).getNombre().equals(nombre))
+            {
+                return Global.empresas.get(i);
+            }
+        }
+        return null;
+    }
+
+    public static Empresa encontrarEmpresaPorId(int id_empresa)
+    {
+        for(int i = 0; i < Global.empresas.size(); i++)
+        {
+            if(Global.empresas.get(i).getId() == id_empresa)
             {
                 return Global.empresas.get(i);
             }

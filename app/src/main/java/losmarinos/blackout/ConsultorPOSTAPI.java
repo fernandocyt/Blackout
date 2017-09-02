@@ -101,6 +101,20 @@ public class ConsultorPOSTAPI extends AsyncTask<Void, Long, String> {
             }
 
             return response.toString();
+        } catch(IOException e) {
+
+            JSONObject error = new JSONObject();
+            try{
+                error.put("error", "Timeout");
+                error.put("message", "Imposible establecer conexion.");
+            }catch (JSONException jsone){}
+
+            if(this.observador != null) {
+                this.observador.obtenerRespuestaAPI(error.toString(), this.tag, false);
+            }
+
+            return new String(error.toString());
+
         } catch(Exception e){
 
             if(this.observador != null) {

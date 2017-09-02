@@ -37,6 +37,8 @@ public class Constantes {
         REGISTRAR_REPORTE,
         REGISTRAR_PUNTO_DE_INTERES,
         OBTENER_USUARIO_POR_TOKEN,
+        OBTENER_EMPRESAS,
+        OBTENER_REPORTES,
     }
 
     public enum SERVICIO
@@ -112,6 +114,17 @@ public class Constantes {
             return SERVICIO.CABLE;
         }
         return null;
+    }
+
+    public static LatLng stringToLatLng(String str_latlng)
+    {
+        String str_lat = str_latlng.substring(0, str_latlng.indexOf(";"));
+        String str_lng = str_latlng.substring(str_latlng.indexOf(";") + 1);
+
+        double lat = Double.parseDouble(str_lat);
+        double lng = Double.parseDouble(str_lng);
+
+        return new LatLng(lat, lng);
     }
 
     public static BitmapDescriptor getIconoCorte(SERVICIO servicio)

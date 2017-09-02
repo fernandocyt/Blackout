@@ -36,6 +36,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_REPORTE;
@@ -166,20 +168,21 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
         LatLng posicion = marcador_posicion_reporte.getPosition();
         double radio = seekbar_radio.getProgress();
 
-        Reporte nuevo_reporte = new Reporte(servicio, empresa, posicion, radio);
+        Date fecha = Calendar.getInstance().getTime();
+        Reporte nuevo_reporte = new Reporte(0,servicio, empresa.getId(), 1, posicion, radio, fecha, 0);
 
         Global.asociarReporteACortes(nuevo_reporte);
 
         try{
             JSONObject nuevo_rep = new JSONObject();
-            nuevo_rep.put("persona_id", 1);
-            nuevo_rep.put("ubicacion", "(" + Double.toString(nuevo_reporte.getUbicacion().latitude) + "," + Double.toString(nuevo_reporte.getUbicacion().longitude) + ")");
+            nuevo_rep.put("persona_id", nuevo_reporte.getIdPersona());
+            nuevo_rep.put("ubicacion", Double.toString(nuevo_reporte.getUbicacion().latitude) + ";" + Double.toString(nuevo_reporte.getUbicacion().longitude));
             nuevo_rep.put("radio", nuevo_reporte.getRadio());
             nuevo_rep.put("servicio_id", Constantes.getIdServicio(nuevo_reporte.getServicio()));
-            if(nuevo_reporte.getEmpresa() == null) {
+            if(empresa == null) {
                 nuevo_rep.put("empresa_id", Constantes.ID_EMPRESA_NO_ESPECIFICA);
             }else{
-                nuevo_rep.put("empresa_id", nuevo_reporte.getEmpresa().getId());
+                nuevo_rep.put("empresa_id", nuevo_reporte.getIdEmpresa());
             }
 
             String resultado = new ConsultorPOSTAPI("reporte", Global.token_usuario_actual, nuevo_rep, REGISTRAR_REPORTE, null).execute().get();

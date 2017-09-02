@@ -88,6 +88,9 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        Global.actualizarEmpresas(this);
+        Global.actualizarReportes(this);
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
@@ -290,9 +293,10 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         for(int i = 0; i < reportes.size(); i++)
         {
             Reporte rep_actual = reportes.get(i);
+            Empresa empresa_rep = Global.encontrarEmpresaPorId(rep_actual.getIdEmpresa());
 
             if(FiltrarMapaPrincipal.nombre_empresa != null &&
-                    !FiltrarMapaPrincipal.nombre_empresa.equals(rep_actual.getEmpresa()))
+                    !FiltrarMapaPrincipal.nombre_empresa.equals(empresa_rep.getNombre()))
             {
                 continue;
             }

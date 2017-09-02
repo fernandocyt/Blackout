@@ -84,7 +84,7 @@ public class ReportesAdapter extends BaseAdapter implements ListAdapter {
             @Override
             public void onClick(View v) {
                 button_resolver.setVisibility(View.GONE);
-                list.get(position).setResuelto(true);
+                list.get(position).setResuelto(1);
                 MisReportes mis_reportes = (MisReportes)context;
                 mis_reportes.cargarListView();
             }

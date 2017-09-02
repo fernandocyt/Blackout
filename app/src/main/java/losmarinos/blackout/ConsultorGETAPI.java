@@ -2,6 +2,7 @@ package losmarinos.blackout;
 
 import android.os.AsyncTask;
 
+import org.apache.http.conn.ConnectTimeoutException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -33,11 +34,11 @@ public class ConsultorGETAPI extends AsyncTask<Void, Long, String> {
     }
 
     protected String doInBackground(Void... params) {
-        try{
+        try {
             URL url = new URL(Constantes.LINK_API + link);
-            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty("Content-Type", "application/json");
-            if(token != null) {
+            if (token != null) {
                 connection.setRequestProperty("Authorization", "Bearer " + token);
             }
             connection.setRequestMethod("GET");
@@ -58,25 +59,39 @@ public class ConsultorGETAPI extends AsyncTask<Void, Long, String> {
             InputStream is = null;
             try {
                 is = connection.getInputStream();
-            }catch (IOException exception){
+            } catch (IOException exception) {
                 is = connection.getErrorStream();
             }
             BufferedReader rd = new BufferedReader(new InputStreamReader(is));
             String line;
             StringBuffer response = new StringBuffer();
-            while((line = rd.readLine()) != null) {
+            while ((line = rd.readLine()) != null) {
                 response.append(line);
                 response.append('\r');
             }
 
             rd.close();
 
-            if(this.observador != null) {
+            if (this.observador != null) {
                 this.observador.obtenerRespuestaAPI(response.toString(), this.tag, true);
             }
 
             return response.toString();
-        } catch(Exception e){
+        }catch(IOException e){
+
+            JSONObject error = new JSONObject();
+            try{
+                error.put("error", "Timeout");
+                error.put("message", "Imposible establecer conexion.");
+            }catch (JSONException jsone){}
+
+            if(this.observador != null) {
+                this.observador.obtenerRespuestaAPI(error.toString(), this.tag, false);
+            }
+
+            return new String(error.toString());
+
+        }catch(Exception e){
 
             if(this.observador != null) {
                 this.observador.obtenerRespuestaAPI("", this.tag, false);

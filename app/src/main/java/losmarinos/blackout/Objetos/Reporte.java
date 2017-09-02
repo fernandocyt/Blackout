@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import losmarinos.blackout.Constantes;
+import losmarinos.blackout.Global;
 
 /**
  * Created by garci on 22/7/2017.
@@ -18,11 +19,12 @@ public class Reporte {
 
     private int id;
     private Constantes.SERVICIO servicio;
-    private Empresa empresa;
+    private int id_empresa;
+    private int id_persona;
     private LatLng ubicacion;
     private double radio;
     private Date fecha;
-    private boolean resuelto;
+    private int resuelto;
     private boolean asociado;
 
     public Constantes.SERVICIO getServicio() {
@@ -33,12 +35,20 @@ public class Reporte {
         this.servicio = servicio;
     }
 
-    public Empresa getEmpresa() {
-        return empresa;
+    public int getIdEmpresa() {
+        return id_empresa;
     }
 
-    public void setEmpresa(Empresa empresa) {
-        this.empresa = empresa;
+    public void setIdEmpresa(int id_empresa) {
+        this.id_empresa = id_empresa;
+    }
+
+    public int getIdPersona() {
+        return id_persona;
+    }
+
+    public void setIdPersona(int id_persona) {
+        this.id_persona = id_persona;
     }
 
     public LatLng getUbicacion() {
@@ -66,10 +76,10 @@ public class Reporte {
     }
 
     public boolean isResuelto() {
-        return resuelto;
+        return (resuelto == 1);
     }
 
-    public void setResuelto(boolean resuelto) {
+    public void setResuelto(int resuelto) {
         this.resuelto = resuelto;
     }
 
@@ -89,18 +99,16 @@ public class Reporte {
         this.asociado = asociado;
     }
 
-    public Reporte(Constantes.SERVICIO servicio, Empresa empresa, LatLng ubicacion, double radio)
+    public Reporte(int id, Constantes.SERVICIO servicio, int id_empresa, int id_persona, LatLng ubicacion, double radio, Date fecha, int resuelto)
     {
-        this.id = proxima_id_reporte_global;
-        proxima_id_reporte_global++;
-
+        this.id = id;
         this.servicio = servicio;
-        this.empresa = empresa;
+        this.id_empresa = id_empresa;
+        this.id_persona = id_persona;
         this.ubicacion = ubicacion;
         this.radio = radio;
-        Calendar calenadrio = Calendar.getInstance();
-        this.fecha = calenadrio.getTime();
-        this.resuelto = false;
+        this.fecha = fecha;
+        this.resuelto = resuelto;
         this.asociado = false;
     }
 
@@ -111,13 +119,19 @@ public class Reporte {
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         String fecha = df.format(this.fecha);
 
-        if(this.empresa != null) {
-            texto = this.servicio + " - " + this.empresa.getNombre() + " - " + fecha;
+        Empresa emp = Global.encontrarEmpresaPorId(this.id_empresa);
+        if(emp != null) {
+            texto = this.servicio + " - " + emp.getNombre() + " - " + fecha;
         }else{
             texto = this.servicio + " - " + fecha;
         }
 
         return texto;
+    }
+
+    public Empresa getEmpresa()
+    {
+        return Global.encontrarEmpresaPorId(this.id_empresa);
     }
 
 }
