@@ -20,7 +20,6 @@ public class PuntoInteres {
     private int id_empresa;
     private LatLng ubicacion;
     private double radio;
-    private boolean activo;
     private List<Integer> id_cortes_avisados;
 
 
@@ -56,14 +55,6 @@ public class PuntoInteres {
         this.radio = radio;
     }
 
-    public boolean isActivo() {
-        return activo;
-    }
-
-    public void setActivo(boolean activo) {
-        this.activo = activo;
-    }
-
     public void addIdCorteAvisado(int id_corte)
     {
         this.id_cortes_avisados.add(id_corte);
@@ -75,7 +66,6 @@ public class PuntoInteres {
         this.id_empresa = id_empresa;
         this.ubicacion = ubicacion;
         this.radio = radio;
-        this.activo = true;
         this.id_cortes_avisados = new ArrayList<>();
     }
 

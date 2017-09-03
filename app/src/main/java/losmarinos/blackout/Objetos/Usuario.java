@@ -1,9 +1,17 @@
 package losmarinos.blackout.Objetos;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import losmarinos.blackout.Constantes;
+import losmarinos.blackout.ConsultorGETAPI;
+import losmarinos.blackout.Global;
+import losmarinos.blackout.ParserJSON;
+
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_PUNTOSINTERES;
 
 /**
  * Created by garci on 23/7/2017.
@@ -91,6 +99,21 @@ public class Usuario {
         this.tipo = tipo;
         this.puntos_interes = new ArrayList<>();
         this.reportes = new ArrayList<>();
+    }
+
+    public void actualizarPuntosInteres(Context context){
+        try {
+            String respuesta = new ConsultorGETAPI("personas/" + String.valueOf(this.id) + "/puntos-de-interes", Global.token_usuario_actual, OBTENER_PUNTOSINTERES, null).execute().get();
+            StringBuilder msg_error = new StringBuilder();
+            if(ParserJSON.esError(respuesta, msg_error)){
+                if(context != null) {
+                    Toast.makeText(context, "No es posible obtener los puntos de interes", Toast.LENGTH_LONG).show();
+                }
+                return;
+            }else{
+                this.puntos_interes = ParserJSON.obtenerPuntosInteres(respuesta);
+            }
+        }catch (Exception e){}
     }
 
 }

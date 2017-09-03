@@ -24,21 +24,21 @@
                 android:layout_height="wrap_content"
                 android:textSize="15sp" />
 
-            <TextView
+            <!--<TextView
                 android:id="@+id/lbl_activo_punto_interes_mis_objetos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
-                android:textStyle="italic" />
+                android:textStyle="italic" />-->
 
         </LinearLayout>
 
-        <Button
+        <!--<Button
             android:id="@+id/btn_activar_punto_interes_mis_objetos"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:text="Activar"
-            android:textSize="12sp" />
+            android:textSize="12sp" />-->
 
         <Button
             android:id="@+id/btn_borrar_punto_interes_mis_objetos"

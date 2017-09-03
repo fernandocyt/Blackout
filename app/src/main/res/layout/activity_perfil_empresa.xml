@@ -227,7 +227,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Escribir comentario..." />
+                android:hint="Escribir comentario..."/>
 
             <Button
                 android:id="@+id/btn_agregar_comentario_perfil_empresa"

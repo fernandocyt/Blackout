@@ -84,11 +84,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Actividades.PerfilEmpresa"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Actividades.VerSucursales"
             android:screenOrientation="portrait" />
-        <activity android:name=".Actividades.BuscarEmpresa"></activity>
+        <activity android:name=".Actividades.BuscarEmpresa"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

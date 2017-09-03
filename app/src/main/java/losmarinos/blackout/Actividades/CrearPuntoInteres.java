@@ -186,6 +186,9 @@ public class CrearPuntoInteres extends AppCompatActivity implements OnMapReadyCa
         this.radio_punto_interes = null;
         this.marcador_posicion_punto_interes = null;
         this.map_crear_punto_interes = null;
+
+        Global.usuario_actual.actualizarPuntosInteres(this);
+
         this.finish();
     }
 

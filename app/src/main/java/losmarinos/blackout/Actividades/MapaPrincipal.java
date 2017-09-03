@@ -90,6 +90,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         mapFragment.getMapAsync(this);
 
         Global.actualizarEmpresas(this);
+        Global.usuario_actual.actualizarPuntosInteres(this);
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
@@ -125,9 +126,9 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         } else if (id == R.id.mis_reportes) {
             Intent i = new Intent(getApplicationContext(), MisReportes.class);
             startActivity(i);
-        //} else if (id == R.id.mis_puntos_interes) {
-            //   Intent i = new Intent(getApplicationContext(), MisPuntosInteres.class);
-            //  startActivity(i);
+        } else if (id == R.id.mis_puntos_interes) {
+            Intent i = new Intent(getApplicationContext(), MisPuntosInteres.class);
+            startActivity(i);
         } else if (id == R.id.accion_filtrar){
             Intent i = new Intent(getApplicationContext(), FiltrarMapaPrincipal.class);
             startActivity(i);

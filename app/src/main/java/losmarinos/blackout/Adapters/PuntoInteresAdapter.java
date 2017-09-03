@@ -29,8 +29,8 @@ public class PuntoInteresAdapter extends BaseAdapter implements ListAdapter {
     private Context context;
     static MisPuntosInteres actividad;
     TextView textview_texto;
-    TextView textview_activo;
-    Button button_activar;
+    //TextView textview_activo;
+    //Button button_activar;
     Button button_borrar;
 
     public PuntoInteresAdapter(List<PuntoInteres> list, Context context, MisPuntosInteres actividad) {
@@ -68,7 +68,7 @@ public class PuntoInteresAdapter extends BaseAdapter implements ListAdapter {
         textview_texto = (TextView)view.findViewById(R.id.lbl_texto_punto_interes_mis_objetos);
         textview_texto.setText(list.get(position).generarTexto());
 
-        textview_activo = (TextView)view.findViewById(R.id.lbl_activo_punto_interes_mis_objetos);
+        /*textview_activo = (TextView)view.findViewById(R.id.lbl_activo_punto_interes_mis_objetos);
         if(list.get(position).isActivo()) {
             textview_activo.setText("Activo");
         }else{
@@ -81,6 +81,7 @@ public class PuntoInteresAdapter extends BaseAdapter implements ListAdapter {
         }else{
             button_activar.setText("Activar");
         }
+
         button_activar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,7 +94,7 @@ public class PuntoInteresAdapter extends BaseAdapter implements ListAdapter {
                 MisPuntosInteres mis_puntos_interes = (MisPuntosInteres)context;
                 mis_puntos_interes.cargarListView();
             }
-        });
+        });*/
 
         button_borrar = (Button)view.findViewById(R.id.btn_borrar_punto_interes_mis_objetos);
         button_borrar.setOnClickListener(new View.OnClickListener() {

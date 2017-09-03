@@ -54,7 +54,7 @@ public class ServicioPeriodico extends Service implements Runnable {
             for (int i = 0; i < puntos_interes.size(); i++) {
                 PuntoInteres punto_actual = puntos_interes.get(i);
 
-                if (punto_actual.isActivo()) {
+                //if (punto_actual.isActivo()) {
 
                     for (int j = 0; j < Global.cortes.size(); j++) {
                         Corte corte_actual = Global.cortes.get(j);
@@ -88,7 +88,7 @@ public class ServicioPeriodico extends Service implements Runnable {
                             nm.notify(1, b.build());
                         }
                     }
-                }
+                //}
             }
         }
 

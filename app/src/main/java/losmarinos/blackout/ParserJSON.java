@@ -17,6 +17,7 @@ import java.util.List;
 import losmarinos.blackout.Objetos.Comentario;
 import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Empresa;
+import losmarinos.blackout.Objetos.PuntoInteres;
 import losmarinos.blackout.Objetos.Reporte;
 import losmarinos.blackout.Objetos.Usuario;
 
@@ -92,6 +93,9 @@ public class ParserJSON {
         if(empresa_id != -1) {
             json_pto_interes.put("empresa_id", empresa_id);
         }
+        if(servicio != null) {
+            json_pto_interes.put("servicio_id", Constantes.getIdServicio(servicio));
+        }
         return json_pto_interes;
     }
 
@@ -124,14 +128,17 @@ public class ParserJSON {
     {
         try {
             JSONObject obj_resp = new JSONObject(json);
-            int id = Integer.parseInt(obj_resp.getString("id"));
+            int id = obj_resp.getInt("id");
             String nombre = obj_resp.getString("nombre");
             String password = obj_resp.getString("password");
             String email = obj_resp.getString("email");
             String telefono = obj_resp.getString("telefono");
             String direccion = obj_resp.getString("direccion");
             String website = obj_resp.getString("website");
-            return new Empresa(id, nombre, password, email, telefono, direccion, Constantes.SERVICIO.AGUA, website);
+            JSONArray array_servicio = obj_resp.getJSONArray("servicios");
+            JSONObject obj_servicio = array_servicio.getJSONObject(0);
+            int id_servicio = obj_servicio.getInt("id");
+            return new Empresa(id, nombre, password, email, telefono, direccion, Constantes.getServicioById(id_servicio), website);
         } catch (JSONException e) {
             return null;
         }
@@ -154,6 +161,48 @@ public class ParserJSON {
                 }
             }
             return empresas_retornar;
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
+    public static PuntoInteres obtenerPuntoInteres(String json)
+    {
+        try {
+            JSONObject obj_resp = new JSONObject(json);
+            int id = obj_resp.getInt("id");
+            String ubicacion = obj_resp.getString("ubicacion");
+            double radio = obj_resp.getDouble("radio");
+            int empresa_id = -1;
+            if (!obj_resp.isNull("empresa_id")){
+                empresa_id = obj_resp.getInt("empresa_id");
+            }
+            int servicio_id = -1;
+            if (!obj_resp.isNull("servicio_id")){
+                servicio_id = obj_resp.getInt("servicio_id");
+            }
+            return new PuntoInteres(Constantes.getServicioById(servicio_id), empresa_id, Constantes.stringToLatLng(ubicacion), radio);
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
+    public static List<PuntoInteres> obtenerPuntosInteres(String json)
+    {
+        List<PuntoInteres> puntos_retornar = new ArrayList<>();
+        try {
+            JSONArray obj_puntos = new JSONArray(json);
+            //JSONArray obj_empresas = array_resp.getJSONArray(0);
+            for(int i = 0; i < obj_puntos.length(); i++)
+            {
+                JSONObject obj_punto = obj_puntos.getJSONObject(i);
+                PuntoInteres punto = ParserJSON.obtenerPuntoInteres(obj_punto.toString());
+
+                if(punto != null){
+                    puntos_retornar.add(punto);
+                }
+            }
+            return puntos_retornar;
         } catch (JSONException e) {
             return null;
         }

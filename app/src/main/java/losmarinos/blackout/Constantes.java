@@ -42,6 +42,7 @@ public class Constantes {
         OBTENER_REPORTES,
         OBTENER_CORTES,
         OBTENER_COMENTARIOS_POR_EMPRESA,
+        OBTENER_PUNTOSINTERES,
     }
 
     public enum SERVICIO
