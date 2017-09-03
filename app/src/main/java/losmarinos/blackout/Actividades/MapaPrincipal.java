@@ -27,6 +27,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -90,6 +91,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         mapFragment.getMapAsync(this);
 
         Global.actualizarEmpresas(this);
+        Global.actualizarUsuarios(this);
         Global.usuario_actual.actualizarPuntosInteres(this);
     }
 
@@ -211,7 +213,6 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
         Global.actualizarReportes(this);
         Global.actualizarCortes(this);
-
         //Global.calcularNuevosCortes();
 
         if(FiltrarMapaPrincipal.mostrar_cortes)
@@ -225,14 +226,16 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         this.marcador_posicion_actual = null;
         if(GPSTracker.ubicacion_actual != null)
             this.actualizarPosicionActual(GPSTracker.ubicacion_actual);
+        
+        Toast.makeText(this, "Mapa actualizado", Toast.LENGTH_LONG).show();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        if(mMap != null)
-            this.actualizarMapaPrincipal(null);
+        //if(mMap != null)
+            //this.actualizarMapaPrincipal(null);
     }
 
 

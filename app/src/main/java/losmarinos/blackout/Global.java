@@ -23,6 +23,7 @@ import losmarinos.blackout.Objetos.Usuario;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_CORTES;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_EMPRESAS;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_REPORTES;
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_USUARIOS;
 
 /**
  * Created by garci on 13/8/2017.
@@ -51,10 +52,10 @@ public class Global {
             usuario_actual.addPuntoInteres(punto);
         }*/
 
-        Usuario usuario1 = new Usuario(55,"joelkalt", "1234", "joelkaltman@gmail.com", Constantes.TIPOSUSUARIO.PERSONA);
+        /*Usuario usuario1 = new Usuario(55,"joelkalt", "1234", "joelkaltman@gmail.com", Constantes.TIPOSUSUARIO.PERSONA);
         Usuario usuario2 = new Usuario(54,"fernandocyt", "1234", "fernandocyt@gmail.com", Constantes.TIPOSUSUARIO.PERSONA);
         usuarios.add(usuario1);
-        usuarios.add(usuario2);
+        usuarios.add(usuario2);*/
 
         //Empresa empresa1 = new Empresa("Metrogas", "1234", "a", Constantes.SERVICIO.GAS);
         /*Empresa empresa1 = new Empresa(4, "Metrogas", "1234", "a", "1532323287", "Loyola 20", Constantes.SERVICIO.GAS, "www.metrogas.com.ar");
@@ -142,6 +143,23 @@ public class Global {
                 return;
             }else{
                 Global.cortes = ParserJSON.obtenerCortes(respuesta);
+            }
+        }catch (Exception e){}
+    }
+
+    public static void actualizarUsuarios(Context context)
+    {
+        try {
+            String respuesta = new ConsultorGETAPI("usuarios", Global.token_usuario_actual, OBTENER_USUARIOS, null).execute().get();
+            StringBuilder msg_error = new StringBuilder();
+            if(ParserJSON.esError(respuesta, msg_error)){
+                if(context != null) {
+                    Toast.makeText(context, "No es posible obtener usuarios", Toast.LENGTH_LONG).show();
+                }
+                return;
+            }else{
+                Global.usuarios = ParserJSON.obtenerUsuarios(respuesta);
+                int a = 0;
             }
         }catch (Exception e){}
     }

@@ -57,6 +57,10 @@ public class Empresa extends Usuario {
         return sucursales;
     }
 
+    public void setSucursales(List<Sucursal> sucursales) {
+        this.sucursales = sucursales;
+    }
+
     public void addSucursal(Sucursal sucursal)
     {
         this.sucursales.add(sucursal);

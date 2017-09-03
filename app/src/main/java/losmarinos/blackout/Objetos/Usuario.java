@@ -11,7 +11,7 @@ import losmarinos.blackout.ConsultorGETAPI;
 import losmarinos.blackout.Global;
 import losmarinos.blackout.ParserJSON;
 
-import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_PUNTOSINTERES;
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_PUNTOSINTERES_POR_USUARIO;
 
 /**
  * Created by garci on 23/7/2017.
@@ -103,7 +103,7 @@ public class Usuario {
 
     public void actualizarPuntosInteres(Context context){
         try {
-            String respuesta = new ConsultorGETAPI("personas/" + String.valueOf(this.id) + "/puntos-de-interes", Global.token_usuario_actual, OBTENER_PUNTOSINTERES, null).execute().get();
+            String respuesta = new ConsultorGETAPI("personas/" + String.valueOf(this.id) + "/puntos-de-interes", Global.token_usuario_actual, OBTENER_PUNTOSINTERES_POR_USUARIO, null).execute().get();
             StringBuilder msg_error = new StringBuilder();
             if(ParserJSON.esError(respuesta, msg_error)){
                 if(context != null) {

@@ -7,11 +7,28 @@ import com.google.android.gms.maps.model.LatLng;
  */
 
 public class Sucursal {
+    private int id;
+    private int id_empresa;
     private LatLng ubicacion;
     private String telefono;
     private String direccion;
 
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getIdEmpresa() {
+        return id_empresa;
+    }
+
+    public void setIdEmpresa(int id_empresa) {
+        this.id_empresa = id_empresa;
+    }
 
     public LatLng getUbicacion() {
         return ubicacion;
@@ -37,8 +54,10 @@ public class Sucursal {
         this.direccion = direccion;
     }
 
-    public Sucursal(LatLng ubicacion, String telefono, String direccion)
+    public Sucursal(int id, int id_empresa, LatLng ubicacion, String telefono, String direccion)
     {
+        this.id = id;
+        this.id_empresa = id_empresa;
         this.ubicacion = ubicacion;
         this.telefono = telefono;
         this.direccion = direccion;
@@ -46,7 +65,8 @@ public class Sucursal {
 
     public String generarTexto()
     {
-        String texto = this.direccion + " (" + this.telefono + ")";
+        String texto = "Dir.: " + this.direccion + " - Tel.: " + this.telefono;
         return texto;
     }
+
 }

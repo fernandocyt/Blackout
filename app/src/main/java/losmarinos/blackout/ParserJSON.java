@@ -19,6 +19,7 @@ import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.Objetos.PuntoInteres;
 import losmarinos.blackout.Objetos.Reporte;
+import losmarinos.blackout.Objetos.Sucursal;
 import losmarinos.blackout.Objetos.Usuario;
 
 import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_REPORTE;
@@ -114,11 +115,40 @@ public class ParserJSON {
         try {
             JSONObject obj_resp = new JSONObject(json);
             int usu_id = Integer.parseInt(obj_resp.getString("id"));
-            String usu_nombre = obj_resp.getString("nombre");
+            String usu_nombre = "";
+            if(obj_resp.has("nombre")) {
+                usu_nombre = obj_resp.getString("nombre");
+            }else if(obj_resp.has("name")){
+                usu_nombre = obj_resp.getString("name");
+            }
             String usu_email = obj_resp.getString("email");
-            int persona_id = Integer.parseInt(obj_resp.getString("persona_id"));
+            int id = -1;
+            if(!obj_resp.isNull("persona_id")) {
+                id = obj_resp.getInt("persona_id");
+            }
             //FALTA QUE TRAIGA EMPRESA_ID
-            return new Usuario(persona_id, usu_nombre, "", usu_email, Constantes.TIPOSUSUARIO.PERSONA);
+            return new Usuario(id, usu_nombre, "", usu_email, Constantes.TIPOSUSUARIO.PERSONA);
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
+    public static List<Usuario> obtenerUsuarios(String json)
+    {
+        // OJO, lo que se retorna es un array cuyo primer elemento es el array "empresa"
+        List<Usuario> usuarios_retornar = new ArrayList<>();
+        try {
+            JSONArray array_usuarios = new JSONArray(json);
+            for(int i = 0; i < array_usuarios.length(); i++)
+            {
+                JSONObject obj_usuario = array_usuarios.getJSONObject(i);
+                Usuario usuario = ParserJSON.obtenerUsuario(obj_usuario.toString());
+
+                if(usuario != null){
+                    usuarios_retornar.add(usuario);
+                }
+            }
+            return usuarios_retornar;
         } catch (JSONException e) {
             return null;
         }
@@ -336,7 +366,6 @@ public class ParserJSON {
 
     public static List<Comentario> obtenerComentarios(String json)
     {
-        // OJO, lo que se retorna es un array cuyo primer elemento es el array "empresa"
         List<Comentario> comentarios_retornar = new ArrayList<>();
         try {
             JSONArray array_com = new JSONArray(json);
@@ -350,6 +379,41 @@ public class ParserJSON {
                 }
             }
             return comentarios_retornar;
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
+    public static Sucursal obtenerSucursal(String json)
+    {
+        try {
+            JSONObject obj_suc = new JSONObject(json);
+            int id = obj_suc.getInt("id");
+            int id_empresa = obj_suc.getInt("empresa_id");
+            String telefono = obj_suc.getString("telefono");
+            String direccion = obj_suc.getString("direccion");
+            String ubicacion = obj_suc.getString("ubicacion");
+            return new Sucursal(id, id_empresa, Constantes.stringToLatLng(ubicacion), telefono, direccion);
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
+    public static List<Sucursal> obtenerSucursales(String json)
+    {
+        List<Sucursal> sucursales_retornar = new ArrayList<>();
+        try {
+            JSONArray obj_sucursales = new JSONArray(json);
+            for(int i = 0; i < obj_sucursales.length(); i++)
+            {
+                JSONObject obj_sucursal = obj_sucursales.getJSONObject(i);
+                Sucursal sucursal = ParserJSON.obtenerSucursal(obj_sucursal.toString());
+
+                if(sucursal != null){
+                    sucursales_retornar.add(sucursal);
+                }
+            }
+            return sucursales_retornar;
         } catch (JSONException e) {
             return null;
         }

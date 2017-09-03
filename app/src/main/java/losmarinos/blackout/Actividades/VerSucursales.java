@@ -3,6 +3,7 @@ package losmarinos.blackout.Actividades;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -13,16 +14,23 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import losmarinos.blackout.Adapters.ReportesAdapter;
 import losmarinos.blackout.Adapters.SucursalAdapter;
 import losmarinos.blackout.Constantes;
+import losmarinos.blackout.ConsultorGETAPI;
 import losmarinos.blackout.Global;
+import losmarinos.blackout.Objetos.Comentario;
 import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.Objetos.Reporte;
 import losmarinos.blackout.Objetos.Sucursal;
+import losmarinos.blackout.ParserJSON;
 import losmarinos.blackout.R;
+
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_COMENTARIOS_POR_EMPRESA;
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_SUCURSALES_POR_EMPRESA;
 
 public class VerSucursales extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -66,13 +74,22 @@ public class VerSucursales extends AppCompatActivity implements OnMapReadyCallba
     }
 
     public void cargarListView(){
-        //Crea el adaptador de alarmas
+
+        List<Comentario> comentarios = new ArrayList<>();
+        try {
+            String respuesta = new ConsultorGETAPI("empresa/"+String.valueOf(this.empresa.getId())+"/sucursales",
+                    Global.token_usuario_actual, OBTENER_SUCURSALES_POR_EMPRESA, null).execute().get();
+            StringBuilder msg_error = new StringBuilder();
+            if(ParserJSON.esError(respuesta, msg_error)){
+                Toast.makeText(this, "No es posible cargar sucursales", Toast.LENGTH_LONG).show();
+                return;
+            }else{
+                empresa.setSucursales(ParserJSON.obtenerSucursales(respuesta));
+            }
+        }catch (Exception e){}
+
         SucursalAdapter adapter = new SucursalAdapter(empresa.getSucursales(), this, this);
-
-        //enlaza el list view del layout a la variable
         ListView mi_lista = (ListView)findViewById(R.id.lst_objetos_mis_objetos);
-
-        //Le setea el adaptador a la lista
         mi_lista.setAdapter(adapter);
     }
 

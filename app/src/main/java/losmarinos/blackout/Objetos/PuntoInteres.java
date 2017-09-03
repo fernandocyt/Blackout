@@ -87,19 +87,17 @@ public class PuntoInteres {
 
     public String generarTexto()
     {
-        String str_ubicacion = "(" + String.valueOf((int)this.ubicacion.latitude) + "," + String.valueOf((int)this.ubicacion.longitude) +")";
-        String str_empresa = "";
-        String str_servicio = "";
+        //String str_ubicacion = "(" + String.valueOf((int)this.ubicacion.latitude) + "," + String.valueOf((int)this.ubicacion.longitude) +")";
+        String texto = "General";
+
+        if(this.servicio != null) {
+            texto = Constantes.servicioToString(this.servicio);
+        }
 
         Empresa empresa = Global.encontrarEmpresaPorId(this.id_empresa);
         if(empresa != null) {
-            str_empresa = empresa.getNombre() + " - ";
+            texto = texto + " - " + empresa.getNombre();
         }
-        if(this.servicio != null) {
-            str_servicio = Constantes.servicioToString(this.servicio) + " - ";
-        }
-
-        String texto = str_servicio + str_empresa + str_ubicacion;
 
         return texto;
     }
