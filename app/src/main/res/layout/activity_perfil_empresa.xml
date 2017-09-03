@@ -10,20 +10,22 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
         android:orientation="vertical"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        app:layout_constraintRight_toRightOf="parent"
-        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1">
 
         <TableLayout
             android:layout_width="368dp"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            tools:layout_editor_absoluteY="0dp"
-            tools:layout_editor_absoluteX="8dp">
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="0dp">
 
             <TableRow
                 android:layout_width="wrap_content"
@@ -33,8 +35,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="Empresa:" />
+                    android:text="Empresa:"
+                    android:textSize="20sp" />
 
                 <Space
                     android:layout_width="20dp"
@@ -44,8 +46,8 @@
                     android:id="@+id/lbl_empresaNombre_perfil_empresa"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="-" />
+                    android:text="-"
+                    android:textSize="20sp" />
 
             </TableRow>
 
@@ -57,8 +59,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="Telefono:" />
+                    android:text="Telefono:"
+                    android:textSize="20sp" />
 
                 <Space
                     android:layout_width="20dp"
@@ -68,8 +70,8 @@
                     android:id="@+id/lbl_telefono_perfil_empresa"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="-" />
+                    android:text="-"
+                    android:textSize="20sp" />
 
             </TableRow>
 
@@ -81,8 +83,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="Dirección:" />
+                    android:text="Dirección:"
+                    android:textSize="20sp" />
 
                 <Space
                     android:layout_width="20dp"
@@ -92,8 +94,8 @@
                     android:id="@+id/lbl_direccion_perfil_empresa"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="-" />
+                    android:text="-"
+                    android:textSize="20sp" />
 
             </TableRow>
 
@@ -105,8 +107,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="Servicio:" />
+                    android:text="Servicio:"
+                    android:textSize="20sp" />
 
                 <Space
                     android:layout_width="20dp"
@@ -116,8 +118,8 @@
                     android:id="@+id/lbl_servicio_perfil_empresa"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="-" />
+                    android:text="-"
+                    android:textSize="20sp" />
 
             </TableRow>
 
@@ -129,8 +131,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="Calificación:" />
+                    android:text="Calificación:"
+                    android:textSize="20sp" />
 
                 <Space
                     android:layout_width="20dp"
@@ -140,8 +142,8 @@
                     android:id="@+id/lbl_calificacion_perfil_empresa"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="-" />
+                    android:text="-"
+                    android:textSize="20sp" />
 
             </TableRow>
 
@@ -153,8 +155,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="Sitio web:" />
+                    android:text="Sitio web:"
+                    android:textSize="20sp" />
 
                 <Space
                     android:layout_width="20dp"
@@ -164,9 +166,9 @@
                     android:id="@+id/lbl_pagina_perfil_empresa"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
+                    android:autoLink="web"
                     android:text="-"
-                    android:autoLink="web"/>
+                    android:textSize="20sp" />
 
             </TableRow>
 
@@ -179,8 +181,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="Sucursales:" />
+                    android:text="Sucursales:"
+                    android:textSize="20sp" />
 
                 <Space
                     android:layout_width="20dp"
@@ -190,15 +192,15 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="horizontal"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
                     <Button
                         android:id="@+id/lbl_sucursales_perfil_empresa"
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
-                        android:text="Ver sucursales"
-                        android:onClick="verSucursales"/>
+                        android:onClick="verSucursales"
+                        android:text="Ver sucursales" />
 
                 </LinearLayout>
 
@@ -210,20 +212,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="25sp"
             android:text="Comentarios"
-            tools:layout_editor_absoluteY="0dp"
-            tools:layout_editor_absoluteX="0dp" />
-
-
-        <ListView
-            android:id="@+id/lst_comentario_perfil_empresa"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_margin="10dp"
-            android:background="#2408" />
-
+            android:textSize="20sp"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -234,18 +226,29 @@
                 android:id="@+id/txt_comentario_perfil_empresa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Escribir comentario..."
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:hint="Escribir comentario..." />
 
             <Button
                 android:id="@+id/btn_agregar_comentario_perfil_empresa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Agregar"
                 android:layout_marginRight="10dp"
-                android:onClick="agregarComentario"/>
+                android:onClick="agregarComentario"
+                android:text="Agregar" />
 
         </LinearLayout>
+
+        <ListView
+            android:id="@+id/lst_comentario_perfil_empresa"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="#2408" />
+
+
+
 
 
     </LinearLayout>

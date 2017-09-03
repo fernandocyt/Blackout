@@ -13,7 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import losmarinos.blackout.Actividades.PerfilEmpresa;
+import losmarinos.blackout.Global;
 import losmarinos.blackout.Objetos.Comentario;
+import losmarinos.blackout.Objetos.Usuario;
 import losmarinos.blackout.R;
 
 /**
@@ -62,8 +64,13 @@ public class ComentarioAdapter extends BaseAdapter implements ListAdapter {
         textview_texto = (TextView)view.findViewById(R.id.lbl_comentario_perfil_empresa);
         textview_texto.setText(list.get(position).getTexto());
 
+        Usuario usuario = Global.encontrarUsuarioPorId(list.get(position).getIdUsuario());
         textview_usuario = (TextView)view.findViewById(R.id.lbl_usuario_comentario_perfil_empresa);
-        textview_usuario.setText(list.get(position).getUsuario().getNombre());
+        if (usuario != null) {
+            textview_usuario.setText(usuario.getNombre());
+        }else{
+            textview_usuario.setText("");
+        }
 
         RelativeLayout linea = (RelativeLayout)view.findViewById(R.id.relative);
 

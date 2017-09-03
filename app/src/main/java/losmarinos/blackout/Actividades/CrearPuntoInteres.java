@@ -160,23 +160,19 @@ public class CrearPuntoInteres extends AppCompatActivity implements OnMapReadyCa
         Constantes.SERVICIO servicio = Constantes.stringToServicio(nombre_servicio);
 
         String nombre_empresa = this.spinner_empresas.getSelectedItem().toString();
-        Empresa empresa = null;
+        int id_empresa = -1;
         if (!nombre_empresa.equals("No especificar")) {
-            empresa = Global.encontrarEmpresaPorNombre(nombre_empresa);
+            id_empresa = Global.encontrarEmpresaPorNombre(nombre_empresa).getId();
         }
 
-        PuntoInteres nuevo_punto_interes = new PuntoInteres(servicio, empresa, marcador_posicion_punto_interes.getPosition(), seekbar_radio.getProgress());
+        LatLng posicion = marcador_posicion_punto_interes.getPosition();
+        int radio = seekbar_radio.getProgress();
+
+        //PuntoInteres nuevo_punto_interes = new PuntoInteres(servicio, id_empresa, posicion, radio);
+        //Global.usuario_actual.addPuntoInteres(nuevo_punto_interes);
 
         try{
-            JSONObject nuevo_pto_interes = new JSONObject();
-            nuevo_pto_interes.put("persona_id", 1);
-            nuevo_pto_interes.put("ubicacion", "(" + Double.toString(nuevo_punto_interes.getUbicacion().latitude) + "," + Double.toString(nuevo_punto_interes.getUbicacion().longitude) + ")");
-            nuevo_pto_interes.put("radio", nuevo_punto_interes.getRadio());
-            if(nuevo_punto_interes.getEmpresa() == null) {
-                nuevo_pto_interes.put("empresa_id", Constantes.ID_EMPRESA_NO_ESPECIFICA);
-            }else{
-                nuevo_pto_interes.put("empresa_id", nuevo_punto_interes.getEmpresa().getId());
-            }
+            JSONObject nuevo_pto_interes = ParserJSON.crearJSONPuntoDeInteres(Global.usuario_actual.getId(), servicio, id_empresa, posicion, radio);
 
             String resultado = new ConsultorPOSTAPI("punto-de-interes", Global.token_usuario_actual, nuevo_pto_interes, REGISTRAR_PUNTO_DE_INTERES, null).execute().get();
             StringBuilder mensaje_error = new StringBuilder();
@@ -186,8 +182,6 @@ public class CrearPuntoInteres extends AppCompatActivity implements OnMapReadyCa
         }catch (Exception e){
             Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
         }
-
-        Global.usuario_actual.addPuntoInteres(nuevo_punto_interes);
 
         this.radio_punto_interes = null;
         this.marcador_posicion_punto_interes = null;

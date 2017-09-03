@@ -35,6 +35,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -161,21 +162,16 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
 
         String nombre_empresa = this.spinner_empresas.getSelectedItem().toString();
 
-        int id_empresa = Constantes.ID_EMPRESA_NO_ESPECIFICA;
+        int id_empresa = -1;
         if (!nombre_empresa.equals("No especificar")) {
             id_empresa = Global.encontrarEmpresaPorNombre(nombre_empresa).getId();
         }
 
         LatLng posicion = marcador_posicion_reporte.getPosition();
-        double radio = seekbar_radio.getProgress();
+        int radio = seekbar_radio.getProgress();
 
         try{
-            JSONObject nuevo_rep = new JSONObject();
-            nuevo_rep.put("persona_id", 1);
-            nuevo_rep.put("ubicacion", Double.toString(posicion.latitude) + ";" + Double.toString(posicion.longitude));
-            nuevo_rep.put("radio", radio);
-            nuevo_rep.put("servicio_id", Constantes.getIdServicio(servicio));
-            nuevo_rep.put("empresa_id", id_empresa);
+            JSONObject nuevo_rep = ParserJSON.crearJSONReporte(Global.usuario_actual.getId(), servicio, id_empresa, posicion, radio);
 
             String resultado = new ConsultorPOSTAPI("reporte", Global.token_usuario_actual, nuevo_rep, REGISTRAR_REPORTE, null).execute().get();
             StringBuilder mensaje_error = new StringBuilder();

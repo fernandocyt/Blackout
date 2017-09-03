@@ -7,16 +7,29 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import losmarinos.blackout.Adapters.ComentarioAdapter;
 import losmarinos.blackout.Constantes;
+import losmarinos.blackout.ConsultorGETAPI;
+import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.Global;
 import losmarinos.blackout.Objetos.Comentario;
 import losmarinos.blackout.Objetos.Empresa;
+import losmarinos.blackout.ParserJSON;
 import losmarinos.blackout.R;
+
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_COMENTARIOS_POR_EMPRESA;
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_EMPRESAS;
+import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_COMENTARIO;
+import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_REPORTE;
 
 public class PerfilEmpresa extends AppCompatActivity {
 
@@ -66,28 +79,47 @@ public class PerfilEmpresa extends AppCompatActivity {
         textview_calificacion.setText(Double.toString(empresa.getCalificacion()));
         textview_pagina.setText(empresa.getPagina());
 
-
         this.cargarListView();
     }
 
     void cargarListView(){
+        List<Comentario> comentarios = new ArrayList<>();
+        try {
+            String respuesta = new ConsultorGETAPI("empresa/"+String.valueOf(this.empresa.getId())+"/comentarios",
+                    Global.token_usuario_actual, OBTENER_COMENTARIOS_POR_EMPRESA, null).execute().get();
+            StringBuilder msg_error = new StringBuilder();
+            if(ParserJSON.esError(respuesta, msg_error)){
+                    Toast.makeText(this, "No es posible cargar comentarios", Toast.LENGTH_LONG).show();
+                return;
+            }else{
+                comentarios = ParserJSON.obtenerComentarios(respuesta);
+            }
+        }catch (Exception e){}
 
-        //Crea el adaptador de alarmas
-        ComentarioAdapter adapter = new ComentarioAdapter(empresa.getComentarios(), this, this);
-
-        //enlaza el list view del layout a la variable
+        ComentarioAdapter adapter = new ComentarioAdapter(comentarios, this, this);
         ListView mi_lista = (ListView)findViewById(R.id.lst_comentario_perfil_empresa);
-
-        //Le setea el adaptador a la lista
         mi_lista.setAdapter(adapter);
     }
 
     public void agregarComentario(View view)
     {
         String comentario = edittext_comentario.getText().toString();
-        Comentario nuevo_comentario = new Comentario(Global.usuarios.get(0), comentario);
 
-        empresa.addComentario(nuevo_comentario);
+        //Comentario nuevo_comentario = new Comentario(Global.usuarios.get(0), comentario);
+        //empresa.addComentario(nuevo_comentario);
+
+        try{
+            JSONObject nuevo_com = ParserJSON.crearJSONComentario(Global.usuario_actual.getId(), empresa.getId(), comentario);
+
+            String resultado = new ConsultorPOSTAPI("comentario", Global.token_usuario_actual, nuevo_com, REGISTRAR_COMENTARIO, null).execute().get();
+            StringBuilder mensaje_error = new StringBuilder();
+            if(ParserJSON.esError(resultado, mensaje_error)){
+                Toast.makeText(this, mensaje_error, Toast.LENGTH_LONG).show();
+            }
+        }catch (Exception e){
+            Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
+        }
+
         this.cargarListView();
 
     }

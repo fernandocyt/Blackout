@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import losmarinos.blackout.Constantes;
+import losmarinos.blackout.Global;
 
 /**
  * Created by garci on 15/8/2017.
@@ -16,7 +17,7 @@ import losmarinos.blackout.Constantes;
 
 public class PuntoInteres {
     private Constantes.SERVICIO servicio;
-    private Empresa empresa;
+    private int id_empresa;
     private LatLng ubicacion;
     private double radio;
     private boolean activo;
@@ -31,12 +32,12 @@ public class PuntoInteres {
         this.servicio = servicio;
     }
 
-    public Empresa getEmpresa() {
-        return empresa;
+    public int getIdEmpresa() {
+        return id_empresa;
     }
 
-    public void setEmpresa(Empresa empresa) {
-        this.empresa = empresa;
+    public void setIdEmpresa(int id_empresa) {
+        this.id_empresa = id_empresa;
     }
 
     public LatLng getUbicacion() {
@@ -68,14 +69,18 @@ public class PuntoInteres {
         this.id_cortes_avisados.add(id_corte);
     }
 
-    public PuntoInteres(Constantes.SERVICIO servicio, Empresa empresa, LatLng ubicacion, double radio)
+    public PuntoInteres(Constantes.SERVICIO servicio, int id_empresa, LatLng ubicacion, double radio)
     {
         this.servicio = servicio;
-        this.empresa = empresa;
+        this.id_empresa = id_empresa;
         this.ubicacion = ubicacion;
         this.radio = radio;
         this.activo = true;
         this.id_cortes_avisados = new ArrayList<>();
+    }
+
+    public Empresa getEmpresa(){
+        return Global.encontrarEmpresaPorId(this.id_empresa);
     }
 
     public boolean avisoCorte(int id_corte)
@@ -96,8 +101,9 @@ public class PuntoInteres {
         String str_empresa = "";
         String str_servicio = "";
 
-        if(this.empresa != null) {
-            str_empresa = this.empresa.getNombre() + " - ";
+        Empresa empresa = Global.encontrarEmpresaPorId(this.id_empresa);
+        if(empresa != null) {
+            str_empresa = empresa.getNombre() + " - ";
         }
         if(this.servicio != null) {
             str_servicio = Constantes.servicioToString(this.servicio) + " - ";

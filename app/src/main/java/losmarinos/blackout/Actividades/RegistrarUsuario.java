@@ -55,13 +55,9 @@ public class RegistrarUsuario extends AppCompatActivity {
         }
 
         try {
-            JSONObject obj = new JSONObject();
-            obj.put("name", nombre);
-            obj.put("email", email);
-            obj.put("password", pass1);
-            obj.put("password_confirmation", pass1);
+            JSONObject nuevo_usu = ParserJSON.crearJSONUsuario(nombre, email, pass1, pass2);
 
-            String respuesta = new ConsultorPOSTAPI("register", null, obj, Constantes.TAGAPI.REGISTRAR_USUARIO, null).execute().get();
+            String respuesta = new ConsultorPOSTAPI("register", null, nuevo_usu, Constantes.TAGAPI.REGISTRAR_USUARIO, null).execute().get();
             StringBuilder msj_error = new StringBuilder();
             if(ParserJSON.esError(respuesta, msj_error))
             {

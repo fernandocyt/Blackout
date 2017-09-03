@@ -5,15 +5,17 @@ package losmarinos.blackout.Objetos;
  */
 
 public class Comentario {
-    private Usuario usuario;
+    private int id;
+    private int id_empresa;
+    private int id_usuario;
     private String texto;
 
-    public Usuario getUsuario() {
-        return usuario;
+    public int getIdUsuario() {
+        return id_usuario;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setIdUsuario(int id_usuario) {
+        this.id_usuario = id_usuario;
     }
 
     public String getTexto() {
@@ -24,9 +26,25 @@ public class Comentario {
         this.texto = texto;
     }
 
-    public Comentario(Usuario usuario, String texto)
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getIdEmpresa() {
+        return id_empresa;
+    }
+
+    public void setIdEmpresa(int id_empresa) {
+        this.id_empresa = id_empresa;
+    }
+
+    public Comentario(int id, int id_usuario, int id_empresa, String texto)
     {
-        this.usuario = usuario;
+        this.id_usuario = id_usuario;
         this.texto = texto;
     }
 }

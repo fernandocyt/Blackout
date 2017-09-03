@@ -57,7 +57,7 @@ public class Global {
         usuarios.add(usuario2);
 
         //Empresa empresa1 = new Empresa("Metrogas", "1234", "a", Constantes.SERVICIO.GAS);
-        Empresa empresa1 = new Empresa(4, "Metrogas", "1234", "a", "1532323287", "Loyola 20", Constantes.SERVICIO.GAS, "www.metrogas.com.ar");
+        /*Empresa empresa1 = new Empresa(4, "Metrogas", "1234", "a", "1532323287", "Loyola 20", Constantes.SERVICIO.GAS, "www.metrogas.com.ar");
         empresa1.addSucursal(new Sucursal(new LatLng(-34.660718, -58.570862), "4983-9271", "Av. Medrano 900"));
         Empresa empresa2 = new Empresa(5, "Edenor", "1234", "a", "1532323288", "Loyola 21", Constantes.SERVICIO.LUZ, "www.edenor.com.ar");
         empresa2.addSucursal(new Sucursal(new LatLng(-34.583871, -58.539276), "48547559", "Corrientes 5225"));
@@ -75,7 +75,7 @@ public class Global {
         Global.empresas.add(empresa5);
         Global.empresas.add(empresa6);
         Global.empresas.add(empresa7);
-        Global.empresas.add(empresa8);
+        Global.empresas.add(empresa8);*/
 
         /*Corte corte_agua = new Corte(Constantes.SERVICIO.AGUA, empresa6, Constantes.BSAS, 500, Calendar.getInstance().getTime(), false);
         Respuesta respuesta1_corte_agua = new Respuesta(usuario1, "Todo mal viejo");
@@ -105,7 +105,7 @@ public class Global {
             StringBuilder msg_error = new StringBuilder();
             if(ParserJSON.esError(respuesta, msg_error)){
                 if(context != null) {
-                    Toast.makeText(context, msg_error.toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "No es posible actualizar empresas", Toast.LENGTH_LONG).show();
                 }
                 return;
             }else{
@@ -121,7 +121,7 @@ public class Global {
             StringBuilder msg_error = new StringBuilder();
             if(ParserJSON.esError(respuesta, msg_error)){
                 if(context != null) {
-                    Toast.makeText(context, msg_error.toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "No es posible actualizar reportes", Toast.LENGTH_LONG).show();
                 }
                 return;
             }else{
@@ -137,7 +137,7 @@ public class Global {
             StringBuilder msg_error = new StringBuilder();
             if(ParserJSON.esError(respuesta, msg_error)){
                 if(context != null) {
-                    Toast.makeText(context, msg_error.toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "No es posible actualizar cortes", Toast.LENGTH_LONG).show();
                 }
                 return;
             }else{
@@ -169,6 +169,23 @@ public class Global {
         }
         return null;
     }
+
+    public static Usuario encontrarUsuarioPorId(int id_usuario)
+    {
+        for(int i = 0; i < Global.usuarios.size(); i++)
+        {
+            if(Global.usuarios.get(i).getId() == id_usuario)
+            {
+                return Global.usuarios.get(i);
+            }
+        }
+        if(Global.usuario_actual.getId() == id_usuario)
+        {
+            return usuario_actual;
+        }
+        return null;
+    }
+
 
     public static boolean asociarReporteACortes(Reporte reporte)
     {

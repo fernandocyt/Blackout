@@ -72,14 +72,8 @@ public class PerfilCorte extends AppCompatActivity {
     }
 
     void cargarListView(){
-
-        //Crea el adaptador de alarmas
         RespuestaAdapter adapter = new RespuestaAdapter(corte.getRespuestas(), this, this);
-
-        //enlaza el list view del layout a la variable
         ListView mi_lista = (ListView)findViewById(R.id.lst_respuesta_perfil_corte);
-
-        //Le setea el adaptador a la lista
         mi_lista.setAdapter(adapter);
 
     }
@@ -95,14 +89,14 @@ public class PerfilCorte extends AppCompatActivity {
     }
 
     public void irAPerfilEmpresa(View view){
-        Intent i = new Intent(getApplicationContext(), PerfilEmpresa.class);
-        i.putExtra("idEmpresa", corte.getEmpresa().getId());
-        try {
-            startActivity(i);
-        }
-        catch (Exception e)
-        {
-            throw e;
+        if(corte.getEmpresa() != null) {
+            Intent i = new Intent(getApplicationContext(), PerfilEmpresa.class);
+            i.putExtra("idEmpresa", corte.getIdEmpresa());
+            try {
+                startActivity(i);
+            } catch (Exception e) {
+                throw e;
+            }
         }
     }
 }
