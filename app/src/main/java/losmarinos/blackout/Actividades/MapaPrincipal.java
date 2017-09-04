@@ -3,6 +3,7 @@ package losmarinos.blackout.Actividades;
 import losmarinos.blackout.Calculos;
 import losmarinos.blackout.ConsultorGETAPI;
 import losmarinos.blackout.Global;
+import losmarinos.blackout.LocalDB;
 import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.Objetos.PuntoInteres;
@@ -150,6 +151,9 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             Intent i = new Intent(getApplicationContext(), BuscarEmpresa.class);
             startActivity(i);
         } else if (id == R.id.cerrar_sesion){
+            LocalDB.borrarXML(this);
+            Intent i = new Intent(getApplicationContext(), Login.class);
+            startActivity(i);
             this.finish();
         }
 

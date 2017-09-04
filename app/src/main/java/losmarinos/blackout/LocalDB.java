@@ -89,6 +89,10 @@ public class LocalDB {
         }
     }
 
+    public static void borrarXML(Context context){
+        context.deleteFile(file_name);
+    }
+
     public static ArrayList<String> leerXML(Context context)
     {
         ArrayList<String> userData = new ArrayList<String>();

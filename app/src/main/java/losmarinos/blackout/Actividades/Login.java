@@ -102,6 +102,7 @@ public class Login extends AppCompatActivity {
 
                     Intent i = new Intent(getApplicationContext(), MapaPrincipal.class);
                     startActivity(i);
+                    finish();
                 }
             }
 
