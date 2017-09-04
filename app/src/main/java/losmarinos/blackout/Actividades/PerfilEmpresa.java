@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +41,7 @@ public class PerfilEmpresa extends AppCompatActivity {
     TextView textview_calificacion;
     TextView textview_pagina;
     EditText edittext_comentario;
+    RatingBar rtb_calificacion;
 
     Empresa empresa;
 
@@ -62,9 +64,10 @@ public class PerfilEmpresa extends AppCompatActivity {
         textview_telefono = (TextView)findViewById(R.id.lbl_telefono_perfil_empresa);
         textview_direccion = (TextView)findViewById(R.id.lbl_direccion_perfil_empresa);
         textview_servicio = (TextView)findViewById(R.id.lbl_servicio_perfil_empresa);
-        textview_calificacion = (TextView)findViewById(R.id.lbl_calificacion_perfil_empresa);
+        //textview_calificacion = (TextView)findViewById(R.id.lbl_calificacion_perfil_empresa);
         textview_pagina = (TextView)findViewById(R.id.lbl_pagina_perfil_empresa);
         edittext_comentario = (EditText)findViewById(R.id.txt_comentario_perfil_empresa);
+        rtb_calificacion = (RatingBar)findViewById(R.id.rtb_calificacion_perfil_empresa);
 
         this.cargarEmpresa();
 
@@ -76,8 +79,9 @@ public class PerfilEmpresa extends AppCompatActivity {
         textview_telefono.setText(empresa.getTelefono());
         textview_direccion.setText(empresa.getDireccion());
         textview_servicio.setText(Constantes.servicioToString(empresa.getTipoServicio()));
-        textview_calificacion.setText(Double.toString(empresa.getCalificacion()));
+        //textview_calificacion.setText(Double.toString(empresa.getCalificacion()));
         textview_pagina.setText(empresa.getPagina());
+        rtb_calificacion.setRating(empresa.getCalificacion());
 
         this.cargarListView();
     }
