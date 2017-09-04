@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import losmarinos.blackout.Actividades.MapaPrincipal;
 import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.Objetos.PuntoInteres;
@@ -29,7 +30,7 @@ import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_USUARIOS;
  * Created by garci on 13/8/2017.
  */
 
-public class Global {
+public class Global implements ObservadorAPI {
     public static Usuario usuario_actual = null;
     public static String token_usuario_actual = null;
 
@@ -40,6 +41,7 @@ public class Global {
 
     public static boolean cargo_datos = false;
 
+    public static MapaPrincipal contexto;
 
     public static void cargarDatosPruebas()
     {
@@ -97,6 +99,55 @@ public class Global {
         Global.cortes.add(corte_telefono);*/
 
         cargo_datos = true;
+    }
+
+    public void obtenerRespuestaAPI(String respuesta, Constantes.TAGAPI tag, boolean correcto)
+    {
+        try {
+            StringBuilder msg_error = new StringBuilder();
+            switch(tag){
+                case OBTENER_CORTES:
+                        if(ParserJSON.esError(respuesta, msg_error)){
+                            Toast.makeText(contexto, "No es posible actualizar cortes", Toast.LENGTH_LONG).show();
+                            return;
+                        }else{
+                            Global.cortes = ParserJSON.obtenerCortes(respuesta);
+                        }
+                    break;
+                case OBTENER_EMPRESAS:
+                    if(ParserJSON.esError(respuesta, msg_error)){
+                        Toast.makeText(contexto, "No es posible actualizar empresas", Toast.LENGTH_LONG).show();
+                        return;
+                    }else{
+                        Global.empresas = ParserJSON.obtenerEmpresas(respuesta);
+                    }
+                    break;
+                case OBTENER_REPORTES:
+                    if(ParserJSON.esError(respuesta, msg_error)){
+                        Toast.makeText(contexto, "No es posible actualizar reportes", Toast.LENGTH_LONG).show();
+                        return;
+                    }else{
+                        Global.reportes = ParserJSON.obtenerReportes(respuesta);
+                    }
+                    break;
+                case OBTENER_USUARIOS:
+                    if(ParserJSON.esError(respuesta, msg_error)){
+                        Toast.makeText(contexto, "No es posible actualizar usuarios", Toast.LENGTH_LONG).show();
+                        return;
+                    }else{
+                        Global.usuarios = ParserJSON.obtenerUsuarios(respuesta);
+                    }
+                    break;
+                case OBTENER_PUNTOSINTERES_POR_USUARIO:
+                    if(ParserJSON.esError(respuesta, msg_error)){
+                        Toast.makeText(contexto, "No es posible actualizar puntos de interes", Toast.LENGTH_LONG).show();
+                        return;
+                    }else{
+                        Global.usuario_actual.setPuntosInteres(ParserJSON.obtenerPuntosInteres(respuesta));
+                    }
+                    break;
+            }
+        }catch (Exception e){}
     }
 
     public static void actualizarEmpresas(Context context)
@@ -202,6 +253,19 @@ public class Global {
             return usuario_actual;
         }
         return null;
+    }
+
+    public static List<Reporte> encontrarReportesPorUsuario(int id_usuario)
+    {
+        List<Reporte> reportes_retornar = new ArrayList<>();
+        for(int i = 0; i < Global.reportes.size(); i++)
+        {
+            if(Global.reportes.get(i).getIdPersona() == id_usuario)
+            {
+                reportes_retornar.add(reportes.get(i));
+            }
+        }
+        return reportes_retornar;
     }
 
 

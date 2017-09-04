@@ -1,6 +1,7 @@
 package losmarinos.blackout.Actividades;
 
 import losmarinos.blackout.Calculos;
+import losmarinos.blackout.ConsultorGETAPI;
 import losmarinos.blackout.Global;
 import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Empresa;
@@ -44,6 +45,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
+
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_CORTES;
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_EMPRESAS;
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_PUNTOSINTERES_POR_USUARIO;
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_REPORTES;
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_USUARIOS;
 
 // Actividad del mapa principal
 public class MapaPrincipal extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
@@ -90,9 +97,11 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        Global.actualizarEmpresas(this);
-        Global.actualizarUsuarios(this);
-        Global.usuario_actual.actualizarPuntosInteres(this);
+        Global.contexto = this;
+
+        new ConsultorGETAPI("empresa", Global.token_usuario_actual, OBTENER_EMPRESAS, new Global()).execute();
+        new ConsultorGETAPI("usuarios", Global.token_usuario_actual, OBTENER_USUARIOS, new Global()).execute();
+        new ConsultorGETAPI("personas/" + String.valueOf(Global.usuario_actual.getId()) + "/puntos-de-interes", Global.token_usuario_actual, OBTENER_PUNTOSINTERES_POR_USUARIO, new Global()).execute();
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
@@ -211,8 +220,9 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
     {
         mMap.clear();
 
-        Global.actualizarReportes(this);
-        Global.actualizarCortes(this);
+        new ConsultorGETAPI("reporte", Global.token_usuario_actual, OBTENER_REPORTES, new Global()).execute();
+        new ConsultorGETAPI("cortes", Global.token_usuario_actual, OBTENER_CORTES, new Global()).execute();
+
         //Global.calcularNuevosCortes();
 
         if(FiltrarMapaPrincipal.mostrar_cortes)
@@ -226,7 +236,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         this.marcador_posicion_actual = null;
         if(GPSTracker.ubicacion_actual != null)
             this.actualizarPosicionActual(GPSTracker.ubicacion_actual);
-        
+
         Toast.makeText(this, "Mapa actualizado", Toast.LENGTH_LONG).show();
     }
 
@@ -234,8 +244,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
     protected void onResume() {
         super.onResume();
 
-        //if(mMap != null)
-            //this.actualizarMapaPrincipal(null);
+        if(mMap != null)
+            this.actualizarMapaPrincipal(null);
     }
 
 
@@ -268,8 +278,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         {
             Corte corte_actual = cortes.get(i);
 
-            if(FiltrarMapaPrincipal.nombre_empresa != null &&
-                !FiltrarMapaPrincipal.nombre_empresa.equals(corte_actual.getEmpresa().getNombre()))
+            if(FiltrarMapaPrincipal.id_empresa != -1 &&
+                FiltrarMapaPrincipal.id_empresa != corte_actual.getIdEmpresa())
             {
                 continue;
             }
@@ -302,10 +312,9 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         for(int i = 0; i < reportes.size(); i++)
         {
             Reporte rep_actual = reportes.get(i);
-            Empresa empresa_rep = Global.encontrarEmpresaPorId(rep_actual.getIdEmpresa());
 
-            if(FiltrarMapaPrincipal.nombre_empresa != null &&
-                    !FiltrarMapaPrincipal.nombre_empresa.equals(empresa_rep.getNombre()))
+            if(FiltrarMapaPrincipal.id_empresa != -1 &&
+                    FiltrarMapaPrincipal.id_empresa != rep_actual.getIdEmpresa())
             {
                 continue;
             }
@@ -340,8 +349,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         List<Empresa> empresas = Global.empresas;
         for(int i = 0; i < empresas.size(); i++)
         {
-            if(FiltrarMapaPrincipal.nombre_empresa != null &&
-                    !FiltrarMapaPrincipal.nombre_empresa.equals(empresas.get(i).getNombre()))
+            if(FiltrarMapaPrincipal.id_empresa != -1 &&
+                    FiltrarMapaPrincipal.id_empresa != empresas.get(i).getId())
             {
                 continue;
             }

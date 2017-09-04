@@ -15,6 +15,7 @@ import java.util.List;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.Global;
+import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.R;
 
 public class FiltrarMapaPrincipal extends AppCompatActivity
@@ -23,8 +24,10 @@ public class FiltrarMapaPrincipal extends AppCompatActivity
 
     public static boolean mostrar_cortes = true;
     public static boolean mostrar_reportes = true;
-    public static String nombre_empresa = null;
+    public static int id_empresa = -1;
     public static Constantes.SERVICIO servicio = null;
+
+    public List<Empresa> empresas_spinner = new ArrayList<>();
 
     Switch switch_cortes;
     Switch switch_reportes;
@@ -76,11 +79,10 @@ public class FiltrarMapaPrincipal extends AppCompatActivity
         }
 
         this.cargarSpinnerEmpresas(FiltrarMapaPrincipal.servicio);
-        if(FiltrarMapaPrincipal.nombre_empresa != null) {
-            for (int i = 0; i < spinner_empresas.getCount(); i++) {
-                String nombre_empresa_item = spinner_empresas.getItemAtPosition(i).toString();
-                if (nombre_empresa_item.equals(FiltrarMapaPrincipal.nombre_empresa)) {
-                    spinner_empresas.setSelection(i);
+        if(FiltrarMapaPrincipal.id_empresa != -1) {
+            for (int i = 0; i < empresas_spinner.size(); i++) {
+                if (empresas_spinner.get(i).getId() == FiltrarMapaPrincipal.id_empresa) {
+                    spinner_empresas.setSelection(i + 1);
                 }
             }
         }
@@ -109,10 +111,13 @@ public class FiltrarMapaPrincipal extends AppCompatActivity
         List<String> spinnerArray =  new ArrayList<String>();
         spinnerArray.add("No");
 
+        empresas_spinner = new ArrayList<>();
+
         for(int i = 0; i < Global.empresas.size(); i++)
         {
             if(Global.empresas.get(i).getTipoServicio() == servicio) {
                 spinnerArray.add(Global.empresas.get(i).getNombre());
+                empresas_spinner.add(Global.empresas.get(i));
             }
         }
 
@@ -155,9 +160,10 @@ public class FiltrarMapaPrincipal extends AppCompatActivity
         }
 
         if(this.spinner_empresas.getSelectedItem().toString().equals("No")) {
-            FiltrarMapaPrincipal.nombre_empresa = null;
+            FiltrarMapaPrincipal.id_empresa = -1;
         }else{
-            FiltrarMapaPrincipal.nombre_empresa = this.spinner_empresas.getSelectedItem().toString();
+            Empresa empresa_elegida = this.empresas_spinner.get(this.spinner_empresas.getSelectedItemPosition()-1);
+            FiltrarMapaPrincipal.id_empresa = empresa_elegida.getId();
         }
 
         if(this.spinner_servicios.getSelectedItem().toString().equals("No")){

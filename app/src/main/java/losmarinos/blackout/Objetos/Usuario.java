@@ -26,7 +26,6 @@ public class Usuario {
     private String mail;
     private Constantes.TIPOSUSUARIO tipo;
     private List<PuntoInteres> puntos_interes;
-    private List<Reporte> reportes;
 
     public String getNombre() {
         return nombre;
@@ -72,16 +71,8 @@ public class Usuario {
         return puntos_interes;
     }
 
-    public void addPuntoInteres(PuntoInteres punto_interes) {
-        this.puntos_interes.add(punto_interes);
-    }
-
-    public List<Reporte> getReportes() {
-        return reportes;
-    }
-
-    public void addReporte(Reporte reporte) {
-        this.reportes.add(reporte);
+    public void setPuntosInteres(List<PuntoInteres> puntos_interes) {
+        this.puntos_interes = puntos_interes;
     }
 
 
@@ -98,7 +89,11 @@ public class Usuario {
         this.mail = mail;
         this.tipo = tipo;
         this.puntos_interes = new ArrayList<>();
-        this.reportes = new ArrayList<>();
+    }
+
+
+    public List<Reporte> getReportes() {
+        return Global.encontrarReportesPorUsuario(this.id);
     }
 
     public void actualizarPuntosInteres(Context context){

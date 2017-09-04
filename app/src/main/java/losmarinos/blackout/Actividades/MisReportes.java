@@ -53,13 +53,8 @@ public class MisReportes extends AppCompatActivity implements OnMapReadyCallback
     }
 
     public void cargarListView(){
-        //Crea el adaptador de alarmas
         ReportesAdapter adapter = new ReportesAdapter(Global.usuario_actual.getReportes(), this, this);
-
-        //enlaza el list view del layout a la variable
         ListView mi_lista = (ListView)findViewById(R.id.lst_objetos_mis_objetos);
-
-        //Le setea el adaptador a la lista
         mi_lista.setAdapter(adapter);
     }
 
