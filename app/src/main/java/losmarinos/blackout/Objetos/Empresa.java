@@ -16,7 +16,7 @@ public class Empresa extends Usuario {
     private String telefono;
     private String direccion;
     private Constantes.SERVICIO tipo_servicio;
-    private double calificacion;
+    private float calificacion;
     private List<Sucursal> sucursales;
     private String pagina;
     private List<Comentario> comentarios;
@@ -45,11 +45,11 @@ public class Empresa extends Usuario {
         this.tipo_servicio = tipo_servicio;
     }
 
-    public double getCalificacion() {
+    public float getCalificacion() {
         return calificacion;
     }
 
-    public void setCalificacion(double calificacion) {
+    public void setCalificacion(float calificacion) {
         this.calificacion = calificacion;
     }
 

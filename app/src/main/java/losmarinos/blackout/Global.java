@@ -39,67 +39,7 @@ public class Global implements ObservadorAPI {
     public static List<Empresa> empresas = new ArrayList<>();
     public static List<Reporte> reportes = new ArrayList<>();
 
-    public static boolean cargo_datos = false;
-
-    public static MapaPrincipal contexto;
-
-    public static void cargarDatosPruebas()
-    {
-        if(cargo_datos)
-            return;
-
-        /*if(usuario_actual != null)
-        {
-            PuntoInteres punto = new PuntoInteres(Constantes.SERVICIO.LUZ, null, new LatLng(-34.627954, -58.499451), 1000);
-            usuario_actual.addPuntoInteres(punto);
-        }*/
-
-        /*Usuario usuario1 = new Usuario(55,"joelkalt", "1234", "joelkaltman@gmail.com", Constantes.TIPOSUSUARIO.PERSONA);
-        Usuario usuario2 = new Usuario(54,"fernandocyt", "1234", "fernandocyt@gmail.com", Constantes.TIPOSUSUARIO.PERSONA);
-        usuarios.add(usuario1);
-        usuarios.add(usuario2);*/
-
-        //Empresa empresa1 = new Empresa("Metrogas", "1234", "a", Constantes.SERVICIO.GAS);
-        /*Empresa empresa1 = new Empresa(4, "Metrogas", "1234", "a", "1532323287", "Loyola 20", Constantes.SERVICIO.GAS, "www.metrogas.com.ar");
-        empresa1.addSucursal(new Sucursal(new LatLng(-34.660718, -58.570862), "4983-9271", "Av. Medrano 900"));
-        Empresa empresa2 = new Empresa(5, "Edenor", "1234", "a", "1532323288", "Loyola 21", Constantes.SERVICIO.LUZ, "www.edenor.com.ar");
-        empresa2.addSucursal(new Sucursal(new LatLng(-34.583871, -58.539276), "48547559", "Corrientes 5225"));
-        Empresa empresa3 = new Empresa(6, "Edesur", "1234", "a", "1532323289", "Loyola 22", Constantes.SERVICIO.LUZ, "www.edesur.com.ar");
-        Empresa empresa4 = new Empresa(7, "Telecentro", "1234", "a", "1532323290", "Loyola 23", Constantes.SERVICIO.CABLE, "www.telecentro.com.ar");
-        Empresa empresa5 = new Empresa(8,"Cablevision", "1234", "a", "1532323291", "Loyola 24", Constantes.SERVICIO.CABLE, "www.cablevisionfibertel.com.ar");
-        Empresa empresa6 = new Empresa(9,"Aysa", "1234", "a", "1532323292", "Loyola 25", Constantes.SERVICIO.AGUA, "www.aysa.com.ar");
-        Empresa empresa7 = new Empresa(10,"Telefonica", "1234", "a", "1532323293", "Loyola 26", Constantes.SERVICIO.TELEFONO, "www.telefonica.com.ar");
-        Empresa empresa8 = new Empresa(11,"Fibertel", "1234", "a", "1532323294", "Loyola 27", Constantes.SERVICIO.INTERNET, "www.cablevisionfibertel.com.ar");
-
-        Global.empresas.add(empresa1);
-        Global.empresas.add(empresa2);
-        Global.empresas.add(empresa3);
-        Global.empresas.add(empresa4);
-        Global.empresas.add(empresa5);
-        Global.empresas.add(empresa6);
-        Global.empresas.add(empresa7);
-        Global.empresas.add(empresa8);*/
-
-        /*Corte corte_agua = new Corte(Constantes.SERVICIO.AGUA, empresa6, Constantes.BSAS, 500, Calendar.getInstance().getTime(), false);
-        Respuesta respuesta1_corte_agua = new Respuesta(usuario1, "Todo mal viejo");
-        Respuesta respuesta2_corte_agua = new Respuesta(usuario2, "Sigo esperando son todos putos");
-        corte_agua.addRespuesta(respuesta1_corte_agua);
-        corte_agua.addRespuesta(respuesta2_corte_agua);
-        Corte corte_luz = new Corte(Constantes.SERVICIO.LUZ, empresa2, new LatLng(-34.627954, -58.499451), 1000, Calendar.getInstance().getTime(), false);
-        Corte corte_gas = new Corte(Constantes.SERVICIO.GAS, empresa1, new LatLng(-34.565213, -58.482971), 700, Calendar.getInstance().getTime(), false);
-        Corte corte_internet = new Corte(Constantes.SERVICIO.INTERNET, empresa8, new LatLng(-34.668060, -58.421173), 1500, Calendar.getInstance().getTime(), false);
-        Corte corte_cable = new Corte(Constantes.SERVICIO.CABLE, empresa4, new LatLng(-34.633038, -58.372421), 1000, Calendar.getInstance().getTime(), false);
-        Corte corte_telefono = new Corte(Constantes.SERVICIO.TELEFONO, empresa7, new LatLng(-34.595742, -58.420486), 1500, Calendar.getInstance().getTime(), false);
-
-        Global.cortes.add(corte_agua);
-        Global.cortes.add(corte_luz);
-        Global.cortes.add(corte_gas);
-        Global.cortes.add(corte_internet);
-        Global.cortes.add(corte_cable);
-        Global.cortes.add(corte_telefono);*/
-
-        cargo_datos = true;
-    }
+    public static MapaPrincipal mapa_principal;
 
     public void obtenerRespuestaAPI(String respuesta, Constantes.TAGAPI tag, boolean correcto)
     {
@@ -108,15 +48,16 @@ public class Global implements ObservadorAPI {
             switch(tag){
                 case OBTENER_CORTES:
                         if(ParserJSON.esError(respuesta, msg_error)){
-                            Toast.makeText(contexto, "No es posible actualizar cortes", Toast.LENGTH_LONG).show();
+                            this.mostrarToastEnMapaPrincipal("Error al obtener cortes");
                             return;
                         }else{
                             Global.cortes = ParserJSON.obtenerCortes(respuesta);
+                            this.cargarCortesEnMapaPrincipal();
                         }
                     break;
                 case OBTENER_EMPRESAS:
                     if(ParserJSON.esError(respuesta, msg_error)){
-                        Toast.makeText(contexto, "No es posible actualizar empresas", Toast.LENGTH_LONG).show();
+                        this.mostrarToastEnMapaPrincipal("Error al obtener empresas");
                         return;
                     }else{
                         Global.empresas = ParserJSON.obtenerEmpresas(respuesta);
@@ -124,15 +65,16 @@ public class Global implements ObservadorAPI {
                     break;
                 case OBTENER_REPORTES:
                     if(ParserJSON.esError(respuesta, msg_error)){
-                        Toast.makeText(contexto, "No es posible actualizar reportes", Toast.LENGTH_LONG).show();
+                        this.mostrarToastEnMapaPrincipal("Error al obtener reportes");
                         return;
                     }else{
                         Global.reportes = ParserJSON.obtenerReportes(respuesta);
+                        this.cargarReportesEnMapaPrincipal();
                     }
                     break;
                 case OBTENER_USUARIOS:
                     if(ParserJSON.esError(respuesta, msg_error)){
-                        Toast.makeText(contexto, "No es posible actualizar usuarios", Toast.LENGTH_LONG).show();
+                        this.mostrarToastEnMapaPrincipal("Error al obtener usuarios");
                         return;
                     }else{
                         Global.usuarios = ParserJSON.obtenerUsuarios(respuesta);
@@ -140,14 +82,60 @@ public class Global implements ObservadorAPI {
                     break;
                 case OBTENER_PUNTOSINTERES_POR_USUARIO:
                     if(ParserJSON.esError(respuesta, msg_error)){
-                        Toast.makeText(contexto, "No es posible actualizar puntos de interes", Toast.LENGTH_LONG).show();
+                        this.mostrarToastEnMapaPrincipal("Error al obtener puntos de interes");
                         return;
                     }else{
                         Global.usuario_actual.setPuntosInteres(ParserJSON.obtenerPuntosInteres(respuesta));
+                        //this.cargarPuntosDeInteresEnMapaPrincipal();
                     }
                     break;
             }
         }catch (Exception e){}
+    }
+
+    public void mostrarToastEnMapaPrincipal(String mensaje){
+        final String mensaje_mostrar = mensaje;
+        if(mapa_principal != null) {
+            mapa_principal.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(mapa_principal, mensaje_mostrar, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
+
+    public void cargarReportesEnMapaPrincipal(){
+        if(mapa_principal != null) {
+            mapa_principal.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mapa_principal.cargarReportesEnMapa();
+                }
+            });
+        }
+    }
+
+    public void cargarCortesEnMapaPrincipal(){
+        if(mapa_principal != null) {
+            mapa_principal.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mapa_principal.cargarCortesEnMapa();
+                }
+            });
+        }
+    }
+
+    public void cargarPuntosDeInteresEnMapaPrincipal(){
+        if(mapa_principal != null) {
+            mapa_principal.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mapa_principal.cargarPuntosInteresEnMapa();
+                }
+            });
+        }
     }
 
     public static void actualizarEmpresas(Context context)

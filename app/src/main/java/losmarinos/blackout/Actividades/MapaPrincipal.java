@@ -66,8 +66,6 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapa_principal);
 
-        Global.cargarDatosPruebas();
-
         //if(!isMyServiceRunning(ServicioPeriodico.class))
             //startService(new Intent(this, ServicioPeriodico.class));
 
@@ -98,7 +96,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        Global.contexto = this;
+        Global.mapa_principal = this;
 
         new ConsultorGETAPI("empresa", Global.token_usuario_actual, OBTENER_EMPRESAS, new Global()).execute();
         new ConsultorGETAPI("usuarios", Global.token_usuario_actual, OBTENER_USUARIOS, new Global()).execute();
@@ -229,19 +227,13 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
         //Global.calcularNuevosCortes();
 
-        if(FiltrarMapaPrincipal.mostrar_cortes)
-            this.cargarCortesEnMapa();
-
-        if(FiltrarMapaPrincipal.mostrar_reportes)
-            this.cargarReportesEnMapa();
-
-        this.cargarPuntosInteres();
+        //this.cargarCortesEnMapa();
+        //this.cargarReportesEnMapa();
+        //this.cargarPuntosInteresEnMapa();
 
         this.marcador_posicion_actual = null;
         if(GPSTracker.ubicacion_actual != null)
             this.actualizarPosicionActual(GPSTracker.ubicacion_actual);
-
-        Toast.makeText(this, "Mapa actualizado", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -253,7 +245,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
     }
 
 
-    public void cargarPuntosInteres()
+    public void cargarPuntosInteresEnMapa()
     {
         List<PuntoInteres> puntos = Global.usuario_actual.getPuntosInteres();
         for(int i = 0; i < puntos.size(); i++) {
@@ -275,8 +267,11 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
     }
 
-    public void cargarCortesEnMapa()
-    {
+    public void cargarCortesEnMapa() {
+        if (!FiltrarMapaPrincipal.mostrar_cortes){
+            return;
+        }
+
         List<Corte> cortes = Global.cortes;
         for(int i = 0; i < cortes.size(); i++)
         {
@@ -312,6 +307,10 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
     public void cargarReportesEnMapa()
     {
+        if(!FiltrarMapaPrincipal.mostrar_reportes) {
+            return;
+        }
+
         List<Reporte> reportes = Global.reportes;
         for(int i = 0; i < reportes.size(); i++)
         {
