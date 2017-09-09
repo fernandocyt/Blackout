@@ -10,19 +10,26 @@
     <LinearLayout
         android:layout_width="368dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
 
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:map="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/map_mis_objetos"
+            android:id="@+id/map_mis_reportes"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="250dp" />
 
 
+        <Switch
+            android:id="@+id/switch_ver_historico_mis_reportes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ver historico    " />
+
         <ListView
-            android:id="@+id/lst_objetos_mis_objetos"
+            android:id="@+id/lst_reportes_mis_reportes"
             android:layout_width="368dp"
             android:layout_height="0dp"
             android:layout_weight="1" />

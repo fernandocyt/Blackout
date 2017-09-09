@@ -74,10 +74,12 @@ public class ConsultorPOSTAPI extends AsyncTask<Void, Long, String> {
             connection.setConnectTimeout(30000);
 
             //Send request
-            DataOutputStream wr = new DataOutputStream (connection.getOutputStream ());
-            wr.write(obj.toString().getBytes("UTF-8"));
-            wr.flush ();
-            wr.close ();
+            if(this.obj != null) {
+                DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+                wr.write(this.obj.toString().getBytes("UTF-8"));
+                wr.flush();
+                wr.close();
+            }
 
             //Get Response
             InputStream is = null;

@@ -32,10 +32,10 @@ public class MisPuntosInteres extends AppCompatActivity implements OnMapReadyCal
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("Mis Puntos de Interes");
-        setContentView(R.layout.activity_mis_objetos);
+        setContentView(R.layout.activity_mis_puntos_de_interes);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map_mis_objetos);
+                .findFragmentById(R.id.map_mis_puntos_de_interes);
         mapFragment.getMapAsync(this);
 
         this.cargarListView();
@@ -56,7 +56,7 @@ public class MisPuntosInteres extends AppCompatActivity implements OnMapReadyCal
 
     public void cargarListView(){
         PuntoInteresAdapter adapter = new PuntoInteresAdapter(Global.usuario_actual.getPuntosInteres(), this, this);
-        ListView mi_lista = (ListView)findViewById(R.id.lst_objetos_mis_objetos);
+        ListView mi_lista = (ListView)findViewById(R.id.lst_puntos_mis_puntos_de_interes);
         mi_lista.setAdapter(adapter);
     }
 

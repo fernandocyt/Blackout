@@ -222,8 +222,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
     {
         mMap.clear();
 
-        new ConsultorGETAPI("reporte", Global.token_usuario_actual, OBTENER_REPORTES, new Global()).execute();
         new ConsultorGETAPI("cortes", Global.token_usuario_actual, OBTENER_CORTES, new Global()).execute();
+        new ConsultorGETAPI("reporte", Global.token_usuario_actual, OBTENER_REPORTES, new Global()).execute();
 
         //Global.calcularNuevosCortes();
 

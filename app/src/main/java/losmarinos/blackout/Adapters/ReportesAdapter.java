@@ -62,7 +62,7 @@ public class ReportesAdapter extends BaseAdapter implements ListAdapter {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.reporte_mis_objetos, null);
+            view = inflater.inflate(R.layout.item_reporte, null);
         }
 
         //Handle TextView and display string from your list
@@ -70,23 +70,26 @@ public class ReportesAdapter extends BaseAdapter implements ListAdapter {
         textview_texto.setText(list.get(position).generarTexto());
 
         textview_activo = (TextView)view.findViewById(R.id.lbl_activo_reporte_mis_objetos);
+        button_resolver = (Button)view.findViewById(R.id.btn_resolver_reporte_mis_objetos);
+
         if(list.get(position).isResuelto()) {
             textview_activo.setText("Resuelto");
+            button_resolver.setVisibility(View.GONE);
         }else{
             textview_activo.setText("Pendiente");
+            button_resolver.setVisibility(View.VISIBLE);
         }
 
         button_resolver = (Button)view.findViewById(R.id.btn_resolver_reporte_mis_objetos);
         if(list.get(position).isResuelto()) {
-            button_resolver.setVisibility(View.GONE);
         }
         button_resolver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                button_resolver.setVisibility(View.GONE);
-                list.get(position).setResuelto(1);
+                list.get(position).resolver();
                 MisReportes mis_reportes = (MisReportes)context;
                 mis_reportes.cargarListView();
+                mis_reportes.cargarMapa();
             }
         });
 

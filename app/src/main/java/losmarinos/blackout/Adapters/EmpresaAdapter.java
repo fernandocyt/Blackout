@@ -57,7 +57,7 @@ public class EmpresaAdapter extends BaseAdapter implements ListAdapter {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.empresa_mis_objetos, null);
+            view = inflater.inflate(R.layout.item_empresa, null);
         }
 
         //Handle TextView and display string from your list

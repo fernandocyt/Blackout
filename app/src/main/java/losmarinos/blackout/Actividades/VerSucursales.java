@@ -40,7 +40,7 @@ public class VerSucursales extends AppCompatActivity implements OnMapReadyCallba
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mis_objetos);
+        setContentView(R.layout.activity_ver_sucursales);
 
         int id_empresa = getIntent().getIntExtra("idEmpresa", 0);
         for(int i = 0; i < Global.empresas.size(); i++)
@@ -54,7 +54,7 @@ public class VerSucursales extends AppCompatActivity implements OnMapReadyCallba
         setTitle("Sucursales " + empresa.getNombre());
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map_mis_objetos);
+                .findFragmentById(R.id.map_ver_sucursales);
         mapFragment.getMapAsync(this);
 
         this.cargarListView();
@@ -89,7 +89,7 @@ public class VerSucursales extends AppCompatActivity implements OnMapReadyCallba
         }catch (Exception e){}
 
         SucursalAdapter adapter = new SucursalAdapter(empresa.getSucursales(), this, this);
-        ListView mi_lista = (ListView)findViewById(R.id.lst_objetos_mis_objetos);
+        ListView mi_lista = (ListView)findViewById(R.id.lst_sucursal_ver_sucursales);
         mi_lista.setAdapter(adapter);
     }
 

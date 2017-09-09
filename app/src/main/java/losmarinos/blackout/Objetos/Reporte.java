@@ -8,7 +8,11 @@ import java.util.Calendar;
 import java.util.Date;
 
 import losmarinos.blackout.Constantes;
+import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.Global;
+import losmarinos.blackout.ParserJSON;
+
+import static losmarinos.blackout.Constantes.TAGAPI.ACTUALIZAR_REPORTE_RESUELTO;
 
 /**
  * Created by garci on 22/7/2017.
@@ -132,6 +136,21 @@ public class Reporte {
     public Empresa getEmpresa()
     {
         return Global.encontrarEmpresaPorId(this.id_empresa);
+    }
+
+    public boolean resolver (){
+        try {
+            String respuesta = new ConsultorPOSTAPI( "reporte/" + String.valueOf(this.id) + "/resolver", Global.token_usuario_actual, null, ACTUALIZAR_REPORTE_RESUELTO, null).execute().get();
+            StringBuilder mensaje_error = new StringBuilder();
+            if(ParserJSON.esError(respuesta, mensaje_error)) {
+                return false;
+            }else{
+                this.resuelto = 1;
+                return true;
+            }
+        }catch (Exception e){
+            return false;
+        }
     }
 
 }

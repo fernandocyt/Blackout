@@ -61,7 +61,7 @@ public class PuntoInteresAdapter extends BaseAdapter implements ListAdapter {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.punto_interes_mis_objetos, null);
+            view = inflater.inflate(R.layout.item_punto_interes, null);
         }
 
         //Handle TextView and display string from your list

@@ -2,7 +2,9 @@ package losmarinos.blackout.Actividades;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.Switch;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,19 +24,23 @@ import losmarinos.blackout.Global;
 import losmarinos.blackout.Objetos.Reporte;
 import losmarinos.blackout.R;
 
-public class MisReportes extends AppCompatActivity implements OnMapReadyCallback {
+public class MisReportes extends AppCompatActivity implements OnMapReadyCallback, CompoundButton.OnCheckedChangeListener{
 
-    GoogleMap map_mis_reportes;
+    GoogleMap map_mis_reportes = null;
+    Switch switch_ver_historico;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("Mis Reportes");
-        setContentView(R.layout.activity_mis_objetos);
+        setContentView(R.layout.activity_mis_reportes);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map_mis_objetos);
+                .findFragmentById(R.id.map_mis_reportes);
         mapFragment.getMapAsync(this);
+
+        switch_ver_historico = (Switch)findViewById(R.id.switch_ver_historico_mis_reportes);
+        switch_ver_historico.setOnCheckedChangeListener(this);
 
         this.cargarListView();
     }
@@ -47,22 +53,35 @@ public class MisReportes extends AppCompatActivity implements OnMapReadyCallback
         this.cargarMapa();
     }
 
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        this.cargarListView();
+        this.cargarMapa();
+    }
+
     public void centrarMapaEnPosicion(LatLng posicion)
     {
         map_mis_reportes.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion, 13.0f));
     }
 
     public void cargarListView(){
-        ReportesAdapter adapter = new ReportesAdapter(Global.usuario_actual.getReportes(), this, this);
-        ListView mi_lista = (ListView)findViewById(R.id.lst_objetos_mis_objetos);
+        List<Reporte> reportes = this.obtenerReportesAMostrar();
+
+        ReportesAdapter adapter = new ReportesAdapter(reportes, this, this);
+        ListView mi_lista = (ListView)findViewById(R.id.lst_reportes_mis_reportes);
         mi_lista.setAdapter(adapter);
     }
 
     public void cargarMapa()
     {
+        if(map_mis_reportes == null){
+            return;
+        }
+
         map_mis_reportes.clear();
 
-        List<Reporte> reportes = Global.usuario_actual.getReportes();
+        List<Reporte> reportes = this.obtenerReportesAMostrar();
+
         for(int i = 0; i < reportes.size(); i++)
         {
             Reporte rep_actual = reportes.get(i);
@@ -79,6 +98,22 @@ public class MisReportes extends AppCompatActivity implements OnMapReadyCallback
                     .fillColor(Constantes.COLOR_CIRCLE)
                     .strokeWidth(5));
         }
+    }
+
+    public List<Reporte> obtenerReportesAMostrar()
+    {
+        List<Reporte> reportes = Global.usuario_actual.getReportes();
+
+        if(!switch_ver_historico.isChecked()){
+            for(int i = 0; i < reportes.size(); i++){
+                if(reportes.get(i).isResuelto()){
+                    reportes.remove(i);
+                    i--;
+                }
+            }
+        }
+
+        return reportes;
     }
 
 }

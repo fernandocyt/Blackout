@@ -57,7 +57,7 @@ public class ComentarioAdapter extends BaseAdapter implements ListAdapter {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.comentario_perfil_empresa, null);
+            view = inflater.inflate(R.layout.item_comentario, null);
         }
 
         //Handle TextView and display string from your list
