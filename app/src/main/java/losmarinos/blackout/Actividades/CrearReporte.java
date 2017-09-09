@@ -160,6 +160,19 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
         String nombre_servicio = this.spinner_servicios.getSelectedItem().toString();
         Constantes.SERVICIO servicio = Constantes.stringToServicio(nombre_servicio);
 
+        // Me fijo si hay mas de 2 reportes activos con el mismo servicio no lo agrego
+        int cant_mismo_servicio_activos = 0;
+        List<Reporte> reportes_usuario = Global.usuario_actual.getReportes();
+        for(int i = 0; i < reportes_usuario.size(); i++){
+            if(reportes_usuario.get(i).getServicio() == servicio && !reportes_usuario.get(i).isResuelto()){
+                cant_mismo_servicio_activos++;
+            }
+        }
+        if(cant_mismo_servicio_activos >= 2){
+            Toast.makeText(this, "No puedes tener mas de 2 reportes de un servicio activos a la vez.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         String nombre_empresa = this.spinner_empresas.getSelectedItem().toString();
 
         int id_empresa = -1;

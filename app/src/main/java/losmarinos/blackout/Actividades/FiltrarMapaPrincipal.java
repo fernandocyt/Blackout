@@ -27,6 +27,9 @@ public class FiltrarMapaPrincipal extends AppCompatActivity
     public static int id_empresa = -1;
     public static Constantes.SERVICIO servicio = null;
 
+    public static int indice_spn_servicios = 0;
+    public static int indice_spn_empresas = 0;
+
     public List<Empresa> empresas_spinner = new ArrayList<>();
 
     Switch switch_cortes;
@@ -55,37 +58,11 @@ public class FiltrarMapaPrincipal extends AppCompatActivity
         spinner_empresas = (Spinner) findViewById(R.id.spn_empresas_filtrar_mapa_principal);
 
         this.cargarSpinnerServicios();
-        if(FiltrarMapaPrincipal.servicio != null) {
-            switch (FiltrarMapaPrincipal.servicio) {
-                case AGUA:
-                    spinner_servicios.setSelection(1);
-                    break;
-                case LUZ:
-                    spinner_servicios.setSelection(2);
-                    break;
-                case GAS:
-                    spinner_servicios.setSelection(3);
-                    break;
-                case TELEFONO:
-                    spinner_servicios.setSelection(4);
-                    break;
-                case INTERNET:
-                    spinner_servicios.setSelection(5);
-                    break;
-                case CABLE:
-                    spinner_servicios.setSelection(6);
-                    break;
-            }
-        }
-
         this.cargarSpinnerEmpresas(FiltrarMapaPrincipal.servicio);
-        if(FiltrarMapaPrincipal.id_empresa != -1) {
-            for (int i = 0; i < empresas_spinner.size(); i++) {
-                if (empresas_spinner.get(i).getId() == FiltrarMapaPrincipal.id_empresa) {
-                    spinner_empresas.setSelection(i + 1);
-                }
-            }
-        }
+
+        spinner_servicios.setSelection(indice_spn_servicios);
+        spinner_empresas.setSelection(indice_spn_empresas);
+
     }
 
     private void cargarSpinnerServicios()
@@ -165,12 +142,14 @@ public class FiltrarMapaPrincipal extends AppCompatActivity
             Empresa empresa_elegida = this.empresas_spinner.get(this.spinner_empresas.getSelectedItemPosition()-1);
             FiltrarMapaPrincipal.id_empresa = empresa_elegida.getId();
         }
+        indice_spn_empresas = this.spinner_empresas.getSelectedItemPosition();
 
         if(this.spinner_servicios.getSelectedItem().toString().equals("No")){
             FiltrarMapaPrincipal.servicio = null;
         }else {
             FiltrarMapaPrincipal.servicio = Constantes.stringToServicio(this.spinner_servicios.getSelectedItem().toString());
         }
+        indice_spn_servicios = this.spinner_servicios.getSelectedItemPosition();
 
         super.onBackPressed();
     }

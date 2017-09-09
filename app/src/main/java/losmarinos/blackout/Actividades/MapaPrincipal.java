@@ -16,11 +16,14 @@ import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.Objetos.Reporte;
 import losmarinos.blackout.ServicioPeriodico;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -66,13 +69,20 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapa_principal);
 
+        // SERVICIO
         //if(!isMyServiceRunning(ServicioPeriodico.class))
             //startService(new Intent(this, ServicioPeriodico.class));
+
+        // GPS
+        if (!GPSTracker.checkPermission(this)) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+        }
 
         if(!isMyServiceRunning(GPSTracker.class))
             startService(new Intent(this, GPSTracker.class));
         GPSTracker.addObserver(this);
 
+        // TOOLBAR
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -91,11 +101,12 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         username_header.setText(Global.usuario_actual.getNombre());
         mail_header.setText(Global.usuario_actual.getMail());
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        // MAPA
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        // CARGA DE DATOS
         Global.mapa_principal = this;
 
         new ConsultorGETAPI("empresa", Global.token_usuario_actual, OBTENER_EMPRESAS, new Global()).execute();
@@ -112,7 +123,6 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         }
         return false;
     }
-
 
     @Override
     public void onBackPressed() {
