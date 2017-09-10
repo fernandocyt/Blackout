@@ -42,12 +42,16 @@ public class Login extends AppCompatActivity {
         usuario = (EditText)findViewById(R.id.txt_usuario_login);
         password = (EditText)findViewById(R.id.txt_password_login);
 
-        ArrayList<String> info_user = LocalDB.leerXML(getApplicationContext());
+        StringBuilder nom = new StringBuilder();
+        StringBuilder pass = new StringBuilder();
+        StringBuilder mail = new StringBuilder();
+        StringBuilder token = new StringBuilder();
+        boolean correcto = LocalDB.leerArchivoJSONUsuario(getApplicationContext(), nom, pass, mail, token);
 
-        if(info_user.size() > 0)
+        if(correcto)
         {
-            usuario.setText(info_user.get(2));
-            password.setText(info_user.get(1));
+            usuario.setText(mail);
+            password.setText(pass);
             this.loguearUsuario(findViewById(R.id.btn_ingresar_login));
         }
     }
@@ -94,7 +98,7 @@ public class Login extends AppCompatActivity {
                     }
                     Global.usuario_actual = nuevo_usuario;
 
-                    LocalDB.crearXML(this.getApplicationContext(),
+                    LocalDB.crearArchivoJSONUsuario(this.getApplicationContext(),
                             Global.usuario_actual.getNombre(),
                             password.getText().toString(),
                             Global.usuario_actual.getMail(),

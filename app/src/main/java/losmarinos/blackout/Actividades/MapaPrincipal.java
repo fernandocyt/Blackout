@@ -70,8 +70,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         setContentView(R.layout.activity_mapa_principal);
 
         // SERVICIO
-        //if(!isMyServiceRunning(ServicioPeriodico.class))
-            //startService(new Intent(this, ServicioPeriodico.class));
+        if(!isMyServiceRunning(ServicioPeriodico.class))
+            startService(new Intent(this, ServicioPeriodico.class));
 
         // GPS
         if (!GPSTracker.checkPermission(this)) {
@@ -159,7 +159,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             Intent i = new Intent(getApplicationContext(), BuscarEmpresa.class);
             startActivity(i);
         } else if (id == R.id.cerrar_sesion){
-            LocalDB.borrarXML(this);
+            LocalDB.borrarArchivoJSONUsuario(this);
+            LocalDB.borrarArchivoJSONCortesAvisados(this);
             Intent i = new Intent(getApplicationContext(), Login.class);
             startActivity(i);
             this.finish();

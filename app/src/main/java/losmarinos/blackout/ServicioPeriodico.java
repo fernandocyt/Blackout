@@ -1,6 +1,7 @@
 package losmarinos.blackout;
 
 import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import losmarinos.blackout.Actividades.Login;
 import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.PuntoInteres;
 import losmarinos.blackout.Objetos.Usuario;
@@ -54,13 +56,8 @@ public class ServicioPeriodico extends Service implements Runnable {
             for (int i = 0; i < puntos_interes.size(); i++) {
                 PuntoInteres punto_actual = puntos_interes.get(i);
 
-                //if (punto_actual.isActivo()) {
-
                     for (int j = 0; j < Global.cortes.size(); j++) {
                         Corte corte_actual = Global.cortes.get(j);
-
-                        if (punto_actual.avisoCorte(corte_actual.getId()))
-                            continue;
 
                         if (punto_actual.getServicio() != null && punto_actual.getServicio() != corte_actual.getServicio())
                             continue;
@@ -68,32 +65,52 @@ public class ServicioPeriodico extends Service implements Runnable {
                         if (punto_actual.getEmpresa() != null && punto_actual.getEmpresa().getId() != corte_actual.getEmpresa().getId())
                             continue;
 
+                        if(LocalDB.estaEnArchivoJSONCortesAvisados(this.context, corte_actual.getId()))
+                            continue;
+
                         if (Calculos.hayInterseccion(
                                 punto_actual.getUbicacion(), punto_actual.getRadio(),
                                 corte_actual.getUbicacion(), corte_actual.getRadio())) {
 
-                            punto_actual.addIdCorteAvisado(corte_actual.getId());
+                            LocalDB.agregarArchivoJSONCortesAvisados(this.context, corte_actual.getId());
 
-                            NotificationCompat.Builder b = new NotificationCompat.Builder(this.context);
-                            b.setAutoCancel(true)
-                                    .setDefaults(NotificationCompat.DEFAULT_ALL)
-                                    .setWhen(System.currentTimeMillis())
-                                    .setSmallIcon(R.mipmap.ic_launcher)
-                                    .setContentTitle("ATENCION")
-                                    .setContentText("Nuevo corte de " + Constantes.servicioToString(corte_actual.getServicio()) + " en tu punto de interes")
-                                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                                    .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
-
-                            NotificationManager nm = (NotificationManager) this.context.getSystemService(Context.NOTIFICATION_SERVICE);
-                            nm.notify(1, b.build());
+                            this.notificar("Nuevo corte de " + Constantes.servicioToString(corte_actual.getServicio()) + " en tu punto de interes");
                         }
                     }
-                //}
             }
         }
 
 
         handler.postDelayed(runnable, TIEMPO_CHECKEO_SERVICIO);
+    }
+
+    public void notificar(String mensaje){
+        // Creo la notificacion
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this.context);
+        mBuilder.setAutoCancel(true)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("ATENCION")
+                .setContentText(mensaje)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
+
+        // Para que se abra el login cuando clickeo la notificacion
+        // TODO: por ahora este codigo abre una actividad nueva, yo quiero que habra la vieja
+        /*Intent resultIntent = new Intent(this.context, Login.class);
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        PendingIntent contentIntent = PendingIntent.getActivity(this.context, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        mBuilder.setContentIntent(contentIntent);*/
+
+        // Activo la notificacion
+        Notification notification = mBuilder.build();
+        //notification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
+
+        NotificationManager nm = (NotificationManager) this.context.getSystemService(Context.NOTIFICATION_SERVICE);
+        nm.notify(1, notification);
     }
 
     @Override

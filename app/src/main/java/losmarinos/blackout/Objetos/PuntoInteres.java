@@ -20,8 +20,6 @@ public class PuntoInteres {
     private int id_empresa;
     private LatLng ubicacion;
     private double radio;
-    private List<Integer> id_cortes_avisados;
-
 
     public Constantes.SERVICIO getServicio() {
         return servicio;
@@ -55,34 +53,16 @@ public class PuntoInteres {
         this.radio = radio;
     }
 
-    public void addIdCorteAvisado(int id_corte)
-    {
-        this.id_cortes_avisados.add(id_corte);
-    }
-
     public PuntoInteres(Constantes.SERVICIO servicio, int id_empresa, LatLng ubicacion, double radio)
     {
         this.servicio = servicio;
         this.id_empresa = id_empresa;
         this.ubicacion = ubicacion;
         this.radio = radio;
-        this.id_cortes_avisados = new ArrayList<>();
     }
 
     public Empresa getEmpresa(){
         return Global.encontrarEmpresaPorId(this.id_empresa);
-    }
-
-    public boolean avisoCorte(int id_corte)
-    {
-        for(int i = 0; i < this.id_cortes_avisados.size(); i++)
-        {
-            if(this.id_cortes_avisados.get(i) == id_corte)
-            {
-                return true;
-            }
-        }
-        return false;
     }
 
     public String generarTexto()
