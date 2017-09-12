@@ -65,9 +65,9 @@ public class ParserJSON {
         return json_usu;
     }
 
-    public static JSONObject crearJSONReporte(int persona_id, Constantes.SERVICIO servicio, int empresa_id, LatLng posicion, int radio) throws JSONException{
+    public static JSONObject crearJSONReporte(int user_id, Constantes.SERVICIO servicio, int empresa_id, LatLng posicion, int radio) throws JSONException{
         JSONObject json_rep = new JSONObject();
-        json_rep.put("persona_id", persona_id);
+        json_rep.put("user_id", user_id);
         json_rep.put("ubicacion", Double.toString(posicion.latitude) + ";" + Double.toString(posicion.longitude));
         json_rep.put("radio", radio);
         json_rep.put("servicio_id", Constantes.getIdServicio(servicio));
@@ -77,18 +77,18 @@ public class ParserJSON {
         return json_rep;
     }
 
-    public static JSONObject crearJSONComentario(int persona_id, int empresa_id, String descripcion) throws JSONException{
+    public static JSONObject crearJSONComentario(int user_id, int empresa_id, String descripcion) throws JSONException{
         JSONObject json_rep = new JSONObject();
-        json_rep.put("persona_id", persona_id);
+        json_rep.put("user_id", user_id);
         json_rep.put("empresa_id", empresa_id);
         json_rep.put("descripcion", descripcion);
 
         return json_rep;
     }
 
-    public static JSONObject crearJSONPuntoDeInteres(int persona_id, Constantes.SERVICIO servicio, int empresa_id, LatLng posicion, int radio) throws JSONException{
+    public static JSONObject crearJSONPuntoDeInteres(int user_id, Constantes.SERVICIO servicio, int empresa_id, LatLng posicion, int radio) throws JSONException{
         JSONObject json_pto_interes = new JSONObject();
-        json_pto_interes.put("persona_id", persona_id);
+        json_pto_interes.put("user_id", user_id);
         json_pto_interes.put("ubicacion", Double.toString(posicion.latitude) + ";" + Double.toString(posicion.longitude));
         json_pto_interes.put("radio", radio);
         if(empresa_id != -1) {
@@ -127,7 +127,7 @@ public class ParserJSON {
                 id = obj_resp.getInt("persona_id");
             }
             //FALTA QUE TRAIGA EMPRESA_ID
-            return new Usuario(id, usu_nombre, "", usu_email, Constantes.TIPOSUSUARIO.PERSONA);
+            return new Usuario(usu_id, usu_nombre, "", usu_email, Constantes.TIPOSUSUARIO.PERSONA);
         } catch (JSONException e) {
             return null;
         }
@@ -243,7 +243,7 @@ public class ParserJSON {
         try {
             JSONObject obj_resp = new JSONObject(json);
             int id = Integer.parseInt(obj_resp.getString("id"));
-            int id_persona = Integer.parseInt(obj_resp.getString("persona_id"));
+            int id_persona = Integer.parseInt(obj_resp.getString("user_id"));
             int id_servicio = Integer.parseInt(obj_resp.getString("servicio_id"));
             int id_empresa = -1;
             if(!obj_resp.isNull("empresa_id")) {
@@ -355,10 +355,10 @@ public class ParserJSON {
         try {
             JSONObject obj_resp = new JSONObject(json);
             int id = Integer.parseInt(obj_resp.getString("id"));
-            int persona_id = Integer.parseInt(obj_resp.getString("persona_id"));
+            int user_id = Integer.parseInt(obj_resp.getString("user_id"));
             int empresa_id = Integer.parseInt(obj_resp.getString("empresa_id"));
             String descripcion = obj_resp.getString("descripcion");
-            return new Comentario(id, persona_id, empresa_id, descripcion);
+            return new Comentario(id, user_id, empresa_id, descripcion);
         } catch (JSONException e) {
             return null;
         }

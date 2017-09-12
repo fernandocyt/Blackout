@@ -111,7 +111,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
         new ConsultorGETAPI("empresa", Global.token_usuario_actual, OBTENER_EMPRESAS, new Global()).execute();
         new ConsultorGETAPI("usuarios", Global.token_usuario_actual, OBTENER_USUARIOS, new Global()).execute();
-        new ConsultorGETAPI("personas/" + String.valueOf(Global.usuario_actual.getId()) + "/puntos-de-interes", Global.token_usuario_actual, OBTENER_PUNTOSINTERES_POR_USUARIO, new Global()).execute();
+        new ConsultorGETAPI("usuarios/" + String.valueOf(Global.usuario_actual.getId()) + "/puntos-de-interes", Global.token_usuario_actual, OBTENER_PUNTOSINTERES_POR_USUARIO, new Global()).execute();
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
