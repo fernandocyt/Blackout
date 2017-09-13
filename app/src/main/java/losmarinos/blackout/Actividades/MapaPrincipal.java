@@ -51,6 +51,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_CORTES;
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_CORTESINTERES_POR_USUARIO;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_EMPRESAS;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_PUNTOSINTERES_POR_USUARIO;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_REPORTES;
@@ -112,6 +113,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         new ConsultorGETAPI("empresa", Global.token_usuario_actual, OBTENER_EMPRESAS, new Global()).execute();
         new ConsultorGETAPI("usuarios", Global.token_usuario_actual, OBTENER_USUARIOS, new Global()).execute();
         new ConsultorGETAPI("usuarios/" + String.valueOf(Global.usuario_actual.getId()) + "/puntos-de-interes", Global.token_usuario_actual, OBTENER_PUNTOSINTERES_POR_USUARIO, new Global()).execute();
+        new ConsultorGETAPI("usuarios/" + String.valueOf(Global.usuario_actual.getId()) + "/cortes-de-interes", Global.token_usuario_actual, OBTENER_CORTESINTERES_POR_USUARIO, new Global()).execute();
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
@@ -161,6 +163,11 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         } else if (id == R.id.cerrar_sesion){
             LocalDB.borrarArchivoJSONUsuario(this);
             LocalDB.borrarArchivoJSONCortesAvisados(this);
+            LocalDB.borrarArchivoJSONCortesResueltosAvisados(this);
+
+            if(isMyServiceRunning(ServicioPeriodico.class))
+                stopService(new Intent(this, ServicioPeriodico.class));
+
             Intent i = new Intent(getApplicationContext(), Login.class);
             startActivity(i);
             this.finish();

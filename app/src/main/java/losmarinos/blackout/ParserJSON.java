@@ -238,6 +238,25 @@ public class ParserJSON {
         }
     }
 
+    public static List<Integer> obtenerCortesInteres(String json)
+    {
+        List<Integer> cortes_retornar = new ArrayList<>();
+        try {
+            JSONArray arr_cortes = new JSONArray(json);
+            //JSONArray obj_empresas = array_resp.getJSONArray(0);
+            for(int i = 0; i < arr_cortes.length(); i++)
+            {
+                JSONObject obj_corte = arr_cortes.getJSONObject(i);
+
+                Integer id_corte = new Integer(obj_corte.getInt("corte_id"));
+                cortes_retornar.add(id_corte);
+            }
+            return cortes_retornar;
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
     public static Reporte obtenerReporte(String json)
     {
         try {
@@ -284,6 +303,26 @@ public class ParserJSON {
             for(int i = 0; i < obj_reportes.length(); i++)
             {
                 JSONObject obj_reporte = obj_reportes.getJSONObject(i);
+                Reporte reporte = ParserJSON.obtenerReporte(obj_reporte.toString());
+
+                if(reporte != null){
+                    reportes_retornar.add(reporte);
+                }
+            }
+            return reportes_retornar;
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
+    public static List<Reporte> obtenerReportesPorUsuario(String json)
+    {
+        List<Reporte> reportes_retornar = new ArrayList<>();
+        try {
+            JSONArray array_resp = new JSONArray(json);
+            for(int i = 0; i < array_resp.length(); i++)
+            {
+                JSONObject obj_reporte = array_resp.getJSONObject(i);
                 Reporte reporte = ParserJSON.obtenerReporte(obj_reporte.toString());
 
                 if(reporte != null){

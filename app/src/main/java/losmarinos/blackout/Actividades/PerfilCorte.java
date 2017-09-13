@@ -99,4 +99,8 @@ public class PerfilCorte extends AppCompatActivity {
             }
         }
     }
+
+    public void marcarCorteDeInteres(View view){
+
+    }
 }

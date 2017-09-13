@@ -56,27 +56,43 @@ public class ServicioPeriodico extends Service implements Runnable {
             for (int i = 0; i < puntos_interes.size(); i++) {
                 PuntoInteres punto_actual = puntos_interes.get(i);
 
-                    for (int j = 0; j < Global.cortes.size(); j++) {
-                        Corte corte_actual = Global.cortes.get(j);
+                for (int j = 0; j < Global.cortes.size(); j++) {
+                    Corte corte_actual = Global.cortes.get(j);
 
-                        if (punto_actual.getServicio() != null && punto_actual.getServicio() != corte_actual.getServicio())
-                            continue;
+                    if (punto_actual.getServicio() != null && punto_actual.getServicio() != corte_actual.getServicio())
+                        continue;
 
-                        if (punto_actual.getEmpresa() != null && punto_actual.getEmpresa().getId() != corte_actual.getEmpresa().getId())
-                            continue;
+                    if (punto_actual.getEmpresa() != null && punto_actual.getEmpresa().getId() != corte_actual.getEmpresa().getId())
+                        continue;
 
-                        if(LocalDB.estaEnArchivoJSONCortesAvisados(this.context, corte_actual.getId()))
-                            continue;
+                    if(LocalDB.estaEnArchivoJSONCortesAvisados(this.context, corte_actual.getId(), false))
+                        continue;
 
-                        if (Calculos.hayInterseccion(
-                                punto_actual.getUbicacion(), punto_actual.getRadio(),
-                                corte_actual.getUbicacion(), corte_actual.getRadio())) {
+                    if (Calculos.hayInterseccion(
+                            punto_actual.getUbicacion(), punto_actual.getRadio(),
+                            corte_actual.getUbicacion(), corte_actual.getRadio())) {
 
-                            LocalDB.agregarArchivoJSONCortesAvisados(this.context, corte_actual.getId());
+                        LocalDB.agregarArchivoJSONCortesAvisados(this.context, corte_actual.getId(), false);
 
-                            this.notificar("Nuevo corte de " + Constantes.servicioToString(corte_actual.getServicio()) + " en tu punto de interes");
-                        }
+                        this.notificar("Nuevo corte de " + Constantes.servicioToString(corte_actual.getServicio()) + " en tu punto de interes");
                     }
+                }
+            }
+
+            List<Corte> cortes_interes = Global.usuario_actual.getCortesInteres();
+
+            for(int i = 0; i < cortes_interes.size(); i++){
+                Corte corte_actual = cortes_interes.get(i);
+
+                if(LocalDB.estaEnArchivoJSONCortesAvisados(this.context, corte_actual.getId(), true))
+                    continue;
+
+                if(cortes_interes.get(i).isResuelto())
+                {
+                    LocalDB.agregarArchivoJSONCortesAvisados(this.context, corte_actual.getId(), true);
+
+                    this.notificar("Tu corte de interes fue resuelto");
+                }
             }
         }
 

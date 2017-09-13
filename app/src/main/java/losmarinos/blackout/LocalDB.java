@@ -41,6 +41,7 @@ import static java.security.AccessController.getContext;
 public class LocalDB {
     static String file_name_usuario = "userData";
     static String file_name_cortes_avisados = "cortesAvisados";
+    static String file_name_cortes_resueltos_avisados = "cortesResueltosAvisados";
 
     // region Archivos XML
     public static void crearXMLUsuario(Context contexto, String nombre, String pass, String mail, String token)
@@ -173,9 +174,16 @@ public class LocalDB {
         context.deleteFile(file_name_usuario);
     }
 
-    public static void crearArchivoJSONCortesAvisados(Context contexto, JSONArray array) {
+    public static void crearArchivoJSONCortesAvisados(Context contexto, JSONArray array, boolean resuelto) {
         try {
-            FileOutputStream fileos = contexto.openFileOutput(file_name_cortes_avisados, Context.MODE_PRIVATE);
+            String file_name = "";
+            if(resuelto){
+                file_name = file_name_cortes_resueltos_avisados;
+            }else{
+                file_name = file_name_cortes_avisados;
+            }
+
+            FileOutputStream fileos = contexto.openFileOutput(file_name, Context.MODE_PRIVATE);
             fileos.write(array.toString().getBytes());
             fileos.close();
         }catch (Exception e){
@@ -183,9 +191,16 @@ public class LocalDB {
         }
     }
 
-    public static void agregarArchivoJSONCortesAvisados(Context contexto, int id_corte) {
+    public static void agregarArchivoJSONCortesAvisados(Context contexto, int id_corte, boolean resuelto) {
         try {
-            FileInputStream fis = contexto.openFileInput(file_name_cortes_avisados);
+            String file_name = "";
+            if(resuelto){
+                file_name = file_name_cortes_resueltos_avisados;
+            }else{
+                file_name = file_name_cortes_avisados;
+            }
+
+            FileInputStream fis = contexto.openFileInput(file_name);
             InputStreamReader isr = new InputStreamReader(fis);
             char[] inputBuffer = new char[fis.available()];
             isr.read(inputBuffer);
@@ -198,21 +213,28 @@ public class LocalDB {
             fis.close();
 
             borrarArchivoJSONCortesAvisados(contexto);
-            crearArchivoJSONCortesAvisados(contexto, arr);
+            crearArchivoJSONCortesAvisados(contexto, arr, resuelto);
 
         }catch (FileNotFoundException e){
             JSONArray arr = new JSONArray();
             arr.put(id_corte);
 
-            crearArchivoJSONCortesAvisados(contexto, arr);
+            crearArchivoJSONCortesAvisados(contexto, arr, resuelto);
         }catch (Exception e){
             borrarArchivoJSONCortesAvisados(contexto);
         }
     }
 
-    public static boolean estaEnArchivoJSONCortesAvisados(Context contexto, int id_corte) {
+    public static boolean estaEnArchivoJSONCortesAvisados(Context contexto, int id_corte, boolean resuelto) {
         try {
-            FileInputStream fis = contexto.openFileInput(file_name_cortes_avisados);
+            String file_name = "";
+            if(resuelto){
+                file_name = file_name_cortes_resueltos_avisados;
+            }else{
+                file_name = file_name_cortes_avisados;
+            }
+
+            FileInputStream fis = contexto.openFileInput(file_name);
             InputStreamReader isr = new InputStreamReader(fis);
             char[] inputBuffer = new char[fis.available()];
             isr.read(inputBuffer);
@@ -236,6 +258,10 @@ public class LocalDB {
     }
 
     public static void borrarArchivoJSONCortesAvisados(Context context){
+        context.deleteFile(file_name_cortes_avisados);
+    }
+
+    public static void borrarArchivoJSONCortesResueltosAvisados(Context context){
         context.deleteFile(file_name_cortes_avisados);
     }
 

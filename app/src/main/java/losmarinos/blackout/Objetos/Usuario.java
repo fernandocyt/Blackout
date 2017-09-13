@@ -11,7 +11,9 @@ import losmarinos.blackout.ConsultorGETAPI;
 import losmarinos.blackout.Global;
 import losmarinos.blackout.ParserJSON;
 
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_CORTESINTERES_POR_USUARIO;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_PUNTOSINTERES_POR_USUARIO;
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_REPORTES_POR_USUARIO;
 
 /**
  * Created by garci on 23/7/2017.
@@ -26,7 +28,8 @@ public class Usuario {
     private String mail;
     private Constantes.TIPOSUSUARIO tipo;
     private List<PuntoInteres> puntos_interes;
-
+    private List<Reporte> reportes;
+    private List<Integer> id_cortes_interes;
     public String getNombre() {
         return nombre;
     }
@@ -75,6 +78,19 @@ public class Usuario {
         this.puntos_interes = puntos_interes;
     }
 
+    public List<Reporte> getReportes() {
+        return reportes;
+    }
+
+    public void setReportes(List<Reporte> reportes) {
+        this.reportes = reportes;
+    }
+
+
+
+    public void setIdCortesInteres(List<Integer> id_cortes_interes) {
+        this.id_cortes_interes = id_cortes_interes;
+    }
 
     public void removePuntoInteres(int pos)
     {
@@ -89,11 +105,36 @@ public class Usuario {
         this.mail = mail;
         this.tipo = tipo;
         this.puntos_interes = new ArrayList<>();
+        this.reportes = new ArrayList<>();
+        this.id_cortes_interes = new ArrayList<>();
     }
 
+    public List<Corte> getCortesInteres() {
+        List<Corte> lista_cortes = new ArrayList<>();
 
-    public List<Reporte> getReportes() {
-        return Global.encontrarReportesPorUsuario(this.id);
+        for(int i = 0; i < this.id_cortes_interes.size(); i++){
+            Corte corte = Global.encontrarCortePorId(id_cortes_interes.get(i).intValue());
+            if(corte != null) {
+                lista_cortes.add(corte);
+            }
+        }
+
+        return lista_cortes;
+    }
+
+    public void actualizarReportes(Context context){
+        try {
+            String respuesta = new ConsultorGETAPI("usuarios/" + String.valueOf(this.id) + "/reportes", Global.token_usuario_actual, OBTENER_REPORTES_POR_USUARIO, null).execute().get();
+            StringBuilder msg_error = new StringBuilder();
+            if(ParserJSON.esError(respuesta, msg_error)){
+                if(context != null) {
+                    Toast.makeText(context, "No es posible obtener los reportes", Toast.LENGTH_LONG).show();
+                }
+                return;
+            }else{
+                this.reportes = ParserJSON.obtenerReportesPorUsuario(respuesta);
+            }
+        }catch (Exception e){}
     }
 
     public void actualizarPuntosInteres(Context context){
@@ -107,6 +148,21 @@ public class Usuario {
                 return;
             }else{
                 this.puntos_interes = ParserJSON.obtenerPuntosInteres(respuesta);
+            }
+        }catch (Exception e){}
+    }
+
+    public void actualizarCortesInteres(Context context){
+        try {
+            String respuesta = new ConsultorGETAPI("usuarios/" + String.valueOf(this.id) + "/cortes-de-interes", Global.token_usuario_actual, OBTENER_CORTESINTERES_POR_USUARIO, null).execute().get();
+            StringBuilder msg_error = new StringBuilder();
+            if(ParserJSON.esError(respuesta, msg_error)){
+                if(context != null) {
+                    Toast.makeText(context, "No es posible obtener los cortes de interes", Toast.LENGTH_LONG).show();
+                }
+                return;
+            }else{
+                this.id_cortes_interes = ParserJSON.obtenerCortesInteres(respuesta);
             }
         }catch (Exception e){}
     }

@@ -82,11 +82,19 @@ public class Global implements ObservadorAPI {
                     break;
                 case OBTENER_PUNTOSINTERES_POR_USUARIO:
                     if(ParserJSON.esError(respuesta, msg_error)){
-                        this.mostrarToastEnMapaPrincipal("Error al obtener puntos de interes");
+                        this.mostrarToastEnMapaPrincipal("Error al obtener puntos de interes del usuario");
                         return;
                     }else{
                         Global.usuario_actual.setPuntosInteres(ParserJSON.obtenerPuntosInteres(respuesta));
                         //this.cargarPuntosDeInteresEnMapaPrincipal();
+                    }
+                    break;
+                case OBTENER_CORTESINTERES_POR_USUARIO:
+                    if(ParserJSON.esError(respuesta, msg_error)){
+                        this.mostrarToastEnMapaPrincipal("Error al obtener cortes de interes del usuario");
+                        return;
+                    }else{
+                        Global.usuario_actual.setIdCortesInteres(ParserJSON.obtenerCortesInteres(respuesta));
                     }
                     break;
             }
@@ -222,6 +230,18 @@ public class Global implements ObservadorAPI {
             if(Global.empresas.get(i).getId() == id_empresa)
             {
                 return Global.empresas.get(i);
+            }
+        }
+        return null;
+    }
+
+    public static Corte encontrarCortePorId(int id_corte)
+    {
+        for(int i = 0; i < Global.cortes.size(); i++)
+        {
+            if(Global.cortes.get(i).getId() == id_corte)
+            {
+                return Global.cortes.get(i);
             }
         }
         return null;

@@ -14,6 +14,7 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import losmarinos.blackout.Adapters.ReportesAdapter;
@@ -42,6 +43,7 @@ public class MisReportes extends AppCompatActivity implements OnMapReadyCallback
         switch_ver_historico = (Switch)findViewById(R.id.switch_ver_historico_mis_reportes);
         switch_ver_historico.setOnCheckedChangeListener(this);
 
+        Global.usuario_actual.actualizarReportes(this);
         this.cargarListView();
     }
 
@@ -105,15 +107,19 @@ public class MisReportes extends AppCompatActivity implements OnMapReadyCallback
         List<Reporte> reportes = Global.usuario_actual.getReportes();
 
         if(!switch_ver_historico.isChecked()){
+            List<Reporte> reportes_mostrar = new ArrayList<>();
             for(int i = 0; i < reportes.size(); i++){
-                if(reportes.get(i).isResuelto()){
-                    reportes.remove(i);
-                    i--;
+                if(!reportes.get(i).isResuelto()){
+                    reportes_mostrar.add(reportes.get(i));
                 }
             }
+            return reportes_mostrar;
+        }
+        else
+        {
+            return reportes;
         }
 
-        return reportes;
     }
 
 }
