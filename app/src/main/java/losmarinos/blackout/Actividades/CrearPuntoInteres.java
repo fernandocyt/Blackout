@@ -162,7 +162,7 @@ public class CrearPuntoInteres extends AppCompatActivity implements OnMapReadyCa
         String nombre_empresa = this.spinner_empresas.getSelectedItem().toString();
         int id_empresa = -1;
         if (!nombre_empresa.equals("No especificar")) {
-            id_empresa = Global.encontrarEmpresaPorNombre(nombre_empresa).getId();
+            id_empresa = Global.encontrarEmpresaPorNombre(nombre_empresa).getSubId();
         }
 
         LatLng posicion = marcador_posicion_punto_interes.getPosition();
@@ -172,7 +172,7 @@ public class CrearPuntoInteres extends AppCompatActivity implements OnMapReadyCa
         //Global.usuario_actual.addPuntoInteres(nuevo_punto_interes);
 
         try{
-            JSONObject nuevo_pto_interes = ParserJSON.crearJSONPuntoDeInteres(Global.usuario_actual.getId(), servicio, id_empresa, posicion, radio);
+            JSONObject nuevo_pto_interes = ParserJSON.crearJSONPuntoDeInteres(Global.usuario_actual.getIdUsuario(), servicio, id_empresa, posicion, radio);
 
             String resultado = new ConsultorPOSTAPI("punto-de-interes", Global.token_usuario_actual, nuevo_pto_interes, REGISTRAR_PUNTO_DE_INTERES, null).execute().get();
             StringBuilder mensaje_error = new StringBuilder();

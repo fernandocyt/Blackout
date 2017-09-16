@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -233,7 +234,7 @@ public class Corte{
 
                 int cant_apariciones = 1;
                 for (int j = 0; j < this.reportes.size(); j++) {
-                    if (this.reportes.get(i).getEmpresa().getId() == this.reportes.get(j).getEmpresa().getId()) {
+                    if (this.reportes.get(i).getEmpresa().getSubId() == this.reportes.get(j).getEmpresa().getSubId()) {
                         if (i == j) continue;
                         cant_apariciones++;
                     }
@@ -248,11 +249,21 @@ public class Corte{
         // Guardo empresa
         if(indice_empresa != -1)
         {
-            this.id_empresa = this.reportes.get(indice_empresa).getEmpresa().getId();
+            this.id_empresa = this.reportes.get(indice_empresa).getEmpresa().getSubId();
         }
         else
         {
             this.id_empresa = -1;
         }
+
+    }
+
+    public String generarTexto()
+    {
+        String str_fecha_inicio = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(this.fecha_inicio);
+        String str_fecha_fin = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(this.fecha_fin);
+
+        String texto = "Inicio: " + str_fecha_inicio + "\nFin: " + str_fecha_fin;
+        return texto;
     }
 }

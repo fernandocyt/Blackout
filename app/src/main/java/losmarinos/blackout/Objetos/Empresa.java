@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import losmarinos.blackout.Constantes;
+import losmarinos.blackout.Global;
 
 /**
  * Created by garci on 29/7/2017.
@@ -84,9 +85,9 @@ public class Empresa extends Usuario {
         return this.comentarios;
     }
 
-    public Empresa(int id, String nombre, String pass, String mail,String telefono, String direccion, Constantes.SERVICIO tipo_servicio, String pagina)
+    public Empresa(int empresa_id, String nombre, String pass, String mail,String telefono, String direccion, Constantes.SERVICIO tipo_servicio, String pagina)
     {
-        super(id, nombre, pass, mail, Constantes.TIPOSUSUARIO.EMPRESA);
+        super(-1, empresa_id, nombre, pass, mail, Constantes.TIPOSUSUARIO.EMPRESA);
         this.telefono = telefono;
         this.direccion = direccion;
         this.tipo_servicio = tipo_servicio;
@@ -95,6 +96,18 @@ public class Empresa extends Usuario {
         this.pagina = pagina;
         this.comentarios = new ArrayList<>();
 
+    }
+
+    public List<Corte> obtenerCortesProgramados(){
+        List<Corte> cortes = new ArrayList<>();
+        for(int i = 0; i < Global.cortes.size(); i++)
+        {
+            if(Global.cortes.get(i).getIdEmpresa() == this.getSubId() && Global.cortes.get(i).isProgramado())
+            {
+                cortes.add(Global.cortes.get(i));
+            }
+        }
+        return cortes;
     }
 
 }

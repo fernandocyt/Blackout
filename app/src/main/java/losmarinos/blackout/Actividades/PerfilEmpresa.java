@@ -54,7 +54,7 @@ public class PerfilEmpresa extends AppCompatActivity {
         int id_empresa = getIntent().getIntExtra("idEmpresa", 0);
         for(int i = 0; i < Global.empresas.size(); i++)
         {
-            if(id_empresa == Global.empresas.get(i).getId())
+            if(id_empresa == Global.empresas.get(i).getSubId())
             {
                 this.empresa = Global.empresas.get(i);
             }
@@ -89,7 +89,7 @@ public class PerfilEmpresa extends AppCompatActivity {
     void cargarListView(){
         List<Comentario> comentarios = new ArrayList<>();
         try {
-            String respuesta = new ConsultorGETAPI("empresa/"+String.valueOf(this.empresa.getId())+"/comentarios",
+            String respuesta = new ConsultorGETAPI("empresa/"+String.valueOf(this.empresa.getSubId())+"/comentarios",
                     Global.token_usuario_actual, OBTENER_COMENTARIOS_POR_EMPRESA, null).execute().get();
             StringBuilder msg_error = new StringBuilder();
             if(ParserJSON.esError(respuesta, msg_error)){
@@ -113,7 +113,7 @@ public class PerfilEmpresa extends AppCompatActivity {
         //empresa.addComentario(nuevo_comentario);
 
         try{
-            JSONObject nuevo_com = ParserJSON.crearJSONComentario(Global.usuario_actual.getId(), empresa.getId(), comentario);
+            JSONObject nuevo_com = ParserJSON.crearJSONComentario(Global.usuario_actual.getIdUsuario(), empresa.getSubId(), comentario);
 
             String resultado = new ConsultorPOSTAPI("comentario", Global.token_usuario_actual, nuevo_com, REGISTRAR_COMENTARIO, null).execute().get();
             StringBuilder mensaje_error = new StringBuilder();
@@ -131,7 +131,7 @@ public class PerfilEmpresa extends AppCompatActivity {
     public void verSucursales(View view)
     {
         Intent i = new Intent(this, VerSucursales.class);
-        i.putExtra("idEmpresa", empresa.getId());
+        i.putExtra("idEmpresa", empresa.getSubId());
         startActivity(i);
     }
 

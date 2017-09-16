@@ -123,7 +123,7 @@ public class PerfilCorte extends AppCompatActivity {
         String respuesta = edittext_respuesta.getText().toString();
 
         try{
-            JSONObject nuevo_com = ParserJSON.crearJSONRespuesta(Global.usuario_actual.getId(), this.corte.getId(), respuesta);
+            JSONObject nuevo_com = ParserJSON.crearJSONRespuesta(Global.usuario_actual.getIdUsuario(), this.corte.getId(), respuesta);
 
             String resultado = new ConsultorPOSTAPI("respuestas", Global.token_usuario_actual, nuevo_com, REGISTRAR_RESPUESTA, null).execute().get();
             StringBuilder mensaje_error = new StringBuilder();
@@ -154,7 +154,7 @@ public class PerfilCorte extends AppCompatActivity {
         if(!Global.usuario_actual.esCorteDeInteres(this.corte.getId())) {
             // LO MARCO COMO CORTE DE INTERES
             try {
-                JSONObject nuevo_corte_int = ParserJSON.crearJSONCorteDeInteres(Global.usuario_actual.getId(), this.corte.getId());
+                JSONObject nuevo_corte_int = ParserJSON.crearJSONCorteDeInteres(Global.usuario_actual.getIdUsuario(), this.corte.getId());
 
                 String resultado = new ConsultorPOSTAPI("cortes-de-interes", Global.token_usuario_actual, nuevo_corte_int, REGISTRAR_CORTE_DE_INTERES, null).execute().get();
                 StringBuilder mensaje_error = new StringBuilder();

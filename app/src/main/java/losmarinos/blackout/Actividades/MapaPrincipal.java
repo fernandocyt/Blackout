@@ -20,6 +20,7 @@ import android.Manifest;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.NavigationView;
@@ -83,24 +84,10 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             startService(new Intent(this, GPSTracker.class));
         GPSTracker.addObserver(this);
 
-        // TOOLBAR
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
 
-        View header = navigationView.getHeaderView(0);
-        TextView username_header = (TextView)header.findViewById(R.id.lbl_username_nav_header_mapa_principal);
-        TextView mail_header = (TextView)header.findViewById(R.id.lbl_mail_nav_header_mapa_principal);
-        username_header.setText(Global.usuario_actual.getNombre());
-        mail_header.setText(Global.usuario_actual.getMail());
+
 
         // MAPA
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -108,12 +95,14 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         mapFragment.getMapAsync(this);
 
         // CARGA DE DATOS
+        this.cargarDrawer();
+
         Global.mapa_principal = this;
 
         new ConsultorGETAPI("empresa", Global.token_usuario_actual, OBTENER_EMPRESAS, new Global()).execute();
         new ConsultorGETAPI("usuarios", Global.token_usuario_actual, OBTENER_USUARIOS, new Global()).execute();
-        new ConsultorGETAPI("usuarios/" + String.valueOf(Global.usuario_actual.getId()) + "/puntos-de-interes", Global.token_usuario_actual, OBTENER_PUNTOSINTERES_POR_USUARIO, new Global()).execute();
-        new ConsultorGETAPI("usuarios/" + String.valueOf(Global.usuario_actual.getId()) + "/cortes-de-interes", Global.token_usuario_actual, OBTENER_CORTESINTERES_POR_USUARIO, new Global()).execute();
+        new ConsultorGETAPI("usuarios/" + String.valueOf(Global.usuario_actual.getIdUsuario()) + "/puntos-de-interes", Global.token_usuario_actual, OBTENER_PUNTOSINTERES_POR_USUARIO, new Global()).execute();
+        new ConsultorGETAPI("usuarios/" + String.valueOf(Global.usuario_actual.getIdUsuario()) + "/cortes-de-interes", Global.token_usuario_actual, OBTENER_CORTESINTERES_POR_USUARIO, new Global()).execute();
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
@@ -136,34 +125,77 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         }
     }
 
+    public void cargarDrawer()
+    {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        View header = navigationView.getHeaderView(0);
+        TextView username_header = (TextView)header.findViewById(R.id.lbl_username_nav_header_mapa_principal);
+        TextView mail_header = (TextView)header.findViewById(R.id.lbl_mail_nav_header_mapa_principal);
+
+        String tipo = "";
+        if(Global.usuario_actual.getTipo() == Constantes.TIPOSUSUARIO.PERSONA) {
+            tipo = " (USUARIO)";
+            navigationView.getMenu().findItem(R.id.drawer_agregar_corte_programado).setVisible(false);
+            navigationView.getMenu().findItem(R.id.drawer_agregar_sucursal).setVisible(false);
+            navigationView.getMenu().findItem(R.id.drawer_mis_cortes_programados).setVisible(false);
+        }else{
+            tipo = " (EMPRESA)";
+            navigationView.getMenu().findItem(R.id.drawer_crear_reporte).setVisible(false);
+            navigationView.getMenu().findItem(R.id.drawer_mis_reportes).setVisible(false);
+        }
+
+        username_header.setText(Global.usuario_actual.getNombre() + tipo);
+        mail_header.setText(Global.usuario_actual.getMail());
+
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.crear_reporte) {
+        if (id == R.id.drawer_crear_reporte) {
             Intent i = new Intent(getApplicationContext(), CrearReporte.class);
             startActivity(i);
-        } else if (id == R.id.mis_reportes) {
+        } else if (id == R.id.drawer_mis_reportes) {
             Intent i = new Intent(getApplicationContext(), MisReportes.class);
             startActivity(i);
-        } else if (id == R.id.mis_puntos_interes) {
+        } else if (id == R.id.drawer_mis_puntos_interes) {
             Intent i = new Intent(getApplicationContext(), MisPuntosInteres.class);
             startActivity(i);
-        } else if (id == R.id.accion_filtrar){
+        } else if (id == R.id.drawer_mis_cortes_programados) {
+            Intent i = new Intent(getApplicationContext(), MisCortesProgramados.class);
+            startActivity(i);
+        } else if (id == R.id.drawer_accion_filtrar){
             Intent i = new Intent(getApplicationContext(), FiltrarMapaPrincipal.class);
             startActivity(i);
-        } else if (id == R.id.agregar_punto_interes){
+        } else if (id == R.id.drawer_agregar_punto_interes){
             Intent i = new Intent(getApplicationContext(), CrearPuntoInteres.class);
             startActivity(i);
-        } else if (id == R.id.buscar_empresa){
+        } else if (id == R.id.drawer_buscar_empresa){
             Intent i = new Intent(getApplicationContext(), BuscarEmpresa.class);
             startActivity(i);
-        } else if (id == R.id.cerrar_sesion){
+        } else if (id == R.id.drawer_agregar_corte_programado){
+            Intent i = new Intent(getApplicationContext(), CrearCorteProgramado.class);
+            startActivity(i);
+        } else if (id == R.id.drawer_cerrar_sesion){
             LocalDB.borrarArchivoJSONUsuario(this);
             LocalDB.borrarArchivoJSONCortesAvisados(this);
             LocalDB.borrarArchivoJSONCortesResueltosAvisados(this);
+
+            Global.vaciarTodo();
 
             if(isMyServiceRunning(ServicioPeriodico.class))
                 stopService(new Intent(this, ServicioPeriodico.class));
@@ -371,7 +403,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         for(int i = 0; i < empresas.size(); i++)
         {
             if(FiltrarMapaPrincipal.id_empresa != -1 &&
-                    FiltrarMapaPrincipal.id_empresa != empresas.get(i).getId())
+                    FiltrarMapaPrincipal.id_empresa != empresas.get(i).getSubId())
             {
                 continue;
             }
@@ -391,6 +423,18 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
                         .title("Sucursal " + empresas.get(i).getNombre())
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_sucursal))
                         .zIndex(1));
+            }
+        }
+    }
+
+    public void irAPerfilEmpresa(View view){
+        if(Global.usuario_actual.getTipo() == Constantes.TIPOSUSUARIO.EMPRESA) {
+            Intent i = new Intent(getApplicationContext(), PerfilEmpresa.class);
+            i.putExtra("idEmpresa", Global.usuario_actual.getSubId());
+            try {
+                startActivity(i);
+            } catch (Exception e) {
+                throw e;
             }
         }
     }

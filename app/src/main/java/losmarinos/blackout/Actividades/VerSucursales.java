@@ -45,7 +45,7 @@ public class VerSucursales extends AppCompatActivity implements OnMapReadyCallba
         int id_empresa = getIntent().getIntExtra("idEmpresa", 0);
         for(int i = 0; i < Global.empresas.size(); i++)
         {
-            if(id_empresa == Global.empresas.get(i).getId())
+            if(id_empresa == Global.empresas.get(i).getSubId())
             {
                 this.empresa = Global.empresas.get(i);
             }
@@ -77,7 +77,7 @@ public class VerSucursales extends AppCompatActivity implements OnMapReadyCallba
 
         List<Comentario> comentarios = new ArrayList<>();
         try {
-            String respuesta = new ConsultorGETAPI("empresa/"+String.valueOf(this.empresa.getId())+"/sucursales",
+            String respuesta = new ConsultorGETAPI("empresa/"+String.valueOf(this.empresa.getSubId())+"/sucursales",
                     Global.token_usuario_actual, OBTENER_SUCURSALES_POR_EMPRESA, null).execute().get();
             StringBuilder msg_error = new StringBuilder();
             if(ParserJSON.esError(respuesta, msg_error)){

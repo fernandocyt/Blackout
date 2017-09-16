@@ -23,6 +23,7 @@ public class Usuario {
     public static int proxima_id_usuario_global = 0;
 
     private int id;
+    private int sub_id;
     private String nombre;
     private String pass;
     private String mail;
@@ -62,12 +63,20 @@ public class Usuario {
         this.tipo = tipo;
     }
 
-    public int getId() {
+    public int getIdUsuario() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setIdUsuario(int id) {
         this.id = id;
+    }
+
+    public int getSubId() {
+        return this.sub_id;
+    }
+
+    public void setSubId(int sub_id) {
+        this.sub_id = sub_id;
     }
 
     public List<PuntoInteres> getPuntosInteres() {
@@ -86,8 +95,6 @@ public class Usuario {
         this.reportes = reportes;
     }
 
-
-
     public void setCortesInteres(List<CorteInteres> cortes_interes) {
         this.cortes_interes = cortes_interes;
     }
@@ -97,9 +104,10 @@ public class Usuario {
         this.puntos_interes.remove(pos);
     }
 
-    public Usuario(int id, String nombre, String pass, String mail, Constantes.TIPOSUSUARIO tipo)
+    public Usuario(int id, int sub_id, String nombre, String pass, String mail, Constantes.TIPOSUSUARIO tipo)
     {
         this.id = id;
+        this.sub_id = sub_id;
         this.nombre = nombre;
         this.pass = pass;
         this.mail = mail;

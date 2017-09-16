@@ -68,7 +68,7 @@ public class EmpresaAdapter extends BaseAdapter implements ListAdapter {
         linea_empresa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EmpresaAdapter.actividad.irAPerfilEmpresa(list.get(position).getId());
+                EmpresaAdapter.actividad.irAPerfilEmpresa(list.get(position).getSubId());
             }
         });
 

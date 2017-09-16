@@ -81,6 +81,18 @@ public class ParserJSON {
         return json_rep;
     }
 
+    public static JSONObject crearJSONCorteProgramado(Constantes.SERVICIO servicio, int empresa_id, LatLng posicion, int radio, String fecha_inicio, String fecha_fin) throws JSONException
+    {
+        JSONObject json_corte_prog = new JSONObject();
+        json_corte_prog.put("ubicacion", Double.toString(posicion.latitude) + ";" + Double.toString(posicion.longitude));
+        json_corte_prog.put("radio", radio);
+        json_corte_prog.put("servicio_id", Constantes.getIdServicio(servicio));
+        json_corte_prog.put("empresa_id", empresa_id);
+        json_corte_prog.put("fecha_inicio", fecha_inicio);
+        json_corte_prog.put("fecha_fin", fecha_fin);
+        return json_corte_prog;
+    }
+
     public static JSONObject crearJSONComentario(int user_id, int empresa_id, String descripcion) throws JSONException
     {
         JSONObject json_rep = new JSONObject();
@@ -146,13 +158,21 @@ public class ParserJSON {
             }else if(obj_resp.has("name")){
                 usu_nombre = obj_resp.getString("name");
             }
+
             String usu_email = obj_resp.getString("email");
-            int id = -1;
+
+            int sub_id = -1;
+            Constantes.TIPOSUSUARIO tipo = null;
             if(!obj_resp.isNull("persona_id")) {
-                id = obj_resp.getInt("persona_id");
+                sub_id = obj_resp.getInt("persona_id");
+                tipo = Constantes.TIPOSUSUARIO.PERSONA;
             }
-            //FALTA QUE TRAIGA EMPRESA_ID
-            return new Usuario(usu_id, usu_nombre, "", usu_email, Constantes.TIPOSUSUARIO.PERSONA);
+            if(!obj_resp.isNull("empresa_id")) {
+                sub_id = obj_resp.getInt("empresa_id");
+                tipo = Constantes.TIPOSUSUARIO.EMPRESA;
+            }
+
+            return new Usuario(usu_id, sub_id, usu_nombre, "", usu_email, tipo);
         } catch (JSONException e) {
             return null;
         }
@@ -398,7 +418,7 @@ public class ParserJSON {
             }
             int programado = 0;
             if(!obj_resp.isNull("es_programado")) {
-                resuelto = Integer.parseInt(obj_resp.getString("es_programado"));
+                programado = Integer.parseInt(obj_resp.getString("es_programado"));
             }
 
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

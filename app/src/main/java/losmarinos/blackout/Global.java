@@ -41,6 +41,13 @@ public class Global implements ObservadorAPI {
 
     public static MapaPrincipal mapa_principal;
 
+    public static void vaciarTodo(){
+        Global.cortes.clear();
+        Global.usuarios.clear();
+        Global.empresas.clear();
+        Global.reportes.clear();
+    }
+
     public void obtenerRespuestaAPI(String respuesta, Constantes.TAGAPI tag, boolean correcto)
     {
         try {
@@ -227,7 +234,7 @@ public class Global implements ObservadorAPI {
     {
         for(int i = 0; i < Global.empresas.size(); i++)
         {
-            if(Global.empresas.get(i).getId() == id_empresa)
+            if(Global.empresas.get(i).getSubId() == id_empresa)
             {
                 return Global.empresas.get(i);
             }
@@ -251,12 +258,12 @@ public class Global implements ObservadorAPI {
     {
         for(int i = 0; i < Global.usuarios.size(); i++)
         {
-            if(Global.usuarios.get(i).getId() == id_usuario)
+            if(Global.usuarios.get(i).getIdUsuario() == id_usuario)
             {
                 return Global.usuarios.get(i);
             }
         }
-        if(Global.usuario_actual.getId() == id_usuario)
+        if(Global.usuario_actual.getIdUsuario() == id_usuario)
         {
             return usuario_actual;
         }

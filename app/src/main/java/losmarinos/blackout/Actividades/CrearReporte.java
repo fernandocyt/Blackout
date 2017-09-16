@@ -177,14 +177,14 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
 
         int id_empresa = -1;
         if (!nombre_empresa.equals("No especificar")) {
-            id_empresa = Global.encontrarEmpresaPorNombre(nombre_empresa).getId();
+            id_empresa = Global.encontrarEmpresaPorNombre(nombre_empresa).getSubId();
         }
 
         LatLng posicion = marcador_posicion_reporte.getPosition();
         int radio = seekbar_radio.getProgress();
 
         try{
-            JSONObject nuevo_rep = ParserJSON.crearJSONReporte(Global.usuario_actual.getId(), servicio, id_empresa, posicion, radio);
+            JSONObject nuevo_rep = ParserJSON.crearJSONReporte(Global.usuario_actual.getIdUsuario(), servicio, id_empresa, posicion, radio);
 
             String resultado = new ConsultorPOSTAPI("reporte", Global.token_usuario_actual, nuevo_rep, REGISTRAR_REPORTE, null).execute().get();
             StringBuilder mensaje_error = new StringBuilder();

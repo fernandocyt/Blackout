@@ -2,42 +2,54 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/accion_filtrar"
-        android:title="FILTRAR MAPA" />
+        android:id="@+id/drawer_accion_filtrar"
+        android:title="FILTRAR" />
 
     <item android:title="Agregar">
     <menu>
         <item
-            android:id="@+id/crear_reporte"
+            android:id="@+id/drawer_crear_reporte"
             android:title="Reporte" />
         <item
-            android:id="@+id/agregar_punto_interes"
+            android:id="@+id/drawer_agregar_punto_interes"
             android:title="Punto de Interes" />
+        <item
+            android:id="@+id/drawer_agregar_corte_programado"
+            android:title="Corte programado" />
+        <item
+            android:id="@+id/drawer_agregar_sucursal"
+            android:title="Sucursal" />
     </menu>
     </item>
     <item android:title="Consultar">
         <menu>
             <item
-                android:id="@+id/mis_reportes"
+                android:id="@+id/drawer_mis_reportes"
                 android:title="Mis Reportes" />
             <item
-                android:id="@+id/mis_puntos_interes"
+                android:id="@+id/drawer_mis_cortes_programados"
+                android:title="Mis Cortes Programados" />
+            <item
+                android:id="@+id/drawer_mis_puntos_interes"
                 android:title="Mis Puntos de Interes" />
+            <item
+                android:id="@+id/drawer_mis_cortes_interes"
+                android:title="Mis Cortes de Interes" />
         </menu>
     </item>
     <item android:title="Acciones">
         <menu>
             <item
-                android:id="@+id/buscar_empresa"
+                android:id="@+id/drawer_buscar_empresa"
                 android:title="Buscar Empresa" />
             <item
-                android:id="@+id/estadisticas"
+                android:id="@+id/drawer_estadisticas"
                 android:title="Consultar Estadisticas" />
             <item
-                android:id="@+id/preferencias"
+                android:id="@+id/drawer_preferencias"
                 android:title="Preferencias" />
             <item
-                android:id="@+id/cerrar_sesion"
+                android:id="@+id/drawer_cerrar_sesion"
                 android:title="Cerrar Sesion" />
         </menu>
     </item>

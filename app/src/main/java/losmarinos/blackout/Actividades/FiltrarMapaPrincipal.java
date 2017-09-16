@@ -140,7 +140,7 @@ public class FiltrarMapaPrincipal extends AppCompatActivity
             FiltrarMapaPrincipal.id_empresa = -1;
         }else{
             Empresa empresa_elegida = this.empresas_spinner.get(this.spinner_empresas.getSelectedItemPosition()-1);
-            FiltrarMapaPrincipal.id_empresa = empresa_elegida.getId();
+            FiltrarMapaPrincipal.id_empresa = empresa_elegida.getSubId();
         }
         indice_spn_empresas = this.spinner_empresas.getSelectedItemPosition();
 

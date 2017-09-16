@@ -25,9 +25,9 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:launchMode="singleTask"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:launchMode="singleTask">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".Actividades.MapaPrincipal"
             android:label="@string/app_name"
@@ -85,12 +85,15 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Actividades.PerfilEmpresa"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Actividades.VerSucursales"
             android:screenOrientation="portrait" />
-        <activity android:name=".Actividades.BuscarEmpresa"
+        <activity
+            android:name=".Actividades.BuscarEmpresa"
             android:screenOrientation="portrait" />
+        <activity android:name=".Actividades.CrearCorteProgramado" />
+        <activity android:name=".Actividades.MisCortesProgramados"></activity>
     </application>
 
 </manifest>

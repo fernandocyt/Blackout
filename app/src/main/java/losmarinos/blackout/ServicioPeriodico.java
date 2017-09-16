@@ -62,7 +62,7 @@ public class ServicioPeriodico extends Service implements Runnable {
                     if (punto_actual.getServicio() != null && punto_actual.getServicio() != corte_actual.getServicio())
                         continue;
 
-                    if (punto_actual.getEmpresa() != null && punto_actual.getEmpresa().getId() != corte_actual.getEmpresa().getId())
+                    if (punto_actual.getEmpresa() != null && punto_actual.getEmpresa().getSubId() != corte_actual.getEmpresa().getSubId())
                         continue;
 
                     if(LocalDB.estaEnArchivoJSONCortesAvisados(this.context, corte_actual.getId(), false))
