@@ -16,10 +16,19 @@ import losmarinos.blackout.Global;
  */
 
 public class PuntoInteres {
+    private int id;
     private Constantes.SERVICIO servicio;
     private int id_empresa;
     private LatLng ubicacion;
     private double radio;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public Constantes.SERVICIO getServicio() {
         return servicio;
@@ -53,8 +62,9 @@ public class PuntoInteres {
         this.radio = radio;
     }
 
-    public PuntoInteres(Constantes.SERVICIO servicio, int id_empresa, LatLng ubicacion, double radio)
+    public PuntoInteres(int id, Constantes.SERVICIO servicio, int id_empresa, LatLng ubicacion, double radio)
     {
+        this.id = id;
         this.servicio = servicio;
         this.id_empresa = id_empresa;
         this.ubicacion = ubicacion;
@@ -81,4 +91,5 @@ public class PuntoInteres {
 
         return texto;
     }
+
 }

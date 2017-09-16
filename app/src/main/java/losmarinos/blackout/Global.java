@@ -94,7 +94,7 @@ public class Global implements ObservadorAPI {
                         this.mostrarToastEnMapaPrincipal("Error al obtener cortes de interes del usuario");
                         return;
                     }else{
-                        Global.usuario_actual.setIdCortesInteres(ParserJSON.obtenerCortesInteres(respuesta));
+                        Global.usuario_actual.setCortesInteres(ParserJSON.obtenerCortesInteres(respuesta));
                     }
                     break;
             }

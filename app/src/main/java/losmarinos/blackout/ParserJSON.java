@@ -16,6 +16,7 @@ import java.util.List;
 
 import losmarinos.blackout.Objetos.Comentario;
 import losmarinos.blackout.Objetos.Corte;
+import losmarinos.blackout.Objetos.CorteInteres;
 import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.Objetos.PuntoInteres;
 import losmarinos.blackout.Objetos.Reporte;
@@ -235,7 +236,7 @@ public class ParserJSON {
             if (!obj_resp.isNull("servicio_id")){
                 servicio_id = obj_resp.getInt("servicio_id");
             }
-            return new PuntoInteres(Constantes.getServicioById(servicio_id), empresa_id, Constantes.stringToLatLng(ubicacion), radio);
+            return new PuntoInteres(id, Constantes.getServicioById(servicio_id), empresa_id, Constantes.stringToLatLng(ubicacion), radio);
         } catch (JSONException e) {
             return null;
         }
@@ -262,18 +263,33 @@ public class ParserJSON {
         }
     }
 
-    public static List<Integer> obtenerCortesInteres(String json)
+    public static CorteInteres obtenerCorteInteres(String json)
     {
-        List<Integer> cortes_retornar = new ArrayList<>();
+        try {
+            JSONObject obj_resp = new JSONObject(json);
+            int id = obj_resp.getInt("id");
+            int user_id = obj_resp.getInt("user_id");
+            int corte_id = obj_resp.getInt("corte_id");
+            return new CorteInteres(id, corte_id, user_id);
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
+    public static List<CorteInteres> obtenerCortesInteres(String json)
+    {
+        List<CorteInteres> cortes_retornar = new ArrayList<>();
         try {
             JSONArray arr_cortes = new JSONArray(json);
             //JSONArray obj_empresas = array_resp.getJSONArray(0);
             for(int i = 0; i < arr_cortes.length(); i++)
             {
                 JSONObject obj_corte = arr_cortes.getJSONObject(i);
+                CorteInteres corte = ParserJSON.obtenerCorteInteres(obj_corte.toString());
 
-                Integer id_corte = new Integer(obj_corte.getInt("corte_id"));
-                cortes_retornar.add(id_corte);
+                if(corte != null) {
+                    cortes_retornar.add(corte);
+                }
             }
             return cortes_retornar;
         } catch (JSONException e) {

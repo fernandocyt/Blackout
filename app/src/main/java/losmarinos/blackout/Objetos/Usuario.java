@@ -29,7 +29,7 @@ public class Usuario {
     private Constantes.TIPOSUSUARIO tipo;
     private List<PuntoInteres> puntos_interes;
     private List<Reporte> reportes;
-    private List<Integer> id_cortes_interes;
+    private List<CorteInteres> cortes_interes;
     public String getNombre() {
         return nombre;
     }
@@ -88,8 +88,8 @@ public class Usuario {
 
 
 
-    public void setIdCortesInteres(List<Integer> id_cortes_interes) {
-        this.id_cortes_interes = id_cortes_interes;
+    public void setCortesInteres(List<CorteInteres> cortes_interes) {
+        this.cortes_interes = cortes_interes;
     }
 
     public void removePuntoInteres(int pos)
@@ -106,14 +106,14 @@ public class Usuario {
         this.tipo = tipo;
         this.puntos_interes = new ArrayList<>();
         this.reportes = new ArrayList<>();
-        this.id_cortes_interes = new ArrayList<>();
+        this.cortes_interes = new ArrayList<>();
     }
 
     public List<Corte> getCortesInteres() {
         List<Corte> lista_cortes = new ArrayList<>();
 
-        for(int i = 0; i < this.id_cortes_interes.size(); i++){
-            Corte corte = Global.encontrarCortePorId(id_cortes_interes.get(i).intValue());
+        for(int i = 0; i < this.cortes_interes.size(); i++){
+            Corte corte = Global.encontrarCortePorId(cortes_interes.get(i).getCorteId());
             if(corte != null) {
                 lista_cortes.add(corte);
             }
@@ -162,19 +162,29 @@ public class Usuario {
                 }
                 return;
             }else{
-                this.id_cortes_interes = ParserJSON.obtenerCortesInteres(respuesta);
+                this.cortes_interes = ParserJSON.obtenerCortesInteres(respuesta);
             }
         }catch (Exception e){}
     }
 
     public boolean esCorteDeInteres(int corte_id)
     {
-        for(int i = 0; i < this.id_cortes_interes.size(); i++){
-            if(this.id_cortes_interes.get(i) == corte_id){
+        for(int i = 0; i < this.cortes_interes.size(); i++){
+            if(this.cortes_interes.get(i).getCorteId() == corte_id){
                 return true;
             }
         }
         return false;
+    }
+
+    public int getIdCorteInteres(int corte_id)
+    {
+        for(int i = 0; i < this.cortes_interes.size(); i++){
+            if(this.cortes_interes.get(i).getCorteId() == corte_id){
+                return this.cortes_interes.get(i).getId();
+            }
+        }
+        return -1;
     }
 
 }
