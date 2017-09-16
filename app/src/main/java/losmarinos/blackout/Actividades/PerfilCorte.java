@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import losmarinos.blackout.Constantes;
+import losmarinos.blackout.ConsultorDELETEAPI;
 import losmarinos.blackout.ConsultorGETAPI;
 import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.Global;
@@ -29,11 +30,14 @@ import losmarinos.blackout.ParserJSON;
 import losmarinos.blackout.R;
 import losmarinos.blackout.Adapters.RespuestaAdapter;
 
+import static losmarinos.blackout.Constantes.TAGAPI.BORRAR_CORTE_DE_INTERES;
+import static losmarinos.blackout.Constantes.TAGAPI.BORRAR_PUNTO_DE_INTERES;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_COMENTARIOS_POR_EMPRESA;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_RESPUESTAS_POR_CORTE;
 import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_COMENTARIO;
 import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_CORTE_DE_INTERES;
 import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_RESPUESTA;
+import static losmarinos.blackout.Global.token_usuario_actual;
 
 public class PerfilCorte extends AppCompatActivity {
 
@@ -42,7 +46,7 @@ public class PerfilCorte extends AppCompatActivity {
     TextView textview_fecha;
     TextView textview_cantidad_reportes;
     EditText edittext_respuesta;
-    Button button_hacer_de_interes;
+    Button button_de_interes;
 
     Corte corte;
 
@@ -67,7 +71,7 @@ public class PerfilCorte extends AppCompatActivity {
         textview_fecha = (TextView)findViewById(R.id.lbl_fecha_inicio_perfil_corte);
         textview_cantidad_reportes = (TextView)findViewById(R.id.lbl_cant_reportes_perfil_corte);
         edittext_respuesta = (EditText)findViewById(R.id.txt_respuesta_perfil_corte);
-        button_hacer_de_interes = (Button)findViewById(R.id.btn_corte_interes_perfil_corte);
+        button_de_interes = (Button)findViewById(R.id.btn_corte_interes_perfil_corte);
 
         this.cargarCorte();
     }
@@ -86,7 +90,9 @@ public class PerfilCorte extends AppCompatActivity {
         textview_cantidad_reportes.setText(Integer.toString(corte.cantidadReportes()));
 
         if(Global.usuario_actual.esCorteDeInteres(this.corte.getId())){
-            button_hacer_de_interes.setVisibility(View.GONE);
+            button_de_interes.setText("Desmarcar de interes");
+        }else{
+            button_de_interes.setText("Marcar de interes");
         }
 
         this.cargarListView();
@@ -145,18 +151,42 @@ public class PerfilCorte extends AppCompatActivity {
     }
 
     public void marcarCorteDeInteres(View view){
-        try{
-            JSONObject nuevo_corte_int = ParserJSON.crearJSONCorteDeInteres(Global.usuario_actual.getId(), this.corte.getId());
+        if(!Global.usuario_actual.esCorteDeInteres(this.corte.getId())) {
+            // LO MARCO COMO CORTE DE INTERES
+            try {
+                JSONObject nuevo_corte_int = ParserJSON.crearJSONCorteDeInteres(Global.usuario_actual.getId(), this.corte.getId());
 
-            String resultado = new ConsultorPOSTAPI("cortes-de-interes", Global.token_usuario_actual, nuevo_corte_int, REGISTRAR_CORTE_DE_INTERES, null).execute().get();
-            StringBuilder mensaje_error = new StringBuilder();
-            if(ParserJSON.esError(resultado, mensaje_error)){
-                Toast.makeText(this, mensaje_error, Toast.LENGTH_LONG).show();
-            }else{
-                Toast.makeText(this, "Corte de interes agregado", Toast.LENGTH_LONG).show();
+                String resultado = new ConsultorPOSTAPI("cortes-de-interes", Global.token_usuario_actual, nuevo_corte_int, REGISTRAR_CORTE_DE_INTERES, null).execute().get();
+                StringBuilder mensaje_error = new StringBuilder();
+                if (ParserJSON.esError(resultado, mensaje_error)) {
+                    Toast.makeText(this, mensaje_error, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, "Corte de interes agregado", Toast.LENGTH_LONG).show();
+                }
+            } catch (Exception e) {
+                Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
             }
-        }catch (Exception e){
-            Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
+        }else{
+            // LO BORRO COMO CORTE DE INTERES
+            try{
+                int id_corte_interes = Global.usuario_actual.getIdCorteInteres(this.corte.getId());
+                if(id_corte_interes == -1){
+                    Toast.makeText(this, "No se pudo encontrar corte de interes", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                String resultado = new ConsultorDELETEAPI("cortes-de-interes/" + id_corte_interes, token_usuario_actual, BORRAR_CORTE_DE_INTERES, null).execute().get();
+                StringBuilder mensaje_error = new StringBuilder();
+                if(ParserJSON.esError(resultado, mensaje_error)){
+                    Toast.makeText(this, mensaje_error, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, "Corte de interes borrado", Toast.LENGTH_LONG).show();
+                }
+            }catch (Exception e){
+                Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
+            }
         }
+        Global.usuario_actual.actualizarCortesInteres(this);
+        this.cargarCorte();
     }
 }

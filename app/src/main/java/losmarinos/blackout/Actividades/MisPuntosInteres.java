@@ -3,6 +3,7 @@ package losmarinos.blackout.Actividades;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -12,17 +13,25 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
 import losmarinos.blackout.Adapters.PuntoInteresAdapter;
 import losmarinos.blackout.Adapters.ReportesAdapter;
 import losmarinos.blackout.Adapters.RespuestaAdapter;
 import losmarinos.blackout.Constantes;
+import losmarinos.blackout.ConsultorDELETEAPI;
 import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.Global;
 import losmarinos.blackout.Objetos.PuntoInteres;
 import losmarinos.blackout.Objetos.Reporte;
+import losmarinos.blackout.ParserJSON;
 import losmarinos.blackout.R;
+
+import static losmarinos.blackout.Constantes.TAGAPI.BORRAR_PUNTO_DE_INTERES;
+import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_PUNTO_DE_INTERES;
+import static losmarinos.blackout.Global.token_usuario_actual;
 
 public class MisPuntosInteres extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -82,4 +91,16 @@ public class MisPuntosInteres extends AppCompatActivity implements OnMapReadyCal
         }
     }
 
+    public void borrarPuntoDeInteres(int id_punto_interes)
+    {
+        try{
+            String resultado = new ConsultorDELETEAPI("punto-de-interes/" + String.valueOf(id_punto_interes) + "/delete", token_usuario_actual, BORRAR_PUNTO_DE_INTERES, null).execute().get();
+            StringBuilder mensaje_error = new StringBuilder();
+            if(ParserJSON.esError(resultado, mensaje_error)){
+                Toast.makeText(this, mensaje_error, Toast.LENGTH_LONG).show();
+            }
+        }catch (Exception e){
+            Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
+        }
+    }
 }

@@ -100,8 +100,9 @@ public class PuntoInteresAdapter extends BaseAdapter implements ListAdapter {
         button_borrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Global.usuario_actual.removePuntoInteres(position);
                 MisPuntosInteres mis_puntos_interes = (MisPuntosInteres)context;
+                mis_puntos_interes.borrarPuntoDeInteres(list.get(position).getId());
+                Global.usuario_actual.actualizarPuntosInteres(context);
                 mis_puntos_interes.cargarListView();
                 PuntoInteresAdapter.actividad.cargarMapa();
             }
