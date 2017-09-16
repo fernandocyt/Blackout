@@ -28,7 +28,9 @@ public class Corte{
     private LatLng ubicacion;
     private int radio;
     private Date fecha_inicio;
+    private Date fecha_fin;
     private int resuelto;
+    private int programado;
     private List<Respuesta> respuestas;
     private List<Reporte> reportes;
 
@@ -72,12 +74,28 @@ public class Corte{
         this.fecha_inicio = fecha_inicio;
     }
 
+    public Date getFechaFin() {
+        return fecha_fin;
+    }
+
+    public void setFechaFin(Date fecha_fin) {
+        this.fecha_fin = fecha_fin;
+    }
+
     public boolean isResuelto() {
         return (resuelto == 1);
     }
 
     public void setResuelto(int resuelto) {
         this.resuelto = resuelto;
+    }
+
+    public boolean isProgramado() {
+        return (programado == 1);
+    }
+
+    public void setProgramado(int programado) {
+        this.programado = programado;
     }
 
     public void addRespuesta(Respuesta respuesta)
@@ -106,7 +124,7 @@ public class Corte{
         return id;
     }
 
-    public Corte(int id, Constantes.SERVICIO servicio, int id_empresa, LatLng ubicacion, int radio, Date fecha_inicio, int resuelto)
+    public Corte(int id, Constantes.SERVICIO servicio, int id_empresa, LatLng ubicacion, int radio, Date fecha_inicio, Date fecha_fin, int resuelto, int programado)
     {
         this.id = id;
         this.servicio = servicio;
@@ -114,7 +132,9 @@ public class Corte{
         this.ubicacion = ubicacion;
         this.radio = radio;
         this.fecha_inicio = fecha_inicio;
+        this.fecha_fin = fecha_fin;
         this.resuelto = resuelto;
+        this.programado = programado;
         this.respuestas = new ArrayList<>();
         this.reportes = new ArrayList<>();
     }
@@ -132,7 +152,9 @@ public class Corte{
         this.ubicacion = reporte.getUbicacion();
         this.radio = 0;
         this.fecha_inicio = Calendar.getInstance().getTime();
+        this.fecha_fin = null;
         this.resuelto = 0;
+        this.programado = 0;
         this.respuestas = new ArrayList<>();
         this.reportes = new ArrayList<>();
         this.reportes.add(reporte);

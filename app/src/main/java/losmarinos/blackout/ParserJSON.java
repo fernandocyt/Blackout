@@ -19,6 +19,7 @@ import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.Objetos.PuntoInteres;
 import losmarinos.blackout.Objetos.Reporte;
+import losmarinos.blackout.Objetos.Respuesta;
 import losmarinos.blackout.Objetos.Sucursal;
 import losmarinos.blackout.Objetos.Usuario;
 
@@ -55,7 +56,8 @@ public class ParserJSON {
         return true;
     }
 
-    public static JSONObject crearJSONUsuario(String nombre, String email, String pass1, String pass2) throws JSONException{
+    public static JSONObject crearJSONUsuario(String nombre, String email, String pass1, String pass2) throws JSONException
+    {
         JSONObject json_usu = new JSONObject();
         json_usu.put("name", nombre);
         json_usu.put("email", email);
@@ -65,7 +67,8 @@ public class ParserJSON {
         return json_usu;
     }
 
-    public static JSONObject crearJSONReporte(int user_id, Constantes.SERVICIO servicio, int empresa_id, LatLng posicion, int radio) throws JSONException{
+    public static JSONObject crearJSONReporte(int user_id, Constantes.SERVICIO servicio, int empresa_id, LatLng posicion, int radio) throws JSONException
+    {
         JSONObject json_rep = new JSONObject();
         json_rep.put("user_id", user_id);
         json_rep.put("ubicacion", Double.toString(posicion.latitude) + ";" + Double.toString(posicion.longitude));
@@ -77,7 +80,8 @@ public class ParserJSON {
         return json_rep;
     }
 
-    public static JSONObject crearJSONComentario(int user_id, int empresa_id, String descripcion) throws JSONException{
+    public static JSONObject crearJSONComentario(int user_id, int empresa_id, String descripcion) throws JSONException
+    {
         JSONObject json_rep = new JSONObject();
         json_rep.put("user_id", user_id);
         json_rep.put("empresa_id", empresa_id);
@@ -86,7 +90,18 @@ public class ParserJSON {
         return json_rep;
     }
 
-    public static JSONObject crearJSONPuntoDeInteres(int user_id, Constantes.SERVICIO servicio, int empresa_id, LatLng posicion, int radio) throws JSONException{
+    public static JSONObject crearJSONRespuesta(int user_id, int corte_id, String descripcion) throws JSONException
+    {
+        JSONObject json_rep = new JSONObject();
+        json_rep.put("user_id", user_id);
+        json_rep.put("corte_id", corte_id);
+        json_rep.put("descripcion", descripcion);
+
+        return json_rep;
+    }
+
+    public static JSONObject crearJSONPuntoDeInteres(int user_id, Constantes.SERVICIO servicio, int empresa_id, LatLng posicion, int radio) throws JSONException
+    {
         JSONObject json_pto_interes = new JSONObject();
         json_pto_interes.put("user_id", user_id);
         json_pto_interes.put("ubicacion", Double.toString(posicion.latitude) + ";" + Double.toString(posicion.longitude));
@@ -98,6 +113,15 @@ public class ParserJSON {
             json_pto_interes.put("servicio_id", Constantes.getIdServicio(servicio));
         }
         return json_pto_interes;
+    }
+
+    public static JSONObject crearJSONCorteDeInteres(int user_id, int corte_id) throws JSONException
+    {
+        JSONObject json_corte_interes = new JSONObject();
+        json_corte_interes.put("user_id", user_id);
+        json_corte_interes.put("corte_id", corte_id);
+
+        return json_corte_interes;
     }
 
     public static String obtenerAccessToken(String json)
@@ -352,14 +376,27 @@ public class ParserJSON {
             int radio = Integer.parseInt(obj_resp.getString("radio"));
             //No traigo cantidad de reportes ya que lo calculo
             //No traigo duración
-            int resuelto = Integer.parseInt(obj_resp.getString("resuelto"));
-            String fecha_inicio = obj_resp.getString("fecha_inicio");
+            int resuelto = 0;
+            if(!obj_resp.isNull("resuelto")) {
+                resuelto = Integer.parseInt(obj_resp.getString("resuelto"));
+            }
+            int programado = 0;
+            if(!obj_resp.isNull("es_programado")) {
+                resuelto = Integer.parseInt(obj_resp.getString("es_programado"));
+            }
 
-            // SI NO ES HH es kk
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date date = format.parse(fecha_inicio);
 
-            return new Corte(id, Constantes.getServicioById(id_servicio), id_empresa, Constantes.stringToLatLng(ubicacion), radio, date, resuelto);
+            String fecha_inicio = obj_resp.getString("fecha_inicio");
+            Date date_inicio = format.parse(fecha_inicio);
+
+            Date date_fin = null;
+            if(!obj_resp.isNull("fecha_fin")) {
+                String fecha_fin = obj_resp.getString("fecha_fin");
+                date_fin = format.parse(fecha_fin);
+            }
+
+            return new Corte(id, Constantes.getServicioById(id_servicio), id_empresa, Constantes.stringToLatLng(ubicacion), radio, date_inicio, date_fin, resuelto, programado);
 
         } catch (JSONException e) {
             return null;
@@ -392,11 +429,11 @@ public class ParserJSON {
     public static Comentario obtenerComentario(String json)
     {
         try {
-            JSONObject obj_resp = new JSONObject(json);
-            int id = Integer.parseInt(obj_resp.getString("id"));
-            int user_id = Integer.parseInt(obj_resp.getString("user_id"));
-            int empresa_id = Integer.parseInt(obj_resp.getString("empresa_id"));
-            String descripcion = obj_resp.getString("descripcion");
+            JSONObject obj_com = new JSONObject(json);
+            int id = Integer.parseInt(obj_com.getString("id"));
+            int user_id = Integer.parseInt(obj_com.getString("user_id"));
+            int empresa_id = Integer.parseInt(obj_com.getString("empresa_id"));
+            String descripcion = obj_com.getString("descripcion");
             return new Comentario(id, user_id, empresa_id, descripcion);
         } catch (JSONException e) {
             return null;
@@ -418,6 +455,48 @@ public class ParserJSON {
                 }
             }
             return comentarios_retornar;
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
+    public static Respuesta obtenerRespuesta(String json)
+    {
+        try {
+            JSONObject obj_resp = new JSONObject(json);
+            int id = obj_resp.getInt("id");
+            int user_id = obj_resp.getInt("user_id");
+            int corte_id = obj_resp.getInt("corte_id");
+            String descripcion = obj_resp.getString("descripcion");
+            String fecha = obj_resp.getString("updated_at");
+
+            // SI NO ES HH es kk
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = format.parse(fecha);
+
+            return new Respuesta(id, user_id, corte_id, descripcion, date);
+        } catch (JSONException e) {
+            return null;
+        } catch (Exception e){
+            return null;
+        }
+    }
+
+    public static List<Respuesta> obtenerRespuestas(String json)
+    {
+        List<Respuesta> respuestas_retornar = new ArrayList<>();
+        try {
+            JSONArray array_res = new JSONArray(json);
+            for(int i = 0; i < array_res.length(); i++)
+            {
+                JSONObject obj_respuesta = array_res.getJSONObject(i);
+                Respuesta respuesta = ParserJSON.obtenerRespuesta(obj_respuesta.toString());
+
+                if(respuesta != null){
+                    respuestas_retornar.add(respuesta);
+                }
+            }
+            return respuestas_retornar;
         } catch (JSONException e) {
             return null;
         }

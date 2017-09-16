@@ -64,7 +64,7 @@ public class ComentarioAdapter extends BaseAdapter implements ListAdapter {
         textview_texto = (TextView)view.findViewById(R.id.lbl_comentario_perfil_empresa);
         textview_texto.setText(list.get(position).getTexto());
 
-        Usuario usuario = Global.encontrarUsuarioPorId(list.get(position).getIdUsuario());
+        Usuario usuario = list.get(position).getUsuario();
         textview_usuario = (TextView)view.findViewById(R.id.lbl_usuario_comentario_perfil_empresa);
         if (usuario != null) {
             textview_usuario.setText(usuario.getNombre());

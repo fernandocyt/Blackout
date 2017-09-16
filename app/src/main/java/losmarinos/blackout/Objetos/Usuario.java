@@ -167,4 +167,14 @@ public class Usuario {
         }catch (Exception e){}
     }
 
+    public boolean esCorteDeInteres(int corte_id)
+    {
+        for(int i = 0; i < this.id_cortes_interes.size(); i++){
+            if(this.id_cortes_interes.get(i) == corte_id){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

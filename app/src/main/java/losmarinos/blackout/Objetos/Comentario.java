@@ -1,5 +1,7 @@
 package losmarinos.blackout.Objetos;
 
+import losmarinos.blackout.Global;
+
 /**
  * Created by garci on 24/7/2017.
  */
@@ -46,5 +48,10 @@ public class Comentario {
     {
         this.id_usuario = id_usuario;
         this.texto = texto;
+    }
+
+    public Usuario getUsuario()
+    {
+        return Global.encontrarUsuarioPorId(this.id_usuario);
     }
 }

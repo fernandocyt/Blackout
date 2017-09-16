@@ -16,6 +16,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import losmarinos.blackout.Objetos.Usuario;
 import losmarinos.blackout.R;
 import losmarinos.blackout.Actividades.PerfilCorte;
 import losmarinos.blackout.Objetos.Corte;
@@ -65,10 +66,13 @@ public class RespuestaAdapter extends BaseAdapter implements ListAdapter {
         textview_texto = (TextView)view.findViewById(R.id.lbl_respuesta_perfil_corte);
         textview_texto.setText(list.get(position).getTexto());
 
+        Usuario usuario = list.get(position).getUsuario();
         textview_usuario = (TextView)view.findViewById(R.id.lbl_usuario_respuesta_perfil_corte);
-        textview_usuario.setText(list.get(position).getUsuario().getNombre());
-
-        RelativeLayout linea = (RelativeLayout)view.findViewById(R.id.relative);
+        if (usuario != null) {
+            textview_usuario.setText(usuario.getNombre());
+        }else{
+            textview_usuario.setText("");
+        }
 
         return view;
     }
