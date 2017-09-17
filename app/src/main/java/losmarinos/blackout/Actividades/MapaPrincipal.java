@@ -84,11 +84,6 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             startService(new Intent(this, GPSTracker.class));
         GPSTracker.addObserver(this);
 
-
-
-
-
-
         // MAPA
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -186,6 +181,9 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             startActivity(i);
         } else if (id == R.id.drawer_buscar_empresa){
             Intent i = new Intent(getApplicationContext(), BuscarEmpresa.class);
+            startActivity(i);
+        } else if (id == R.id.drawer_estadisticas){
+            Intent i = new Intent(getApplicationContext(), ConsultarEstadisticas.class);
             startActivity(i);
         } else if (id == R.id.drawer_agregar_corte_programado){
             Intent i = new Intent(getApplicationContext(), CrearCorteProgramado.class);

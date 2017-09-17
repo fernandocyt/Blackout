@@ -93,7 +93,8 @@
             android:name=".Actividades.BuscarEmpresa"
             android:screenOrientation="portrait" />
         <activity android:name=".Actividades.CrearCorteProgramado" />
-        <activity android:name=".Actividades.MisCortesProgramados"></activity>
+        <activity android:name=".Actividades.MisCortesProgramados" />
+        <activity android:name=".Actividades.ConsultarEstadisticas"></activity>
     </application>
 
 </manifest>
