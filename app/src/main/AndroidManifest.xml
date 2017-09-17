@@ -94,7 +94,8 @@
             android:screenOrientation="portrait" />
         <activity android:name=".Actividades.CrearCorteProgramado" />
         <activity android:name=".Actividades.MisCortesProgramados" />
-        <activity android:name=".Actividades.ConsultarEstadisticas"></activity>
+        <activity android:name=".Actividades.ConsultarEstadisticas" />
+        <activity android:name=".Actividades.CrearSucursal"></activity>
     </application>
 
 </manifest>

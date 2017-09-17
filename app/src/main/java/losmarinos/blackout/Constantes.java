@@ -40,6 +40,7 @@ public class Constantes {
         REGISTRAR_COMENTARIO,
         REGISTRAR_RESPUESTA,
         REGISTRAR_CORTE_PROGRAMADO,
+        REGISTRAR_SUCURSAL,
         OBTENER_USUARIO_POR_TOKEN,
         OBTENER_EMPRESAS,
         OBTENER_REPORTES,
@@ -55,6 +56,7 @@ public class Constantes {
         BORRAR_PUNTO_DE_INTERES,
         BORRAR_CORTE_DE_INTERES,
         BORRAR_CORTE_PROGRAMADO,
+        BORRAR_SUCURSAL,
 
     }
 

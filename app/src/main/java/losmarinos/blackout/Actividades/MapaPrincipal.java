@@ -188,6 +188,9 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         } else if (id == R.id.drawer_agregar_corte_programado){
             Intent i = new Intent(getApplicationContext(), CrearCorteProgramado.class);
             startActivity(i);
+        } else if (id == R.id.drawer_agregar_sucursal){
+            Intent i = new Intent(getApplicationContext(), CrearSucursal.class);
+            startActivity(i);
         } else if (id == R.id.drawer_cerrar_sesion){
             LocalDB.borrarArchivoJSONUsuario(this);
             LocalDB.borrarArchivoJSONCortesAvisados(this);

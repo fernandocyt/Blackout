@@ -20,6 +20,7 @@ import java.util.List;
 import losmarinos.blackout.Adapters.ReportesAdapter;
 import losmarinos.blackout.Adapters.SucursalAdapter;
 import losmarinos.blackout.Constantes;
+import losmarinos.blackout.ConsultorDELETEAPI;
 import losmarinos.blackout.ConsultorGETAPI;
 import losmarinos.blackout.Global;
 import losmarinos.blackout.Objetos.Comentario;
@@ -29,8 +30,11 @@ import losmarinos.blackout.Objetos.Sucursal;
 import losmarinos.blackout.ParserJSON;
 import losmarinos.blackout.R;
 
+import static losmarinos.blackout.Constantes.TAGAPI.BORRAR_CORTE_PROGRAMADO;
+import static losmarinos.blackout.Constantes.TAGAPI.BORRAR_SUCURSAL;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_COMENTARIOS_POR_EMPRESA;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_SUCURSALES_POR_EMPRESA;
+import static losmarinos.blackout.Global.token_usuario_actual;
 
 public class VerSucursales extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -75,7 +79,7 @@ public class VerSucursales extends AppCompatActivity implements OnMapReadyCallba
 
     public void cargarListView(){
 
-        List<Comentario> comentarios = new ArrayList<>();
+        List<Sucursal> sucursales = new ArrayList<>();
         try {
             String respuesta = new ConsultorGETAPI("empresa/"+String.valueOf(this.empresa.getSubId())+"/sucursales",
                     Global.token_usuario_actual, OBTENER_SUCURSALES_POR_EMPRESA, null).execute().get();
@@ -107,6 +111,19 @@ public class VerSucursales extends AppCompatActivity implements OnMapReadyCallba
                     .title("Sucursal")
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_sucursal)));
 
+        }
+    }
+
+    public void borrarSucursal(int id_sucursal)
+    {
+        try{
+            String resultado = new ConsultorDELETEAPI("sucursal/" + String.valueOf(id_sucursal) + "/delete", token_usuario_actual, BORRAR_SUCURSAL, null).execute().get();
+            StringBuilder mensaje_error = new StringBuilder();
+            if(ParserJSON.esError(resultado, mensaje_error)){
+                Toast.makeText(this, mensaje_error, Toast.LENGTH_LONG).show();
+            }
+        }catch (Exception e){
+            Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
         }
     }
 

@@ -93,6 +93,17 @@ public class ParserJSON {
         return json_corte_prog;
     }
 
+    public static JSONObject crearJSONSucursal(int empresa_id, String telefono, String direccion, LatLng posicion) throws JSONException
+    {
+        JSONObject json_sucursal = new JSONObject();
+        json_sucursal.put("empresa_id", empresa_id);
+        json_sucursal.put("telefono", telefono);
+        json_sucursal.put("direccion", direccion);
+        json_sucursal.put("ubicacion", Double.toString(posicion.latitude) + ";" + Double.toString(posicion.longitude));
+        return json_sucursal;
+    }
+
+
     public static JSONObject crearJSONComentario(int user_id, int empresa_id, String descripcion) throws JSONException
     {
         JSONObject json_rep = new JSONObject();

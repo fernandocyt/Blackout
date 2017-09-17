@@ -26,6 +26,13 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/btn_borrar_sucursal_mis_objetos"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="Borrar"
+            android:textSize="12sp" />
+
     </LinearLayout>
 
 </LinearLayout>
