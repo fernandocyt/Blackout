@@ -304,8 +304,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
             Marker punto = mMap.addMarker(new MarkerOptions()
                     .position(punto_actual.getUbicacion())
-                    .title("punto")
-                    .zIndex(3));
+                    .title("punto"));
             punto.setTag(punto_actual);
 
             mMap.addCircle(new CircleOptions()
@@ -340,11 +339,13 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
                 continue;
             }
 
+            boolean programado = corte_actual.isProgramado();
+            boolean interes = Global.usuario_actual.esCorteDeInteres(corte_actual.getId());
+
             Marker corte = mMap.addMarker(new MarkerOptions()
                     .position(corte_actual.getUbicacion())
                     .title("Corte")
-                    .icon(Constantes.getIconoCorte(corte_actual.getServicio()))
-                    .zIndex(2));
+                    .icon(Constantes.getIconoCorte(corte_actual.getServicio(), programado, interes)));
             corte.setTag(corte_actual);
 
             mMap.addCircle(new CircleOptions()
@@ -422,8 +423,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
                 mMap.addMarker(new MarkerOptions()
                         .position(sucursales_actual.get(j).getUbicacion())
                         .title("Sucursal " + empresas.get(i).getNombre())
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_sucursal))
-                        .zIndex(1));
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_sucursal)));
             }
         }
     }

@@ -46,20 +46,16 @@ public class VerSucursales extends AppCompatActivity implements OnMapReadyCallba
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ver_sucursales);
 
-        int id_empresa = getIntent().getIntExtra("idEmpresa", 0);
-        for(int i = 0; i < Global.empresas.size(); i++)
-        {
-            if(id_empresa == Global.empresas.get(i).getSubId())
-            {
-                this.empresa = Global.empresas.get(i);
-            }
-        }
-
-        setTitle("Sucursales " + empresa.getNombre());
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map_ver_sucursales);
         mapFragment.getMapAsync(this);
+
+        int id_empresa = getIntent().getIntExtra("idEmpresa", 0);
+        this.empresa = Global.encontrarEmpresaPorId(id_empresa);
+
+        setTitle("Sucursales " + empresa.getNombre());
+
+        this.empresa.actualizarSucursales(this);
 
         this.cargarListView();
     }
@@ -78,21 +74,7 @@ public class VerSucursales extends AppCompatActivity implements OnMapReadyCallba
     }
 
     public void cargarListView(){
-
-        List<Sucursal> sucursales = new ArrayList<>();
-        try {
-            String respuesta = new ConsultorGETAPI("empresa/"+String.valueOf(this.empresa.getSubId())+"/sucursales",
-                    Global.token_usuario_actual, OBTENER_SUCURSALES_POR_EMPRESA, null).execute().get();
-            StringBuilder msg_error = new StringBuilder();
-            if(ParserJSON.esError(respuesta, msg_error)){
-                Toast.makeText(this, "No es posible cargar sucursales", Toast.LENGTH_LONG).show();
-                return;
-            }else{
-                empresa.setSucursales(ParserJSON.obtenerSucursales(respuesta));
-            }
-        }catch (Exception e){}
-
-        SucursalAdapter adapter = new SucursalAdapter(empresa.getSucursales(), this, this);
+        SucursalAdapter adapter = new SucursalAdapter(empresa, this, this);
         ListView mi_lista = (ListView)findViewById(R.id.lst_sucursal_ver_sucursales);
         mi_lista.setAdapter(adapter);
     }

@@ -10,6 +10,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -96,7 +97,8 @@ public class MisCortesProgramados extends AppCompatActivity implements OnMapRead
 
             map_mis_cortes_programados.addMarker(new MarkerOptions()
                     .position(corte_prog_actual.getUbicacion())
-                    .title("Corte Programado"))
+                    .title("Corte Programado")
+                    .icon(Constantes.getIconoCorte(corte_prog_actual.getServicio(), true, false)))
                     .setTag(corte_prog_actual);
 
             map_mis_cortes_programados.addCircle(new CircleOptions()

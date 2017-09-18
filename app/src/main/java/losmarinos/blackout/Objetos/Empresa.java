@@ -1,12 +1,19 @@
 package losmarinos.blackout.Objetos;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import losmarinos.blackout.Constantes;
+import losmarinos.blackout.ConsultorGETAPI;
 import losmarinos.blackout.Global;
+import losmarinos.blackout.ParserJSON;
+
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_SUCURSALES_POR_EMPRESA;
 
 /**
  * Created by garci on 29/7/2017.
@@ -108,6 +115,20 @@ public class Empresa extends Usuario {
             }
         }
         return cortes;
+    }
+
+    public void actualizarSucursales(Context context){
+        try {
+            String respuesta = new ConsultorGETAPI("empresa/"+String.valueOf(this.getSubId())+"/sucursales",
+                    Global.token_usuario_actual, OBTENER_SUCURSALES_POR_EMPRESA, null).execute().get();
+            StringBuilder msg_error = new StringBuilder();
+            if(ParserJSON.esError(respuesta, msg_error)){
+                Toast.makeText(context, "No es posible cargar sucursales", Toast.LENGTH_LONG).show();
+                return;
+            }else{
+                this.sucursales = ParserJSON.obtenerSucursales(respuesta);
+            }
+        }catch (Exception e){}
     }
 
 }

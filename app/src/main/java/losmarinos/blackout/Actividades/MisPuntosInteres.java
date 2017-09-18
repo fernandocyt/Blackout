@@ -9,6 +9,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -80,7 +81,8 @@ public class MisPuntosInteres extends AppCompatActivity implements OnMapReadyCal
 
             map_mis_puntos_interes.addMarker(new MarkerOptions()
                     .position(pi_actual.getUbicacion())
-                    .title("PuntoInteres"));
+                    .title("PuntoInteres")
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_punto_interes)));
 
             map_mis_puntos_interes.addCircle(new CircleOptions()
                     .center(pi_actual.getUbicacion())

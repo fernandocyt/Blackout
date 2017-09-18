@@ -30,6 +30,11 @@ public class Constantes {
     // CONSTANTES BASE
     public static final int ID_EMPRESA_NO_ESPECIFICA = 3;
 
+    public enum TIPOSUSUARIO
+    {
+        PERSONA, EMPRESA, ADMINISTRADOR
+    }
+
     public enum TAGAPI
     {
         LOGUEAR_USUARIO,
@@ -146,17 +151,39 @@ public class Constantes {
         return new LatLng(lat, lng);
     }
 
-    public static BitmapDescriptor getIconoCorte(SERVICIO servicio)
+    public static BitmapDescriptor getIconoCorte(SERVICIO servicio, boolean programado, boolean interes)
     {
         BitmapDescriptor icono;
-        switch (servicio)
-        {
-            case AGUA: default: icono = BitmapDescriptorFactory.fromResource(R.drawable.icono_corte_agua); break;
-            case LUZ: icono = BitmapDescriptorFactory.fromResource(R.drawable.icono_corte_luz); break;
-            case GAS: icono = BitmapDescriptorFactory.fromResource(R.drawable.icono_corte_gas); break;
-            case TELEFONO: icono = BitmapDescriptorFactory.fromResource(R.drawable.icono_corte_telefono); break;
-            case INTERNET: icono = BitmapDescriptorFactory.fromResource(R.drawable.icono_corte_internet); break;
-            case CABLE: icono = BitmapDescriptorFactory.fromResource(R.drawable.icono_corte_cable); break;
+        if(!programado && !interes){
+            switch (servicio)
+            {
+                case AGUA: default: icono = BitmapDescriptorFactory.fromResource(R.drawable.icono_corte_agua); break;
+                case LUZ: icono = BitmapDescriptorFactory.fromResource(R.drawable.icono_corte_luz); break;
+                case GAS: icono = BitmapDescriptorFactory.fromResource(R.drawable.icono_corte_gas); break;
+                case TELEFONO: icono = BitmapDescriptorFactory.fromResource(R.drawable.icono_corte_telefono); break;
+                case INTERNET: icono = BitmapDescriptorFactory.fromResource(R.drawable.icono_corte_internet); break;
+                case CABLE: icono = BitmapDescriptorFactory.fromResource(R.drawable.icono_corte_cable); break;
+            }
+        }else if(interes){
+            switch (servicio)
+            {
+                case AGUA: default: icono = BitmapDescriptorFactory.fromResource(R.drawable.icono_corte_interes_agua); break;
+                case LUZ: icono = BitmapDescriptorFactory.fromResource(R.drawable.icono_corte_interes_luz); break;
+                case GAS: icono = BitmapDescriptorFactory.fromResource(R.drawable.icono_corte_interes_gas); break;
+                case TELEFONO: icono = BitmapDescriptorFactory.fromResource(R.drawable.icono_corte_interes_telefono); break;
+                case INTERNET: icono = BitmapDescriptorFactory.fromResource(R.drawable.icono_corte_interes_internet); break;
+                case CABLE: icono = BitmapDescriptorFactory.fromResource(R.drawable.icono_corte_interes_cable); break;
+            }
+        }else{
+            switch (servicio)
+            {
+                case AGUA: default: icono = BitmapDescriptorFactory.fromResource(R.drawable.icono_corte_programado_agua); break;
+                case LUZ: icono = BitmapDescriptorFactory.fromResource(R.drawable.icono_corte_programado_luz); break;
+                case GAS: icono = BitmapDescriptorFactory.fromResource(R.drawable.icono_corte_programado_gas); break;
+                case TELEFONO: icono = BitmapDescriptorFactory.fromResource(R.drawable.icono_corte_programado_telefono); break;
+                case INTERNET: icono = BitmapDescriptorFactory.fromResource(R.drawable.icono_corte_programado_internet); break;
+                case CABLE: icono = BitmapDescriptorFactory.fromResource(R.drawable.icono_corte_programado_cable); break;
+            }
         }
         return icono;
     }
@@ -175,10 +202,4 @@ public class Constantes {
         }
         return icono;
     }
-
-    public enum TIPOSUSUARIO
-    {
-        PERSONA, EMPRESA, ADMINISTRADOR
-    }
-
 }

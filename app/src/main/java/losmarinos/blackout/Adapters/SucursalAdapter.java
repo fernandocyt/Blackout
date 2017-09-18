@@ -35,8 +35,9 @@ public class SucursalAdapter extends BaseAdapter implements ListAdapter {
     Button button_borrar;
     Empresa empresa_actual;
 
-    public SucursalAdapter(List<Sucursal> list, Context context, VerSucursales actividad) {
-        this.list = list;
+    public SucursalAdapter(Empresa empresa, Context context, VerSucursales actividad) {
+        this.empresa_actual = empresa;
+        this.list = empresa.getSucursales();
         this.context = context;
         this.actividad = actividad;
     }
@@ -70,25 +71,26 @@ public class SucursalAdapter extends BaseAdapter implements ListAdapter {
         textview_texto = (TextView)view.findViewById(R.id.lbl_texto_sucursal_mis_objetos);
         textview_texto.setText(list.get(position).generarTexto());
 
-
         button_borrar = (Button)view.findViewById(R.id.btn_borrar_sucursal_mis_objetos);
+        if(Global.usuario_actual.getTipo() == Constantes.TIPOSUSUARIO.EMPRESA && Global.usuario_actual.getSubId() == empresa_actual.getSubId()) {
+            button_borrar.setVisibility(View.VISIBLE);
+        }else{
+            button_borrar.setVisibility(View.GONE);
+        }
         button_borrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 VerSucursales ver_sucursales = (VerSucursales)context;
                 ver_sucursales.borrarSucursal(list.get(position).getId());
+
+                empresa_actual.actualizarSucursales(context);
+
                 ver_sucursales.cargarListView();
                 SucursalAdapter.actividad.cargarMapa();
             }
         });
 
-        empresa_actual = Global.encontrarEmpresaPorId(Global.usuario_actual.getSubId());
 
-        if(Global.usuario_actual.getTipo() == Constantes.TIPOSUSUARIO.EMPRESA) {
-            button_borrar.setVisibility(View.VISIBLE);
-        }else{
-            button_borrar.setVisibility(View.GONE);
-        }
 
         LinearLayout linea_sucursal = (LinearLayout)view.findViewById(R.id.sucursal_mis_objetos);
         linea_sucursal.setOnClickListener(new View.OnClickListener() {
