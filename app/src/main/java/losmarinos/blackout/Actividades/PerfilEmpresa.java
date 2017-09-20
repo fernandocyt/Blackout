@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RatingBar;
@@ -42,6 +43,7 @@ public class PerfilEmpresa extends AppCompatActivity {
     TextView textview_pagina;
     EditText edittext_comentario;
     RatingBar rtb_calificacion;
+    Button button_agregar_comentario;
 
     Empresa empresa;
 
@@ -68,6 +70,7 @@ public class PerfilEmpresa extends AppCompatActivity {
         textview_pagina = (TextView)findViewById(R.id.lbl_pagina_perfil_empresa);
         edittext_comentario = (EditText)findViewById(R.id.txt_comentario_perfil_empresa);
         rtb_calificacion = (RatingBar)findViewById(R.id.rtb_calificacion_perfil_empresa);
+        button_agregar_comentario = (Button)findViewById(R.id.btn_agregar_comentario_perfil_empresa);
 
         this.cargarEmpresa();
 
@@ -82,6 +85,14 @@ public class PerfilEmpresa extends AppCompatActivity {
         //textview_calificacion.setText(Double.toString(empresa.getCalificacion()));
         textview_pagina.setText(empresa.getPagina());
         rtb_calificacion.setRating(empresa.getCalificacion());
+
+        if(Global.usuario_actual.getTipo() == Constantes.TIPOSUSUARIO.EMPRESA){
+            button_agregar_comentario.setVisibility(View.GONE);
+            edittext_comentario.setVisibility(View.GONE);
+        }else{
+            button_agregar_comentario.setVisibility(View.VISIBLE);
+            edittext_comentario.setVisibility(View.VISIBLE);
+        }
 
         this.cargarListView();
     }

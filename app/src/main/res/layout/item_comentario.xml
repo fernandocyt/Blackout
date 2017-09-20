@@ -20,8 +20,7 @@
             android:id="@+id/lbl_usuario_comentario_perfil_empresa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:textSize="8sp"
+            android:textSize="12sp"
             android:textStyle="italic"/>
 
     </LinearLayout>

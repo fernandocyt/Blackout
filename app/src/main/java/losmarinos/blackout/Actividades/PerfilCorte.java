@@ -47,6 +47,7 @@ public class PerfilCorte extends AppCompatActivity {
     TextView textview_cantidad_reportes;
     EditText edittext_respuesta;
     Button button_de_interes;
+    Button button_agregar_respuesta;
 
     Corte corte;
 
@@ -57,14 +58,7 @@ public class PerfilCorte extends AppCompatActivity {
         setContentView(R.layout.activity_perfil_corte);
 
         int id_corte = getIntent().getIntExtra("idCorte", 0);
-        for(int i = 0; i < Global.cortes.size(); i++)
-        {
-            if(id_corte == Global.cortes.get(i).getId())
-            {
-                this.corte = Global.cortes.get(i);
-            }
-        }
-        //corte = ConsultorAPI.cortes.get(0);
+        this.corte = Global.encontrarCortePorId(id_corte);
 
         textview_servicio = (TextView)findViewById(R.id.lbl_servicio_perfil_corte);
         textview_empresa = (TextView)findViewById(R.id.lbl_empresa_perfil_corte);
@@ -72,6 +66,7 @@ public class PerfilCorte extends AppCompatActivity {
         textview_cantidad_reportes = (TextView)findViewById(R.id.lbl_cant_reportes_perfil_corte);
         edittext_respuesta = (EditText)findViewById(R.id.txt_respuesta_perfil_corte);
         button_de_interes = (Button)findViewById(R.id.btn_corte_interes_perfil_corte);
+        button_agregar_respuesta = (Button)findViewById(R.id.btn_agregar_respuesta_perfil_corte);
 
         this.cargarCorte();
     }
@@ -95,6 +90,20 @@ public class PerfilCorte extends AppCompatActivity {
             button_de_interes.setText("Marcar de interes");
         }
 
+        if(Global.usuario_actual.getTipo() == Constantes.TIPOSUSUARIO.EMPRESA &&
+                Global.usuario_actual.getSubId() != this.corte.getIdEmpresa()){
+            button_agregar_respuesta.setVisibility(View.GONE);
+            edittext_respuesta.setVisibility(View.GONE);
+        }else{
+            button_agregar_respuesta.setVisibility(View.VISIBLE);
+            edittext_respuesta.setVisibility(View.VISIBLE);
+        }
+
+        if(Global.usuario_actual.getTipo() == Constantes.TIPOSUSUARIO.EMPRESA &&
+                Global.usuario_actual.getSubId() == this.corte.getIdEmpresa()){
+            edittext_respuesta.setHint("Informar a usuarios");
+        }
+
         this.cargarListView();
     }
 
@@ -112,7 +121,20 @@ public class PerfilCorte extends AppCompatActivity {
             }
         }catch (Exception e){}
 
-        RespuestaAdapter adapter = new RespuestaAdapter(respuestas, this, this);
+        for(int i = 0; i < respuestas.size(); i++) {
+            if(respuestas.get(i).getUsuario().getTipo() == Constantes.TIPOSUSUARIO.EMPRESA)
+            {
+
+                List<Respuesta> resp_empresa = new ArrayList<>();
+                resp_empresa.add(respuestas.remove(i));
+                RespuestaAdapter adapter = new RespuestaAdapter(resp_empresa, true, this, this);
+                ListView mi_lista = (ListView)findViewById(R.id.lst_respuesta_empresa_perfil_corte);
+                mi_lista.setAdapter(adapter);
+                break;
+            }
+        }
+
+        RespuestaAdapter adapter = new RespuestaAdapter(respuestas, false, this, this);
         ListView mi_lista = (ListView)findViewById(R.id.lst_respuesta_perfil_corte);
         mi_lista.setAdapter(adapter);
 

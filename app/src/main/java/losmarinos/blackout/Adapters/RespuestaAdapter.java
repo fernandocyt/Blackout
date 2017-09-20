@@ -16,6 +16,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import losmarinos.blackout.Constantes;
 import losmarinos.blackout.Objetos.Usuario;
 import losmarinos.blackout.R;
 import losmarinos.blackout.Actividades.PerfilCorte;
@@ -29,12 +30,13 @@ public class RespuestaAdapter extends BaseAdapter implements ListAdapter {
     PerfilCorte actividad;
     TextView textview_texto;
     TextView textview_usuario;
+    boolean mostrar_estrella;
 
-
-    public RespuestaAdapter(List<Respuesta> list, Context context, PerfilCorte actividad) {
+    public RespuestaAdapter(List<Respuesta> list, boolean mostrar_estrella, Context context, PerfilCorte actividad) {
         this.list = list;
         this.context = context;
         this.actividad = actividad;
+        this.mostrar_estrella = mostrar_estrella;
     }
 
     @Override
@@ -60,6 +62,13 @@ public class RespuestaAdapter extends BaseAdapter implements ListAdapter {
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.item_respuesta, null);
+        }
+
+        ImageView estrella = (ImageView)view.findViewById(R.id.img_estrella_item_respuesta);
+        if(mostrar_estrella){
+            estrella.setVisibility(View.VISIBLE);
+        }else{
+            estrella.setVisibility(View.GONE);
         }
 
         //Handle TextView and display string from your list

@@ -164,6 +164,13 @@
         </LinearLayout>
 
         <ListView
+            android:id="@+id/lst_respuesta_empresa_perfil_corte"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="#2408" />
+
+        <ListView
             android:id="@+id/lst_respuesta_perfil_corte"
             android:layout_width="match_parent"
             android:layout_height="0dp"
