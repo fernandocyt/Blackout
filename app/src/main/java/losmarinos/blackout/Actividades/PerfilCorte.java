@@ -43,8 +43,9 @@ public class PerfilCorte extends AppCompatActivity {
 
     TextView textview_servicio;
     TextView textview_empresa;
-    TextView textview_fecha;
-    TextView textview_cantidad_reportes;
+    TextView textview_motivo;
+    TextView textview_fecha_inicio;
+    TextView textview_fecha_fin;
     EditText edittext_respuesta;
     Button button_de_interes;
     Button button_agregar_respuesta;
@@ -62,8 +63,9 @@ public class PerfilCorte extends AppCompatActivity {
 
         textview_servicio = (TextView)findViewById(R.id.lbl_servicio_perfil_corte);
         textview_empresa = (TextView)findViewById(R.id.lbl_empresa_perfil_corte);
-        textview_fecha = (TextView)findViewById(R.id.lbl_fecha_inicio_perfil_corte);
-        textview_cantidad_reportes = (TextView)findViewById(R.id.lbl_cant_reportes_perfil_corte);
+        textview_motivo = (TextView)findViewById(R.id.lbl_motivo_perfil_corte);
+        textview_fecha_inicio = (TextView)findViewById(R.id.lbl_fecha_inicio_perfil_corte);
+        textview_fecha_fin = (TextView)findViewById(R.id.lbl_fecha_fin_perfil_corte);
         edittext_respuesta = (EditText)findViewById(R.id.txt_respuesta_perfil_corte);
         button_de_interes = (Button)findViewById(R.id.btn_corte_interes_perfil_corte);
         button_agregar_respuesta = (Button)findViewById(R.id.btn_agregar_respuesta_perfil_corte);
@@ -78,11 +80,17 @@ public class PerfilCorte extends AppCompatActivity {
         if(corte.getEmpresa() != null)
             textview_empresa.setText(corte.getEmpresa().getNombre());
 
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        String fecha = df.format(corte.getFechaInicio());
-        textview_fecha.setText(fecha);
+        if(corte.isProgramado()){
+            textview_motivo.setText("Programado por empresa");
+        }else{
+            textview_motivo.setText("Generado por " + Integer.toString(corte.cantidadReportes()) + " reportes");
+        }
 
-        textview_cantidad_reportes.setText(Integer.toString(corte.cantidadReportes()));
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        textview_fecha_inicio.setText(df.format(corte.getFechaInicio()));
+        if(corte.getFechaFin() != null) {
+            textview_fecha_fin.setText(df.format(corte.getFechaFin()));
+        }
 
         if(Global.usuario_actual.esCorteDeInteres(this.corte.getId())){
             button_de_interes.setText("Desmarcar de interes");

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import losmarinos.blackout.Adapters.ComentarioAdapter;
+import losmarinos.blackout.Calculos;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorGETAPI;
 import losmarinos.blackout.ConsultorPOSTAPI;
@@ -70,6 +71,8 @@ public class PerfilEmpresa extends AppCompatActivity {
         textview_pagina = (TextView)findViewById(R.id.lbl_pagina_perfil_empresa);
         edittext_comentario = (EditText)findViewById(R.id.txt_comentario_perfil_empresa);
         rtb_calificacion = (RatingBar)findViewById(R.id.rtb_calificacion_perfil_empresa);
+        rtb_calificacion.setMax(5);
+        rtb_calificacion.setStepSize(0.1f);
         button_agregar_comentario = (Button)findViewById(R.id.btn_agregar_comentario_perfil_empresa);
 
         this.cargarEmpresa();
@@ -84,7 +87,7 @@ public class PerfilEmpresa extends AppCompatActivity {
         textview_servicio.setText(Constantes.servicioToString(empresa.getTipoServicio()));
         //textview_calificacion.setText(Double.toString(empresa.getCalificacion()));
         textview_pagina.setText(empresa.getPagina());
-        rtb_calificacion.setRating(empresa.getCalificacion());
+        rtb_calificacion.setRating((float) Calculos.calificacionEmpresa(empresa));
 
         if(Global.usuario_actual.getTipo() == Constantes.TIPOSUSUARIO.EMPRESA){
             button_agregar_comentario.setVisibility(View.GONE);
@@ -93,6 +96,8 @@ public class PerfilEmpresa extends AppCompatActivity {
             button_agregar_comentario.setVisibility(View.VISIBLE);
             edittext_comentario.setVisibility(View.VISIBLE);
         }
+
+
 
         this.cargarListView();
     }

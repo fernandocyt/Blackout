@@ -254,6 +254,19 @@ public class Global implements ObservadorAPI {
         return null;
     }
 
+    public static List<Corte> encontrarCortesPorEmpresa(int id_empresa)
+    {
+        List<Corte> cortes_retornar = new ArrayList<>();
+        for(int i = 0; i < Global.cortes.size(); i++)
+        {
+            if(Global.cortes.get(i).getIdEmpresa() == id_empresa)
+            {
+                cortes_retornar.add(Global.cortes.get(i));
+            }
+        }
+        return cortes_retornar;
+    }
+
     public static Usuario encontrarUsuarioPorId(int id_usuario)
     {
         for(int i = 0; i < Global.usuarios.size(); i++)

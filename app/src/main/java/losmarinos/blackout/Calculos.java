@@ -14,6 +14,8 @@ import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.Objetos.Reporte;
 
+import static java.lang.Math.abs;
+
 /**
  * Created by garci on 12/8/2017.
  */
@@ -68,6 +70,70 @@ public class Calculos {
         loc2.setLongitude(p2.longitude);
 
         return loc1.distanceTo(loc2);
+    }
+
+
+    public static double calificacionEmpresa(Empresa empresa)
+    {
+        // 2ptos - cantidad de cortes no programados ultimo año
+        //      +100 = 0pts     -20 = 3pts
+        // 3ptos - duracion promedio de cortes
+        //      +24hs = 0pts    -2hs = 2pts
+        // FUTURO --> 1ptos - respuestas x corte ratio
+
+        List<Corte> cortes_empresa = Global.encontrarCortesPorEmpresa(empresa.getSubId());
+        int cant_cortes_no_programados_ultimo_año = 0;
+        double hs_promedio_corte = 0;
+        for(int i = 0; i < cortes_empresa.size(); i++){
+
+            Date inicio = cortes_empresa.get(i).getFechaInicio();
+            Date fin = cortes_empresa.get(i).getFechaFin();
+            Date ahora = Calendar.getInstance().getTime();
+
+            // Cantidad de cortes totales ultimo año
+            long dif_inicio_ahora_dias = abs(ahora.getTime() - inicio.getTime()) / (24 * 60 * 60 * 1000);
+            if(dif_inicio_ahora_dias < 365){
+                cant_cortes_no_programados_ultimo_año++;
+            }
+
+            // Promedio duracion cortes
+            if(fin != null){
+                long dif_inicio_fin_horas = abs(fin.getTime() - inicio.getTime()) / (60 * 60 * 1000);
+
+                if(hs_promedio_corte == 0){
+                    hs_promedio_corte = dif_inicio_fin_horas;
+                }else{
+                    hs_promedio_corte = (hs_promedio_corte + dif_inicio_fin_horas)/2;
+                }
+            }
+        }
+
+
+        // La parte 1 es cantidad de cortes en 1 año
+        double parte_1 = 0; //acumulado real de esta parte
+        double valor_1 = 3; //vale 3 estrellas
+        double min_1 = 2;  //si el valor es menor a 20, le doy las 3 estrellas
+        double max_1 = 10; //si el valor es mayor a 100, no le doy un choto
+
+        if(cant_cortes_no_programados_ultimo_año < min_1){
+            parte_1 = valor_1;
+        }else if(cant_cortes_no_programados_ultimo_año < max_1){
+            parte_1 = valor_1 - (cant_cortes_no_programados_ultimo_año - min_1) * valor_1 / (max_1 - min_1);
+        }
+
+        // La parte 2 es el promedio de la duracion de los cortes
+        double parte_2 = 0; //acumulado real de esta parte
+        double valor_2 = 2; //vale 2 estrellas
+        double min_2 = 2;  //si el valor es menor a 2, le doy las 2 estrellas
+        double max_2 = 24; //si el valor es mayor a 24, no le doy un choto
+
+        if(hs_promedio_corte < min_2){
+            parte_2 = valor_2;
+        }else if(hs_promedio_corte < max_2){
+            parte_2 = valor_2 - (hs_promedio_corte - min_2) * valor_2 / (max_2 - min_2);
+        }
+
+        return parte_1 + parte_2;
     }
 
     public static List<valorEmpresa> porcentajeCortesTotal(Constantes.SERVICIO servicio)

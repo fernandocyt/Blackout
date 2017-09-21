@@ -83,14 +83,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
-                    android:text="Cantidad reportes:" />
+                    android:text="Motivo:" />
 
                 <Space
                     android:layout_width="20dp"
                     android:layout_height="wrap_content" />
 
                 <TextView
-                    android:id="@+id/lbl_cant_reportes_perfil_corte"
+                    android:id="@+id/lbl_motivo_perfil_corte"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
@@ -115,6 +115,30 @@
 
                 <TextView
                     android:id="@+id/lbl_fecha_inicio_perfil_corte"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="-" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="Fin:" />
+
+                <Space
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/lbl_fecha_fin_perfil_corte"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
