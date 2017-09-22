@@ -1,7 +1,9 @@
 package losmarinos.blackout.Objetos;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -14,7 +16,11 @@ import java.util.List;
 
 import losmarinos.blackout.Calculos;
 import losmarinos.blackout.Constantes;
+import losmarinos.blackout.ConsultorGETAPI;
 import losmarinos.blackout.Global;
+import losmarinos.blackout.ParserJSON;
+
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_RESPUESTAS_POR_CORTE;
 
 /**
  * Created by garci on 23/7/2017.
@@ -143,6 +149,20 @@ public class Corte{
     public Empresa getEmpresa()
     {
         return Global.encontrarEmpresaPorId(this.id_empresa);
+    }
+
+    public void actualizarRespuestas(Context contexto){
+        try {
+            String respuesta = new ConsultorGETAPI("cortes/"+String.valueOf(this.id)+"/respuestas",
+                    Global.token_usuario_actual, OBTENER_RESPUESTAS_POR_CORTE, null).execute().get();
+            StringBuilder msg_error = new StringBuilder();
+            if(ParserJSON.esError(respuesta, msg_error)){
+                Toast.makeText(contexto, "No es posible cargar respuestas", Toast.LENGTH_LONG).show();
+                return;
+            }else{
+                this.respuestas = ParserJSON.obtenerRespuestas(respuesta);
+            }
+        }catch (Exception e){}
     }
 
     public Corte(Reporte reporte)

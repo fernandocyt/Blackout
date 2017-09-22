@@ -17,15 +17,6 @@
             android:layout_height="wrap_content"
             app:srcCompat="@android:drawable/btn_star_big_on" />
 
-
-
-        <Button
-            android:id="@+id/btn_borrar_respuesta_item_respuesta"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Borrar"
-            android:textSize="12sp" />
-
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="wrap_content"

@@ -89,24 +89,6 @@ public class RespuestaAdapter extends BaseAdapter implements ListAdapter {
             textview_usuario.setText("");
         }
 
-        button_borrar = (Button)view.findViewById(R.id.btn_borrar_respuesta_item_respuesta);
-
-        if(Global.usuario_actual.getIdUsuario() == id_usuario_rta_actual) {
-            button_borrar.setVisibility(View.VISIBLE);
-        }else{
-            button_borrar.setVisibility(View.GONE);
-        }
-
-        button_borrar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PerfilCorte perfil_corte = (PerfilCorte)context;
-                perfil_corte.borrarRespuesta(list.get(position).getId());
-                //empresa_actual.actualizarSucursales(context);
-                perfil_corte.cargarListView();
-            }
-        });
-
         return view;
     }
 

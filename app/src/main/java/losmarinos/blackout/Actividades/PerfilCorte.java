@@ -50,6 +50,7 @@ public class PerfilCorte extends AppCompatActivity {
     EditText edittext_respuesta;
     Button button_de_interes;
     Button button_agregar_respuesta;
+    Button button_borrar_respuesta;
 
     Corte corte;
 
@@ -70,7 +71,9 @@ public class PerfilCorte extends AppCompatActivity {
         edittext_respuesta = (EditText)findViewById(R.id.txt_respuesta_perfil_corte);
         button_de_interes = (Button)findViewById(R.id.btn_corte_interes_perfil_corte);
         button_agregar_respuesta = (Button)findViewById(R.id.btn_agregar_respuesta_perfil_corte);
+        button_borrar_respuesta = (Button)findViewById(R.id.btn_borrar_respuesta_perfil_corte);
 
+        this.corte.actualizarRespuestas(this);
         this.cargarCorte();
     }
 
@@ -113,39 +116,38 @@ public class PerfilCorte extends AppCompatActivity {
             edittext_respuesta.setHint("Informar a usuarios");
         }
 
+        button_borrar_respuesta.setVisibility(View.GONE);
+        List<Respuesta> respuestas = this.corte.getRespuestas();
+        for(int i= 0; i < respuestas.size(); i++){
+            if(respuestas.get(i).getUsuario().getIdUsuario() == Global.usuario_actual.getIdUsuario()){
+                edittext_respuesta.setText(respuestas.get(i).getTexto());
+                button_borrar_respuesta.setVisibility(View.VISIBLE);
+            }
+        }
+
         this.cargarListView();
     }
 
     public void cargarListView(){
-        List<Respuesta> respuestas = new ArrayList<>();
-        try {
-            String respuesta = new ConsultorGETAPI("cortes/"+String.valueOf(this.corte.getId())+"/respuestas",
-                    Global.token_usuario_actual, OBTENER_RESPUESTAS_POR_CORTE, null).execute().get();
-            StringBuilder msg_error = new StringBuilder();
-            if(ParserJSON.esError(respuesta, msg_error)){
-                Toast.makeText(this, "No es posible cargar respuestas", Toast.LENGTH_LONG).show();
-                return;
-            }else{
-                respuestas = ParserJSON.obtenerRespuestas(respuesta);
-            }
-        }catch (Exception e){}
+        List<Respuesta> respuestas_usuarios = new ArrayList<>(this.corte.getRespuestas());
+        List<Respuesta> respuesta_empresa = new ArrayList<>();
 
-        for(int i = 0; i < respuestas.size(); i++) {
-            if(respuestas.get(i).getUsuario().getTipo() == Constantes.TIPOSUSUARIO.EMPRESA)
+        for(int i = 0; i < respuestas_usuarios.size(); i++) {
+            if(respuestas_usuarios.get(i).getUsuario().getTipo() == Constantes.TIPOSUSUARIO.EMPRESA)
             {
-
-                List<Respuesta> resp_empresa = new ArrayList<>();
-                resp_empresa.add(respuestas.remove(i));
-                RespuestaAdapter adapter = new RespuestaAdapter(resp_empresa, true, this, this);
-                ListView mi_lista = (ListView)findViewById(R.id.lst_respuesta_empresa_perfil_corte);
-                mi_lista.setAdapter(adapter);
+                respuesta_empresa.add(respuestas_usuarios.remove(i));
                 break;
             }
         }
 
-        RespuestaAdapter adapter = new RespuestaAdapter(respuestas, false, this, this);
-        ListView mi_lista = (ListView)findViewById(R.id.lst_respuesta_perfil_corte);
-        mi_lista.setAdapter(adapter);
+
+        RespuestaAdapter adapter_empresa = new RespuestaAdapter(respuesta_empresa, true, this, this);
+        ListView mi_lista_empresa = (ListView)findViewById(R.id.lst_respuesta_empresa_perfil_corte);
+        mi_lista_empresa.setAdapter(adapter_empresa);
+
+        RespuestaAdapter adapter_usuarios = new RespuestaAdapter(respuestas_usuarios, false, this, this);
+        ListView mi_lista_usuarios = (ListView)findViewById(R.id.lst_respuesta_perfil_corte);
+        mi_lista_usuarios.setAdapter(adapter_usuarios);
 
     }
 
@@ -165,8 +167,8 @@ public class PerfilCorte extends AppCompatActivity {
             Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
         }
 
-
-        this.cargarListView();
+        this.corte.actualizarRespuestas(this);
+        this.cargarCorte();
     }
 
     public void irAPerfilEmpresa(View view){
@@ -221,8 +223,19 @@ public class PerfilCorte extends AppCompatActivity {
         this.cargarCorte();
     }
 
-    public void borrarRespuesta(int id_respuesta)
+    public void borrarRespuesta(View view)
     {
+        List<Respuesta> respuestas = this.corte.getRespuestas();
+        int id_respuesta = -1;
+        for(int i = 0; i < respuestas.size(); i++){
+            if(respuestas.get(i).getUsuario().getIdUsuario() == Global.usuario_actual.getIdUsuario()){
+                id_respuesta = respuestas.get(i).getId();
+            }
+        }
+
+        if(id_respuesta == -1)
+            return;
+
         try{
             String resultado = new ConsultorDELETEAPI("respuestas/" + String.valueOf(id_respuesta) + "/delete", token_usuario_actual, BORRAR_RESPUESTA, null).execute().get();
             StringBuilder mensaje_error = new StringBuilder();
@@ -232,6 +245,9 @@ public class PerfilCorte extends AppCompatActivity {
         }catch (Exception e){
             Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
         }
+
+        this.corte.actualizarRespuestas(this);
+        this.cargarCorte();
     }
 
 }
