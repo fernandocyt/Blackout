@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import losmarinos.blackout.Constantes;
+import losmarinos.blackout.Global;
 import losmarinos.blackout.Objetos.Usuario;
 import losmarinos.blackout.R;
 import losmarinos.blackout.Actividades.PerfilCorte;
@@ -31,6 +33,8 @@ public class RespuestaAdapter extends BaseAdapter implements ListAdapter {
     TextView textview_texto;
     TextView textview_usuario;
     boolean mostrar_estrella;
+    Button button_borrar;
+    int id_usuario_rta_actual;
 
     public RespuestaAdapter(List<Respuesta> list, boolean mostrar_estrella, Context context, PerfilCorte actividad) {
         this.list = list;
@@ -59,6 +63,8 @@ public class RespuestaAdapter extends BaseAdapter implements ListAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
+        id_usuario_rta_actual = list.get(position).getId_usuario();
+
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.item_respuesta, null);
@@ -83,6 +89,25 @@ public class RespuestaAdapter extends BaseAdapter implements ListAdapter {
             textview_usuario.setText("");
         }
 
+        button_borrar = (Button)view.findViewById(R.id.btn_borrar_respuesta_item_respuesta);
+
+        if(Global.usuario_actual.getIdUsuario() == id_usuario_rta_actual) {
+            button_borrar.setVisibility(View.VISIBLE);
+        }else{
+            button_borrar.setVisibility(View.GONE);
+        }
+
+        button_borrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PerfilCorte perfil_corte = (PerfilCorte)context;
+                perfil_corte.borrarRespuesta(list.get(position).getId());
+                //empresa_actual.actualizarSucursales(context);
+                perfil_corte.cargarListView();
+            }
+        });
+
         return view;
     }
+
 }

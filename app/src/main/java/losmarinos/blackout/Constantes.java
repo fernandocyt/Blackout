@@ -62,6 +62,7 @@ public class Constantes {
         BORRAR_CORTE_DE_INTERES,
         BORRAR_CORTE_PROGRAMADO,
         BORRAR_SUCURSAL,
+        BORRAR_RESPUESTA,
 
     }
 

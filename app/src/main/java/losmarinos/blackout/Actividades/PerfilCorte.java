@@ -32,6 +32,7 @@ import losmarinos.blackout.Adapters.RespuestaAdapter;
 
 import static losmarinos.blackout.Constantes.TAGAPI.BORRAR_CORTE_DE_INTERES;
 import static losmarinos.blackout.Constantes.TAGAPI.BORRAR_PUNTO_DE_INTERES;
+import static losmarinos.blackout.Constantes.TAGAPI.BORRAR_RESPUESTA;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_COMENTARIOS_POR_EMPRESA;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_RESPUESTAS_POR_CORTE;
 import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_COMENTARIO;
@@ -115,7 +116,7 @@ public class PerfilCorte extends AppCompatActivity {
         this.cargarListView();
     }
 
-    void cargarListView(){
+    public void cargarListView(){
         List<Respuesta> respuestas = new ArrayList<>();
         try {
             String respuesta = new ConsultorGETAPI("cortes/"+String.valueOf(this.corte.getId())+"/respuestas",
@@ -219,4 +220,18 @@ public class PerfilCorte extends AppCompatActivity {
         Global.usuario_actual.actualizarCortesInteres(this);
         this.cargarCorte();
     }
+
+    public void borrarRespuesta(int id_respuesta)
+    {
+        try{
+            String resultado = new ConsultorDELETEAPI("respuestas/" + String.valueOf(id_respuesta) + "/delete", token_usuario_actual, BORRAR_RESPUESTA, null).execute().get();
+            StringBuilder mensaje_error = new StringBuilder();
+            if(ParserJSON.esError(resultado, mensaje_error)){
+                Toast.makeText(this, mensaje_error, Toast.LENGTH_LONG).show();
+            }
+        }catch (Exception e){
+            Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
+        }
+    }
+
 }

@@ -34,6 +34,11 @@ public class ParserJSON {
 
     public static boolean esError(String json, StringBuilder mensaje_error)
     {
+        //Validación porque la ruta de borrar Respuesta devuelve un string "true\r" en lugar de un JSON
+        if (json.startsWith("true")){
+            return false;
+        }//Validación porque la ruta de borrar Respuesta devuelve un string "true\r" en lugar de un JSON
+
         try {
             JSONObject obj_resp = new JSONObject(json);
 
