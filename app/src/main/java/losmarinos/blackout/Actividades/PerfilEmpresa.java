@@ -45,6 +45,7 @@ public class PerfilEmpresa extends AppCompatActivity {
     EditText edittext_comentario;
     RatingBar rtb_calificacion;
     Button button_agregar_comentario;
+    Button button_borrar_comenario;
 
     Empresa empresa;
 
@@ -74,7 +75,9 @@ public class PerfilEmpresa extends AppCompatActivity {
         rtb_calificacion.setMax(5);
         rtb_calificacion.setStepSize(0.1f);
         button_agregar_comentario = (Button)findViewById(R.id.btn_agregar_comentario_perfil_empresa);
+        button_borrar_comenario = (Button)findViewById(R.id.btn_borrar_comentario_perfil_empresa);
 
+        this.empresa.actualizarComentarios(this);
         this.cargarEmpresa();
 
     }
@@ -96,6 +99,8 @@ public class PerfilEmpresa extends AppCompatActivity {
             button_agregar_comentario.setVisibility(View.VISIBLE);
             edittext_comentario.setVisibility(View.VISIBLE);
         }
+
+
 
 
 

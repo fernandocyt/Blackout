@@ -13,6 +13,7 @@ import losmarinos.blackout.ConsultorGETAPI;
 import losmarinos.blackout.Global;
 import losmarinos.blackout.ParserJSON;
 
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_COMENTARIOS_POR_EMPRESA;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_SUCURSALES_POR_EMPRESA;
 
 /**
@@ -127,6 +128,20 @@ public class Empresa extends Usuario {
                 return;
             }else{
                 this.sucursales = ParserJSON.obtenerSucursales(respuesta);
+            }
+        }catch (Exception e){}
+    }
+
+    public void actualizarComentarios(Context contexto){
+        try {
+            String respuesta = new ConsultorGETAPI("empresa/"+String.valueOf(this.getSubId())+"/comentarios",
+                    Global.token_usuario_actual, OBTENER_COMENTARIOS_POR_EMPRESA, null).execute().get();
+            StringBuilder msg_error = new StringBuilder();
+            if(ParserJSON.esError(respuesta, msg_error)){
+                Toast.makeText(contexto, "No es posible cargar comentarios", Toast.LENGTH_LONG).show();
+                return;
+            }else{
+                this.comentarios = ParserJSON.obtenerComentarios(respuesta);
             }
         }catch (Exception e){}
     }

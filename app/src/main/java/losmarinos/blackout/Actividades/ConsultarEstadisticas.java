@@ -67,7 +67,7 @@ public class ConsultarEstadisticas extends AppCompatActivity implements AdapterV
         List<String> spinnerArray =  new ArrayList<String>();
         spinnerArray.add("Porcentaje de cortes total");
         spinnerArray.add("Cantidad de cortes programados");
-        spinnerArray.add("Tiempo promedio de resolucion de cortes");
+        spinnerArray.add("Tiempo promedio de resolución de cortes");
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, spinnerArray);

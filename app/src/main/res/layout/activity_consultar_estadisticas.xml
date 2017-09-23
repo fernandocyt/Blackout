@@ -41,7 +41,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Estadistica"
+                android:text="Estadística"
                 android:layout_margin="10dp"
                 android:textSize="20sp"/>
 
