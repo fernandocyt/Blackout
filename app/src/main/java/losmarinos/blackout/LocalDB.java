@@ -264,7 +264,7 @@ public class LocalDB {
     }
 
     public static void borrarArchivoJSONCortesResueltosAvisados(Context context){
-        context.deleteFile(file_name_cortes_avisados);
+        context.deleteFile(file_name_cortes_resueltos_avisados);
     }
 
 }
