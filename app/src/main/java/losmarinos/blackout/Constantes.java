@@ -16,6 +16,8 @@ public class Constantes {
 
     // SERVICIO PERIODICO
     public static final int TIEMPO_CHECKEO_SERVICIO = 1000 * 30 * 1; //30 segundos
+    public static final int TIEMPO_PEDIR_CONFIRMACION_REPORTES = 1440; // 1440 minutos (24hs)
+    public static final int TIEMPO_RESOLVER_AUTOMATICAMENTE_REPORTES = 1500; // 1500 minutos (25hs)
 
     // MAPA
     public static final int STROKE_COLOR_CIRCLE = Color.TRANSPARENT;
@@ -27,8 +29,6 @@ public class Constantes {
     // CALCULOS
     public static final int RADIO_SECU = 1000;
 
-    // CONSTANTES BASE
-    public static final int ID_EMPRESA_NO_ESPECIFICA = 3;
 
     public enum TIPOSUSUARIO
     {

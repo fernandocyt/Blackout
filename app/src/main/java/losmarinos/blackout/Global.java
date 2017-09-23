@@ -288,7 +288,7 @@ public class Global implements ObservadorAPI {
         List<Reporte> reportes_retornar = new ArrayList<>();
         for(int i = 0; i < Global.reportes.size(); i++)
         {
-            if(Global.reportes.get(i).getIdPersona() == id_usuario)
+            if(Global.reportes.get(i).getIdUsuario() == id_usuario)
             {
                 reportes_retornar.add(reportes.get(i));
             }

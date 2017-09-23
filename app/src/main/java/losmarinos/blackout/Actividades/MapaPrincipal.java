@@ -192,10 +192,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             Intent i = new Intent(getApplicationContext(), CrearSucursal.class);
             startActivity(i);
         } else if (id == R.id.drawer_cerrar_sesion){
-            LocalDB.borrarArchivoJSONUsuario(this);
-            LocalDB.borrarArchivoJSONCortesAvisados(this);
-            LocalDB.borrarArchivoJSONCortesResueltosAvisados(this);
-
+            LocalDB.borrarTodasLasDB(this);
             Global.vaciarTodo();
 
             if(isMyServiceRunning(ServicioPeriodico.class))

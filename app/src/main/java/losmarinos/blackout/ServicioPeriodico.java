@@ -15,19 +15,26 @@ import android.support.v7.app.NotificationCompat;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import losmarinos.blackout.Actividades.Login;
 import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.CorteInteres;
 import losmarinos.blackout.Objetos.PuntoInteres;
+import losmarinos.blackout.Objetos.Reporte;
 import losmarinos.blackout.Objetos.Usuario;
 
+import static java.lang.Math.abs;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_CORTES;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_CORTESINTERES_POR_USUARIO;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_PUNTOSINTERES_POR_USUARIO;
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_REPORTES;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_REPORTES_POR_USUARIO;
 import static losmarinos.blackout.Constantes.TIEMPO_CHECKEO_SERVICIO;
+import static losmarinos.blackout.Constantes.TIEMPO_PEDIR_CONFIRMACION_REPORTES;
+import static losmarinos.blackout.Constantes.TIEMPO_RESOLVER_AUTOMATICAMENTE_REPORTES;
 
 /**
  * Created by garci on 15/8/2017.
@@ -73,6 +80,9 @@ public class ServicioPeriodico extends Service implements Runnable {
 
             List<Corte> cortes_interes = actualizarCortesInteres(id[0], token.toString(), cortes);
             checkearCortesInteres(cortes_interes);
+
+            List<Reporte> reportes_usuario = actualizarReportes(id[0], token.toString());
+            checkearReportes(reportes_usuario);
         }
 
         handler.postDelayed(runnable, TIEMPO_CHECKEO_SERVICIO);
@@ -127,6 +137,26 @@ public class ServicioPeriodico extends Service implements Runnable {
         return cortes_retornar;
     }
 
+    public static List<Reporte> actualizarReportes(int id_usuario, String token){
+        List<Reporte> reportes_usuario = new ArrayList<>();
+        try {
+            String respuesta = new ConsultorGETAPI("reporte", token, OBTENER_REPORTES, null).execute().get();
+            StringBuilder msg_error = new StringBuilder();
+            if(!ParserJSON.esError(respuesta, msg_error)){
+                reportes_usuario = ParserJSON.obtenerReportes(respuesta);
+            }
+        }catch (Exception e){}
+
+        for(int i = 0; i < reportes_usuario.size(); i++){
+            if(reportes_usuario.get(i).getIdUsuario() != id_usuario){
+                reportes_usuario.remove(i);
+                i--;
+            }
+        }
+
+        return reportes_usuario;
+    }
+
     public void checkearPuntosInteres(List<PuntoInteres> puntos_interes, List<Corte> cortes) {
         for (int i = 0; i < puntos_interes.size(); i++) {
             PuntoInteres punto_actual = puntos_interes.get(i);
@@ -167,6 +197,38 @@ public class ServicioPeriodico extends Service implements Runnable {
                 LocalDB.agregarArchivoJSONCortesAvisados(this.context, corte_actual.getId(), true);
 
                 this.notificar("Tu corte de interes fue resuelto");
+            }
+        }
+    }
+
+    public void checkearReportes(List<Reporte> reportes_usuario){
+        for(int i = 0; i < reportes_usuario.size(); i++){
+            Reporte reporte_actual = reportes_usuario.get(i);
+
+            if(reporte_actual.isResuelto())
+                continue;
+
+            Date fecha_conf = LocalDB.estaEnArchivoJSONReportesConfirmados(this, reporte_actual.getId());
+
+            if(fecha_conf == null){
+                LocalDB.agregarArchivoJSONReportesConfirmados(this, reporte_actual.getId(), reporte_actual.getFecha());
+            }else{
+                Date ahora = Calendar.getInstance().getTime();
+                long dif_mins_conf_horas = (ahora.getTime() - fecha_conf.getTime()) / (60 * 1000);
+
+                if(dif_mins_conf_horas > TIEMPO_PEDIR_CONFIRMACION_REPORTES &&
+                        dif_mins_conf_horas < TIEMPO_RESOLVER_AUTOMATICAMENTE_REPORTES)
+                {
+                    String str_servicio = Constantes.servicioToString(reporte_actual.getServicio());
+                    this.notificar("Confirma o resuelve tu reporte de " + str_servicio);
+                }
+                else if (dif_mins_conf_horas > TIEMPO_RESOLVER_AUTOMATICAMENTE_REPORTES)
+                {
+                    reporte_actual.resolver();
+
+                    String str_servicio = Constantes.servicioToString(reporte_actual.getServicio());
+                    this.notificar("Se resolvio el reporte de " + str_servicio);
+                }
             }
         }
     }

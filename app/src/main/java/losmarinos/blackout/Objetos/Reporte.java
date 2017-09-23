@@ -1,5 +1,7 @@
 package losmarinos.blackout.Objetos;
 
+import android.content.Context;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.text.DateFormat;
@@ -10,6 +12,7 @@ import java.util.Date;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.Global;
+import losmarinos.blackout.LocalDB;
 import losmarinos.blackout.ParserJSON;
 
 import static losmarinos.blackout.Constantes.TAGAPI.ACTUALIZAR_REPORTE_RESUELTO;
@@ -24,7 +27,7 @@ public class Reporte {
     private int id;
     private Constantes.SERVICIO servicio;
     private int id_empresa;
-    private int id_persona;
+    private int id_usuario;
     private LatLng ubicacion;
     private int radio;
     private Date fecha;
@@ -47,12 +50,12 @@ public class Reporte {
         this.id_empresa = id_empresa;
     }
 
-    public int getIdPersona() {
-        return id_persona;
+    public int getIdUsuario() {
+        return id_usuario;
     }
 
-    public void setIdPersona(int id_persona) {
-        this.id_persona = id_persona;
+    public void setIdUsuario(int id_usuario) {
+        this.id_usuario = id_usuario;
     }
 
     public LatLng getUbicacion() {
@@ -103,12 +106,12 @@ public class Reporte {
         this.asociado = asociado;
     }
 
-    public Reporte(int id, Constantes.SERVICIO servicio, int id_empresa, int id_persona, LatLng ubicacion, int radio, Date fecha, int resuelto)
+    public Reporte(int id, Constantes.SERVICIO servicio, int id_empresa, int id_usuario, LatLng ubicacion, int radio, Date fecha, int resuelto)
     {
         this.id = id;
         this.servicio = servicio;
         this.id_empresa = id_empresa;
-        this.id_persona = id_persona;
+        this.id_usuario = id_usuario;
         this.ubicacion = ubicacion;
         this.radio = radio;
         this.fecha = fecha;
@@ -151,6 +154,11 @@ public class Reporte {
         }catch (Exception e){
             return false;
         }
+    }
+
+    public void confirmar(Context contexto){
+        Date ahora = Calendar.getInstance().getTime();
+        LocalDB.agregarArchivoJSONReportesConfirmados(contexto, this.id, ahora);
     }
 
 }

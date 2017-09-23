@@ -338,7 +338,7 @@ public class ParserJSON {
         try {
             JSONObject obj_resp = new JSONObject(json);
             int id = Integer.parseInt(obj_resp.getString("id"));
-            int id_persona = Integer.parseInt(obj_resp.getString("user_id"));
+            int id_usuario = Integer.parseInt(obj_resp.getString("user_id"));
             int id_servicio = Integer.parseInt(obj_resp.getString("servicio_id"));
             int id_empresa = -1;
             if(!obj_resp.isNull("empresa_id")) {
@@ -356,7 +356,7 @@ public class ParserJSON {
             return new Reporte(id,
                     Constantes.getServicioById(id_servicio),
                     id_empresa,
-                    id_persona,
+                    id_usuario,
                     Constantes.stringToLatLng(ubicacion),
                     radio,
                     date,

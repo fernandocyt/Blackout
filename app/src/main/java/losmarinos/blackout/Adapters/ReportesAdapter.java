@@ -10,14 +10,18 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import losmarinos.blackout.Actividades.MisReportes;
 import losmarinos.blackout.Actividades.PerfilCorte;
+import losmarinos.blackout.LocalDB;
 import losmarinos.blackout.Objetos.Reporte;
 import losmarinos.blackout.Objetos.Respuesta;
 import losmarinos.blackout.R;
@@ -33,6 +37,7 @@ public class ReportesAdapter extends BaseAdapter implements ListAdapter {
     TextView textview_texto;
     TextView textview_activo;
     Button button_resolver;
+    Button button_confirmar;
 
     public ReportesAdapter(List<Reporte> list, Context context, MisReportes actividad) {
         this.list = list;
@@ -71,18 +76,23 @@ public class ReportesAdapter extends BaseAdapter implements ListAdapter {
 
         textview_activo = (TextView)view.findViewById(R.id.lbl_activo_reporte_mis_objetos);
         button_resolver = (Button)view.findViewById(R.id.btn_resolver_reporte_mis_objetos);
+        button_confirmar = (Button)view.findViewById(R.id.btn_confirmar_reporte_mis_objetos);
 
         if(list.get(position).isResuelto()) {
             textview_activo.setText("Resuelto");
             button_resolver.setVisibility(View.GONE);
+            button_confirmar.setVisibility(View.GONE);
         }else{
             textview_activo.setText("Pendiente");
             button_resolver.setVisibility(View.VISIBLE);
+
+            if(LocalDB.estaEnArchivoJSONReportesConfirmados(context, list.get(position).getId()) == null){
+                button_confirmar.setVisibility(View.GONE);
+            }else{
+                button_confirmar.setVisibility(View.VISIBLE);
+            }
         }
 
-        button_resolver = (Button)view.findViewById(R.id.btn_resolver_reporte_mis_objetos);
-        if(list.get(position).isResuelto()) {
-        }
         button_resolver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +103,18 @@ public class ReportesAdapter extends BaseAdapter implements ListAdapter {
             }
         });
 
+        button_confirmar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                list.get(position).confirmar(context);
+                Date ahora = Calendar.getInstance().getTime();
+
+                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy");
+                String str_fecha = format.format(ahora);
+                Toast.makeText(context, "Reporte confirmado (" + str_fecha + ")", Toast.LENGTH_LONG).show();
+
+            }
+        });
 
         LinearLayout linea_reporte = (LinearLayout)view.findViewById(R.id.reporte_mis_objetos);
         linea_reporte.setOnClickListener(new View.OnClickListener() {

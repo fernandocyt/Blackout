@@ -26,10 +26,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
+import losmarinos.blackout.Objetos.Reporte;
 
 import static android.R.attr.data;
 import static java.security.AccessController.getContext;
@@ -42,6 +48,7 @@ public class LocalDB {
     static String file_name_usuario = "userData";
     static String file_name_cortes_avisados = "cortesAvisados";
     static String file_name_cortes_resueltos_avisados = "cortesResueltosAvisados";
+    static String file_name_reportes_confirmados = "reportesConfirmados";
 
     // region Archivos XML
     public static void crearXMLUsuario(Context contexto, String nombre, String pass, String mail, String token)
@@ -130,6 +137,13 @@ public class LocalDB {
     }
 
     // endregion
+
+    public static void borrarTodasLasDB(Context contexto){
+        borrarArchivoJSONUsuario(contexto);
+        borrarArchivoJSONCortesAvisados(contexto);
+        borrarArchivoJSONCortesResueltosAvisados(contexto);
+        borrarArchivoJSONReportesConfirmados(contexto);
+    }
 
     public static void crearArchivoJSONUsuario(Context contexto, int id, String nombre, String pass, String mail, String token) {
         try {
@@ -267,4 +281,97 @@ public class LocalDB {
         context.deleteFile(file_name_cortes_resueltos_avisados);
     }
 
+    public static void crearArchivoJSONReportesConfirmados(Context contexto, JSONArray array) {
+        try {
+            FileOutputStream fileos = contexto.openFileOutput(file_name_reportes_confirmados, Context.MODE_PRIVATE);
+            fileos.write(array.toString().getBytes());
+            fileos.close();
+        }catch (Exception e){
+
+        }
+    }
+
+    public static void agregarArchivoJSONReportesConfirmados(Context contexto, int id_reporte, Date fecha) {
+        try {
+            FileInputStream fis = contexto.openFileInput(file_name_reportes_confirmados);
+            InputStreamReader isr = new InputStreamReader(fis);
+            char[] inputBuffer = new char[fis.available()];
+            isr.read(inputBuffer);
+            String data = new String(inputBuffer);
+
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String str_fecha = format.format(fecha);
+
+            JSONArray arr = new JSONArray(data);
+
+            boolean estaba = false;
+            for(int i = 0; i < arr.length(); i++) {
+                JSONObject obj_reporte = arr.getJSONObject(i);
+                if(obj_reporte.getInt("id") == id_reporte){
+                    obj_reporte.put("ultima_confirmacion", str_fecha);
+                    estaba = true;
+                }
+            }
+            if(!estaba) {
+                JSONObject rep = new JSONObject();
+                rep.put("id", id_reporte);
+                rep.put("ultima_confirmacion", str_fecha);
+                arr.put(rep);
+            }
+
+            isr.close();
+            fis.close();
+
+            borrarArchivoJSONReportesConfirmados(contexto);
+            crearArchivoJSONReportesConfirmados(contexto, arr);
+
+        }catch (FileNotFoundException e){
+            try {
+                JSONArray arr = new JSONArray();
+                    JSONObject rep = new JSONObject();
+                    rep.put("id", id_reporte);
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String str_fecha = format.format(fecha);
+                    rep.put("ultima_confirmacion", str_fecha);
+                arr.put(rep);
+
+                crearArchivoJSONReportesConfirmados(contexto, arr);
+            }catch (Exception e2){}
+        }catch (Exception e){
+            borrarArchivoJSONReportesConfirmados(contexto);
+        }
+    }
+
+    public static Date estaEnArchivoJSONReportesConfirmados(Context contexto, int id_reporte) {
+        try {
+            FileInputStream fis = contexto.openFileInput(file_name_reportes_confirmados);
+            InputStreamReader isr = new InputStreamReader(fis);
+            char[] inputBuffer = new char[fis.available()];
+            isr.read(inputBuffer);
+            String data = new String(inputBuffer);
+
+            JSONArray arr = new JSONArray(data);
+
+            isr.close();
+            fis.close();
+
+            for(int i = 0; i < arr.length(); i++) {
+                JSONObject obj_reporte = arr.getJSONObject(i);
+                if(obj_reporte.getInt("id") == id_reporte){
+                    String str_fecha = obj_reporte.getString("ultima_confirmacion");
+
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    return format.parse(str_fecha);
+                }
+            }
+
+            return null;
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    public static void borrarArchivoJSONReportesConfirmados(Context context){
+        context.deleteFile(file_name_reportes_confirmados);
+    }
 }
