@@ -21,6 +21,7 @@ import java.util.List;
 import losmarinos.blackout.Adapters.ComentarioAdapter;
 import losmarinos.blackout.Calculos;
 import losmarinos.blackout.Constantes;
+import losmarinos.blackout.ConsultorDELETEAPI;
 import losmarinos.blackout.ConsultorGETAPI;
 import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.Global;
@@ -29,10 +30,12 @@ import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.ParserJSON;
 import losmarinos.blackout.R;
 
+import static losmarinos.blackout.Constantes.TAGAPI.BORRAR_COMENTARIO;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_COMENTARIOS_POR_EMPRESA;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_EMPRESAS;
 import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_COMENTARIO;
 import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_REPORTE;
+import static losmarinos.blackout.Global.token_usuario_actual;
 
 public class PerfilEmpresa extends AppCompatActivity {
 
@@ -45,7 +48,7 @@ public class PerfilEmpresa extends AppCompatActivity {
     EditText edittext_comentario;
     RatingBar rtb_calificacion;
     Button button_agregar_comentario;
-    Button button_borrar_comenario;
+    Button button_borrar_comentario;
 
     Empresa empresa;
 
@@ -75,7 +78,7 @@ public class PerfilEmpresa extends AppCompatActivity {
         rtb_calificacion.setMax(5);
         rtb_calificacion.setStepSize(0.1f);
         button_agregar_comentario = (Button)findViewById(R.id.btn_agregar_comentario_perfil_empresa);
-        button_borrar_comenario = (Button)findViewById(R.id.btn_borrar_comentario_perfil_empresa);
+        button_borrar_comentario = (Button)findViewById(R.id.btn_borrar_comentario_perfil_empresa);
 
         this.empresa.actualizarComentarios(this);
         this.cargarEmpresa();
@@ -100,30 +103,24 @@ public class PerfilEmpresa extends AppCompatActivity {
             edittext_comentario.setVisibility(View.VISIBLE);
         }
 
-
-
-
+        button_borrar_comentario.setVisibility(View.GONE);
+        List<Comentario> comentarios = this.empresa.getComentarios();
+        for(int i= 0; i < comentarios.size(); i++){
+            if(comentarios.get(i).getUsuario().getIdUsuario() == Global.usuario_actual.getIdUsuario()){
+                edittext_comentario.setText(comentarios.get(i).getTexto());
+                button_borrar_comentario.setVisibility(View.VISIBLE);
+            }
+        }
 
         this.cargarListView();
     }
 
-    void cargarListView(){
-        List<Comentario> comentarios = new ArrayList<>();
-        try {
-            String respuesta = new ConsultorGETAPI("empresa/"+String.valueOf(this.empresa.getSubId())+"/comentarios",
-                    Global.token_usuario_actual, OBTENER_COMENTARIOS_POR_EMPRESA, null).execute().get();
-            StringBuilder msg_error = new StringBuilder();
-            if(ParserJSON.esError(respuesta, msg_error)){
-                    Toast.makeText(this, "No es posible cargar comentarios", Toast.LENGTH_LONG).show();
-                return;
-            }else{
-                comentarios = ParserJSON.obtenerComentarios(respuesta);
-            }
-        }catch (Exception e){}
+    public void cargarListView(){
+        List<Comentario> comentarios_usuarios = new ArrayList<>(this.empresa.getComentarios());
 
-        ComentarioAdapter adapter = new ComentarioAdapter(comentarios, this, this);
-        ListView mi_lista = (ListView)findViewById(R.id.lst_comentario_perfil_empresa);
-        mi_lista.setAdapter(adapter);
+        ComentarioAdapter adapter = new ComentarioAdapter(comentarios_usuarios, this, this);
+        ListView mi_lista_comentarios = (ListView)findViewById(R.id.lst_comentario_perfil_empresa);
+        mi_lista_comentarios.setAdapter(adapter);
     }
 
     public void agregarComentario(View view)
@@ -145,7 +142,8 @@ public class PerfilEmpresa extends AppCompatActivity {
             Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
         }
 
-        this.cargarListView();
+        this.empresa.actualizarComentarios(this);
+        this.cargarEmpresa();
 
     }
 
@@ -154,6 +152,33 @@ public class PerfilEmpresa extends AppCompatActivity {
         Intent i = new Intent(this, VerSucursales.class);
         i.putExtra("idEmpresa", empresa.getSubId());
         startActivity(i);
+    }
+
+    public void borrarComentario(View view)
+    {
+        List<Comentario> comentarios = this.empresa.getComentarios();
+        int id_comentario = -1;
+        for(int i = 0; i < comentarios.size(); i++){
+            if(comentarios.get(i).getUsuario().getIdUsuario() == Global.usuario_actual.getIdUsuario()){
+                id_comentario = comentarios.get(i).getId();
+            }
+        }
+
+        if(id_comentario == -1)
+            return;
+
+        try{
+            String resultado = new ConsultorDELETEAPI("comentario/" + String.valueOf(id_comentario) + "/delete", token_usuario_actual, BORRAR_COMENTARIO, null).execute().get();
+            StringBuilder mensaje_error = new StringBuilder();
+            if(ParserJSON.esError(resultado, mensaje_error)){
+                Toast.makeText(this, mensaje_error, Toast.LENGTH_LONG).show();
+            }
+        }catch (Exception e){
+            Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
+        }
+
+        this.empresa.actualizarComentarios(this);
+        this.cargarEmpresa();
     }
 
 }

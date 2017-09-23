@@ -46,7 +46,9 @@ public class Comentario {
 
     public Comentario(int id, int id_usuario, int id_empresa, String texto)
     {
+        this.id = id;
         this.id_usuario = id_usuario;
+        this.id_empresa = id_empresa;
         this.texto = texto;
     }
 
