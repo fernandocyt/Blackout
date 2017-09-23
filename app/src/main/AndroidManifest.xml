@@ -95,7 +95,8 @@
         <activity android:name=".Actividades.CrearCorteProgramado" />
         <activity android:name=".Actividades.MisCortesProgramados" />
         <activity android:name=".Actividades.ConsultarEstadisticas" />
-        <activity android:name=".Actividades.CrearSucursal"></activity>
+        <activity android:name=".Actividades.CrearSucursal" />
+        <activity android:name=".Actividades.ModificarPerfilEmpresa"></activity>
     </application>
 
 </manifest>

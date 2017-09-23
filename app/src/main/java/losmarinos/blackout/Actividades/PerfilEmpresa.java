@@ -49,8 +49,9 @@ public class PerfilEmpresa extends AppCompatActivity {
     RatingBar rtb_calificacion;
     Button button_agregar_comentario;
     Button button_borrar_comentario;
+    Button button_modificar_perfil;
 
-    Empresa empresa;
+    Empresa empresa = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,13 +60,7 @@ public class PerfilEmpresa extends AppCompatActivity {
         setContentView(R.layout.activity_perfil_empresa);
 
         int id_empresa = getIntent().getIntExtra("idEmpresa", 0);
-        for(int i = 0; i < Global.empresas.size(); i++)
-        {
-            if(id_empresa == Global.empresas.get(i).getSubId())
-            {
-                this.empresa = Global.empresas.get(i);
-            }
-        }
+        this.empresa = Global.encontrarEmpresaPorId(id_empresa);
 
         textview_empresaNombre = (TextView)findViewById(R.id.lbl_empresaNombre_perfil_empresa);
         textview_telefono = (TextView)findViewById(R.id.lbl_telefono_perfil_empresa);
@@ -79,10 +74,19 @@ public class PerfilEmpresa extends AppCompatActivity {
         rtb_calificacion.setStepSize(0.1f);
         button_agregar_comentario = (Button)findViewById(R.id.btn_agregar_comentario_perfil_empresa);
         button_borrar_comentario = (Button)findViewById(R.id.btn_borrar_comentario_perfil_empresa);
+        button_modificar_perfil = (Button)findViewById(R.id.btn_modificar_perfil_empresa);
 
         this.empresa.actualizarComentarios(this);
         this.cargarEmpresa();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(empresa != null)
+            this.cargarEmpresa();
     }
 
     void cargarEmpresa()
@@ -101,6 +105,12 @@ public class PerfilEmpresa extends AppCompatActivity {
         }else{
             button_agregar_comentario.setVisibility(View.VISIBLE);
             edittext_comentario.setVisibility(View.VISIBLE);
+        }
+
+        if(Global.usuario_actual.getSubId() == empresa.getSubId()){
+            button_modificar_perfil.setVisibility(View.VISIBLE);
+        }else{
+            button_modificar_perfil.setVisibility(View.GONE);
         }
 
         button_borrar_comentario.setVisibility(View.GONE);
@@ -150,6 +160,13 @@ public class PerfilEmpresa extends AppCompatActivity {
     public void verSucursales(View view)
     {
         Intent i = new Intent(this, VerSucursales.class);
+        i.putExtra("idEmpresa", empresa.getSubId());
+        startActivity(i);
+    }
+
+    public void modificarPerfil(View view)
+    {
+        Intent i = new Intent(this, ModificarPerfilEmpresa.class);
         i.putExtra("idEmpresa", empresa.getSubId());
         startActivity(i);
     }

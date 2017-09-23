@@ -73,6 +73,18 @@ public class ParserJSON {
         return json_usu;
     }
 
+    public static JSONObject crearJSONEmpresa(String nombre, String email, String telefono, String website, String direccion) throws JSONException
+    {
+        JSONObject json_emp = new JSONObject();
+        json_emp.put("nombre", nombre);
+        json_emp.put("email", email);
+        json_emp.put("telefono", telefono);
+        json_emp.put("direccion", direccion);
+        json_emp.put("website", website);
+
+        return json_emp;
+    }
+
     public static JSONObject crearJSONReporte(int user_id, Constantes.SERVICIO servicio, int empresa_id, LatLng posicion, int radio) throws JSONException
     {
         JSONObject json_rep = new JSONObject();
