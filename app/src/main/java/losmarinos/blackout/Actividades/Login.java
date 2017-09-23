@@ -46,7 +46,8 @@ public class Login extends AppCompatActivity {
         StringBuilder pass = new StringBuilder();
         StringBuilder mail = new StringBuilder();
         StringBuilder token = new StringBuilder();
-        boolean correcto = LocalDB.leerArchivoJSONUsuario(getApplicationContext(), nom, pass, mail, token);
+        int[] id = new int[1];
+        boolean correcto = LocalDB.leerArchivoJSONUsuario(getApplicationContext(), id, nom, pass, mail, token);
 
         if(correcto)
         {
@@ -99,6 +100,7 @@ public class Login extends AppCompatActivity {
                     Global.usuario_actual = nuevo_usuario;
 
                     LocalDB.crearArchivoJSONUsuario(this.getApplicationContext(),
+                            Global.usuario_actual.getIdUsuario(),
                             Global.usuario_actual.getNombre(),
                             password.getText().toString(),
                             Global.usuario_actual.getMail(),

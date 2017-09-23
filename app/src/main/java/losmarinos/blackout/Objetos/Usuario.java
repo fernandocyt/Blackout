@@ -117,6 +117,23 @@ public class Usuario {
         this.cortes_interes = new ArrayList<>();
     }
 
+    public Usuario(){
+    }
+
+    public Usuario clonar(){
+        Usuario usu = new Usuario();
+        usu.id = this.id;
+        usu.sub_id = this.sub_id;
+        usu.nombre = this.nombre;
+        usu.pass = this.pass;
+        usu.mail = this.mail;
+        usu.tipo = this.tipo;
+        usu.puntos_interes = this.puntos_interes;
+        usu.reportes = this.reportes;
+        usu.cortes_interes = this.cortes_interes;
+        return usu;
+    }
+
     public List<Corte> getCortesInteres() {
         List<Corte> lista_cortes = new ArrayList<>();
 

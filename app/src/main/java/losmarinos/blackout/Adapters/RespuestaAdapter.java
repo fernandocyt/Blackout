@@ -33,8 +33,6 @@ public class RespuestaAdapter extends BaseAdapter implements ListAdapter {
     TextView textview_texto;
     TextView textview_usuario;
     boolean mostrar_estrella;
-    Button button_borrar;
-    int id_usuario_rta_actual;
 
     public RespuestaAdapter(List<Respuesta> list, boolean mostrar_estrella, Context context, PerfilCorte actividad) {
         this.list = list;
@@ -63,7 +61,6 @@ public class RespuestaAdapter extends BaseAdapter implements ListAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
-        id_usuario_rta_actual = list.get(position).getId_usuario();
 
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

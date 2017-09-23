@@ -14,13 +14,19 @@ import android.os.SystemClock;
 import android.support.v7.app.NotificationCompat;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import losmarinos.blackout.Actividades.Login;
 import losmarinos.blackout.Objetos.Corte;
+import losmarinos.blackout.Objetos.CorteInteres;
 import losmarinos.blackout.Objetos.PuntoInteres;
 import losmarinos.blackout.Objetos.Usuario;
 
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_CORTES;
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_CORTESINTERES_POR_USUARIO;
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_PUNTOSINTERES_POR_USUARIO;
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_REPORTES_POR_USUARIO;
 import static losmarinos.blackout.Constantes.TIEMPO_CHECKEO_SERVICIO;
 
 /**
@@ -48,56 +54,121 @@ public class ServicioPeriodico extends Service implements Runnable {
         handler.postDelayed(runnable, 15000);
     }
 
+
     @Override
     public void run() {
-        if(Global.usuario_actual != null) {
-            List<PuntoInteres> puntos_interes = Global.usuario_actual.getPuntosInteres();
 
-            for (int i = 0; i < puntos_interes.size(); i++) {
-                PuntoInteres punto_actual = puntos_interes.get(i);
+        StringBuilder nombre = new StringBuilder();
+        StringBuilder pass = new StringBuilder();
+        StringBuilder mail = new StringBuilder();
+        StringBuilder token = new StringBuilder();
+        int[] id = new int[1];
+        boolean ok_usuario = LocalDB.leerArchivoJSONUsuario(this, id, nombre, pass, mail, token);
 
-                for (int j = 0; j < Global.cortes.size(); j++) {
-                    Corte corte_actual = Global.cortes.get(j);
+        if(ok_usuario) {
+            List<Corte> cortes = actualizarCortes(token.toString());
 
-                    if (punto_actual.getServicio() != null && punto_actual.getServicio() != corte_actual.getServicio())
-                        continue;
+            List<PuntoInteres> puntos_interes = actualizarPtosInteres(id[0], token.toString());
+            checkearPuntosInteres(puntos_interes, cortes);
 
-                    if (punto_actual.getEmpresa() != null && punto_actual.getEmpresa().getSubId() != corte_actual.getEmpresa().getSubId())
-                        continue;
+            List<Corte> cortes_interes = actualizarCortesInteres(id[0], token.toString(), cortes);
+            checkearCortesInteres(cortes_interes);
+        }
 
-                    if(LocalDB.estaEnArchivoJSONCortesAvisados(this.context, corte_actual.getId(), false))
-                        continue;
+        handler.postDelayed(runnable, TIEMPO_CHECKEO_SERVICIO);
+    }
 
-                    if (Calculos.hayInterseccion(
-                            punto_actual.getUbicacion(), punto_actual.getRadio(),
-                            corte_actual.getUbicacion(), corte_actual.getRadio())) {
-
-                        LocalDB.agregarArchivoJSONCortesAvisados(this.context, corte_actual.getId(), false);
-
-                        this.notificar("Nuevo corte de " + Constantes.servicioToString(corte_actual.getServicio()) + " en tu punto de interes");
-                    }
-                }
+    public static List<Corte> actualizarCortes(String token){
+        List<Corte> cortes = new ArrayList<>();
+        try {
+            String respuesta = new ConsultorGETAPI("cortes", token, OBTENER_CORTES, null).execute().get();
+            StringBuilder msg_error = new StringBuilder();
+            if(!ParserJSON.esError(respuesta, msg_error)){
+                cortes = ParserJSON.obtenerCortes(respuesta);
             }
+        }catch (Exception e){}
 
-            List<Corte> cortes_interes = Global.usuario_actual.getCortesInteres();
+        return cortes;
+    }
 
-            for(int i = 0; i < cortes_interes.size(); i++){
-                Corte corte_actual = cortes_interes.get(i);
+    public static List<PuntoInteres> actualizarPtosInteres(int id_usuario, String token){
 
-                if(LocalDB.estaEnArchivoJSONCortesAvisados(this.context, corte_actual.getId(), true))
-                    continue;
+        List<PuntoInteres> ptos_interes = new ArrayList<>();
+        try{
+            String respuesta = new ConsultorGETAPI("usuarios/" + String.valueOf(id_usuario) + "/puntos-de-interes", token, OBTENER_PUNTOSINTERES_POR_USUARIO, null).execute().get();
+            StringBuilder msg_error = new StringBuilder();
+            if(!ParserJSON.esError(respuesta, msg_error)){
+                ptos_interes = ParserJSON.obtenerPuntosInteres(respuesta);
+            }
+        }catch (Exception e){}
 
-                if(cortes_interes.get(i).isResuelto())
-                {
-                    LocalDB.agregarArchivoJSONCortesAvisados(this.context, corte_actual.getId(), true);
+        return ptos_interes;
+    }
 
-                    this.notificar("Tu corte de interes fue resuelto");
+    public static List<Corte> actualizarCortesInteres(int id_usuario, String token, List<Corte> cortes){
+        List<CorteInteres> cortes_interes = new ArrayList<>();
+        try {
+            String respuesta = new ConsultorGETAPI("usuarios/" + String.valueOf(id_usuario) + "/cortes-de-interes", token, OBTENER_CORTESINTERES_POR_USUARIO, null).execute().get();
+            StringBuilder msg_error = new StringBuilder();
+            if(!ParserJSON.esError(respuesta, msg_error)){
+                cortes_interes = ParserJSON.obtenerCortesInteres(respuesta);
+            }
+        }catch (Exception e){}
+
+        List<Corte> cortes_retornar = new ArrayList<>();
+        for(int i = 0; i < cortes_interes.size(); i++){
+            for(int j = 0; j < cortes.size(); j++){
+                if (cortes_interes.get(i).getCorteId() == cortes.get(j).getId()){
+                    cortes_retornar.add(cortes.get(j));
                 }
             }
         }
 
+        return cortes_retornar;
+    }
 
-        handler.postDelayed(runnable, TIEMPO_CHECKEO_SERVICIO);
+    public void checkearPuntosInteres(List<PuntoInteres> puntos_interes, List<Corte> cortes) {
+        for (int i = 0; i < puntos_interes.size(); i++) {
+            PuntoInteres punto_actual = puntos_interes.get(i);
+
+            for (int j = 0; j < cortes.size(); j++) {
+                Corte corte_actual = cortes.get(j);
+
+                if (punto_actual.getServicio() != null && punto_actual.getServicio() != corte_actual.getServicio())
+                    continue;
+
+                if (punto_actual.getEmpresa() != null && punto_actual.getEmpresa().getSubId() != corte_actual.getEmpresa().getSubId())
+                    continue;
+
+                if(LocalDB.estaEnArchivoJSONCortesAvisados(this, corte_actual.getId(), false))
+                    continue;
+
+                if (Calculos.hayInterseccion(
+                        punto_actual.getUbicacion(), punto_actual.getRadio(),
+                        corte_actual.getUbicacion(), corte_actual.getRadio())) {
+
+                    LocalDB.agregarArchivoJSONCortesAvisados(this.context, corte_actual.getId(), false);
+
+                    this.notificar("Nuevo corte de " + Constantes.servicioToString(corte_actual.getServicio()) + " en tu punto de interes");
+                }
+            }
+        }
+    }
+
+    public void checkearCortesInteres(List<Corte> cortes_interes){
+        for(int i = 0; i < cortes_interes.size(); i++){
+            Corte corte_actual = cortes_interes.get(i);
+
+            if(LocalDB.estaEnArchivoJSONCortesAvisados(this.context, corte_actual.getId(), true))
+                continue;
+
+            if(cortes_interes.get(i).isResuelto())
+            {
+                LocalDB.agregarArchivoJSONCortesAvisados(this.context, corte_actual.getId(), true);
+
+                this.notificar("Tu corte de interes fue resuelto");
+            }
+        }
     }
 
     public void notificar(String mensaje){

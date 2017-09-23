@@ -131,15 +131,16 @@ public class LocalDB {
 
     // endregion
 
-    public static void crearArchivoJSONUsuario(Context contexto, String nombre, String pass, String mail, String token) {
+    public static void crearArchivoJSONUsuario(Context contexto, int id, String nombre, String pass, String mail, String token) {
         try {
             JSONObject usuario = new JSONObject();
+            usuario.put("id", id);
             usuario.put("nombre", nombre);
             usuario.put("pass", pass);
             usuario.put("mail", mail);
             usuario.put("token", token);
 
-            FileOutputStream fileos = contexto.openFileOutput(file_name_usuario, Context.MODE_PRIVATE);
+            FileOutputStream fileos = contexto.openFileOutput(file_name_usuario, 0);
             fileos.write(usuario.toString().getBytes());
             fileos.close();
         }catch (Exception e){
@@ -147,7 +148,7 @@ public class LocalDB {
         }
     }
 
-    public static boolean leerArchivoJSONUsuario(Context contexto, StringBuilder nombre, StringBuilder pass, StringBuilder mail, StringBuilder token) {
+    public static boolean leerArchivoJSONUsuario(Context contexto, int[] id, StringBuilder nombre, StringBuilder pass, StringBuilder mail, StringBuilder token) {
         try {
             FileInputStream fis = contexto.openFileInput(file_name_usuario);
             InputStreamReader isr = new InputStreamReader(fis);
@@ -156,6 +157,7 @@ public class LocalDB {
             String data = new String(inputBuffer);
 
             JSONObject obj = new JSONObject(data);
+            id[0] = obj.getInt("id");
             nombre.append(obj.getString("nombre"));
             pass.append(obj.getString("pass"));
             mail.append(obj.getString("mail"));

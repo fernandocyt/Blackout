@@ -1,9 +1,12 @@
 package losmarinos.blackout.Actividades;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -148,7 +151,6 @@ public class PerfilCorte extends AppCompatActivity {
         RespuestaAdapter adapter_usuarios = new RespuestaAdapter(respuestas_usuarios, false, this, this);
         ListView mi_lista_usuarios = (ListView)findViewById(R.id.lst_respuesta_perfil_corte);
         mi_lista_usuarios.setAdapter(adapter_usuarios);
-
     }
 
     public void agregarRespuesta(View view)
