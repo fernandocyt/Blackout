@@ -93,7 +93,7 @@ public class Global implements ObservadorAPI {
                         return;
                     }else{
                         Global.usuario_actual.setPuntosInteres(ParserJSON.obtenerPuntosInteres(respuesta));
-                        //this.cargarPuntosDeInteresEnMapaPrincipal();
+                        this.cargarPuntosDeInteresEnMapaPrincipal();
                     }
                     break;
                 case OBTENER_CORTESINTERES_POR_USUARIO:

@@ -56,6 +56,7 @@ import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_CORTESINTERES_POR_US
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_EMPRESAS;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_PUNTOSINTERES_POR_USUARIO;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_REPORTES;
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_SUCURSALES_POR_EMPRESA;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_USUARIOS;
 
 // Actividad del mapa principal
@@ -273,11 +274,17 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         new ConsultorGETAPI("cortes", Global.token_usuario_actual, OBTENER_CORTES, new Global()).execute();
         new ConsultorGETAPI("reporte", Global.token_usuario_actual, OBTENER_REPORTES, new Global()).execute();
 
+        if(FiltrarMapaPrincipal.mostrar_sucursales && FiltrarMapaPrincipal.id_empresa != -1){
+            Empresa empresa = Global.encontrarEmpresaPorId(FiltrarMapaPrincipal.id_empresa);
+            empresa.actualizarSucursales(this);
+            this.cargarSucursalesEnMapa(empresa);
+        }
+
         //Global.calcularNuevosCortes();
 
         //this.cargarCortesEnMapa();
         //this.cargarReportesEnMapa();
-        //this.cargarPuntosInteresEnMapa();
+        this.cargarPuntosInteresEnMapa();
 
         this.marcador_posicion_actual = null;
         if(GPSTracker.ubicacion_actual != null)
@@ -295,13 +302,18 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
     public void cargarPuntosInteresEnMapa()
     {
+        if (!FiltrarMapaPrincipal.mostrar_puntos_interes){
+            return;
+        }
+
         List<PuntoInteres> puntos = Global.usuario_actual.getPuntosInteres();
         for(int i = 0; i < puntos.size(); i++) {
             PuntoInteres punto_actual = puntos.get(i);
 
             Marker punto = mMap.addMarker(new MarkerOptions()
                     .position(punto_actual.getUbicacion())
-                    .title("punto"));
+                    .title("punto")
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_punto_interes)));
             punto.setTag(punto_actual);
 
             mMap.addCircle(new CircleOptions()
@@ -338,6 +350,14 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
             boolean programado = corte_actual.isProgramado();
             boolean interes = Global.usuario_actual.esCorteDeInteres(corte_actual.getId());
+
+            if(programado && !interes && !FiltrarMapaPrincipal.mostrar_cortes_programados){
+                continue;
+            }
+
+            if(interes && !programado && !FiltrarMapaPrincipal.mostrar_cortes_interes){
+                continue;
+            }
 
             Marker corte = mMap.addMarker(new MarkerOptions()
                     .position(corte_actual.getUbicacion())
@@ -395,33 +415,15 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         }
     }
 
-    // OJO QUE ESTA NO SE ESTA USANDO
-    public void cargarSucursalesEnMapa()
+    public void cargarSucursalesEnMapa(Empresa empresa)
     {
-        List<Empresa> empresas = Global.empresas;
-        for(int i = 0; i < empresas.size(); i++)
+        List<Sucursal> sucursales = empresa.getSucursales();
+        for(int i = 0; i < sucursales.size(); i++)
         {
-            if(FiltrarMapaPrincipal.id_empresa != -1 &&
-                    FiltrarMapaPrincipal.id_empresa != empresas.get(i).getSubId())
-            {
-                continue;
-            }
-
-            if(FiltrarMapaPrincipal.servicio != null &&
-                    FiltrarMapaPrincipal.servicio != empresas.get(i).getTipoServicio())
-            {
-                continue;
-            }
-
-            List<Sucursal> sucursales_actual = empresas.get(i).getSucursales();
-
-            for(int j = 0; j < sucursales_actual.size(); j++)
-            {
-                mMap.addMarker(new MarkerOptions()
-                        .position(sucursales_actual.get(j).getUbicacion())
-                        .title("Sucursal " + empresas.get(i).getNombre())
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_sucursal)));
-            }
+            mMap.addMarker(new MarkerOptions()
+                    .position(sucursales.get(i).getUbicacion())
+                    .title("Sucursal " + empresa.getNombre())
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_sucursal)));
         }
     }
 

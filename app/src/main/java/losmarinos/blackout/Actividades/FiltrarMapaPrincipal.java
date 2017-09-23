@@ -23,7 +23,12 @@ public class FiltrarMapaPrincipal extends AppCompatActivity
         AdapterView.OnItemSelectedListener{
 
     public static boolean mostrar_cortes = true;
-    public static boolean mostrar_reportes = true;
+    public static boolean mostrar_reportes = false;
+    public static boolean mostrar_cortes_programados = true;
+    public static boolean mostrar_cortes_interes = true;
+    public static boolean mostrar_puntos_interes= false;
+    public static boolean mostrar_sucursales = false;
+
     public static int id_empresa = -1;
     public static Constantes.SERVICIO servicio = null;
 
@@ -35,6 +40,9 @@ public class FiltrarMapaPrincipal extends AppCompatActivity
     Switch switch_cortes;
     Switch switch_reportes;
     Switch switch_sucursales;
+    Switch switch_cortes_programados;
+    Switch switch_cortes_interes;
+    Switch switch_puntos_interes;
     Spinner spinner_empresas;
     Spinner spinner_servicios;
 
@@ -52,10 +60,27 @@ public class FiltrarMapaPrincipal extends AppCompatActivity
         switch_reportes.setChecked(FiltrarMapaPrincipal.mostrar_reportes);
         switch_reportes.setOnCheckedChangeListener(this);
 
+        switch_sucursales = (Switch) findViewById(R.id.switch_sucursales_filtrar_mapa_principal);
+        switch_sucursales.setChecked(FiltrarMapaPrincipal.mostrar_sucursales);
+        switch_sucursales.setOnCheckedChangeListener(this);
+
+        switch_cortes_programados = (Switch) findViewById(R.id.switch_cortes_programados_filtrar_mapa_principal);
+        switch_cortes_programados.setChecked(FiltrarMapaPrincipal.mostrar_cortes_programados);
+        switch_cortes_programados.setOnCheckedChangeListener(this);
+
+        switch_cortes_interes = (Switch) findViewById(R.id.switch_cortes_interes_filtrar_mapa_principal);
+        switch_cortes_interes.setChecked(FiltrarMapaPrincipal.mostrar_cortes_interes);
+        switch_cortes_interes.setOnCheckedChangeListener(this);
+
+        switch_puntos_interes = (Switch) findViewById(R.id.switch_puntos_interes_filtrar_mapa_principal);
+        switch_puntos_interes.setChecked(FiltrarMapaPrincipal.mostrar_puntos_interes);
+        switch_puntos_interes.setOnCheckedChangeListener(this);
+
         spinner_servicios = (Spinner) findViewById(R.id.spn_servicios_filtrar_mapa_principal);
         spinner_servicios.setOnItemSelectedListener(this);
 
         spinner_empresas = (Spinner) findViewById(R.id.spn_empresas_filtrar_mapa_principal);
+        spinner_empresas.setOnItemSelectedListener(this);
 
         this.cargarSpinnerServicios();
         this.cargarSpinnerEmpresas(FiltrarMapaPrincipal.servicio);
@@ -108,9 +133,20 @@ public class FiltrarMapaPrincipal extends AppCompatActivity
 
     @Override
     public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-        String servicio = this.spinner_servicios.getSelectedItem().toString();
-
-        this.cargarSpinnerEmpresas(Constantes.stringToServicio(servicio));
+        Spinner spinner = (Spinner) parentView;
+        if(spinner.getId() == this.spinner_servicios.getId())
+        {
+            String servicio = this.spinner_servicios.getSelectedItem().toString();
+            this.cargarSpinnerEmpresas(Constantes.stringToServicio(servicio));
+        }
+        else if(spinner.getId() == this.spinner_empresas.getId()) {
+            if (this.spinner_empresas.getSelectedItemPosition() == 0) {
+                this.switch_sucursales.setChecked(false);
+                this.switch_sucursales.setVisibility(View.GONE);
+            } else {
+                this.switch_sucursales.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     @Override
@@ -120,7 +156,10 @@ public class FiltrarMapaPrincipal extends AppCompatActivity
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+        if(!switch_cortes.isChecked()){
+            switch_cortes_programados.setChecked(false);
+            switch_cortes_interes.setChecked(false);
+        }
     }
 
     public void aplicarFiltros(View view)
@@ -134,6 +173,26 @@ public class FiltrarMapaPrincipal extends AppCompatActivity
             FiltrarMapaPrincipal.mostrar_reportes = true;
         }else{
             FiltrarMapaPrincipal.mostrar_reportes = false;
+        }
+        if(switch_sucursales.isChecked()){
+            FiltrarMapaPrincipal.mostrar_sucursales = true;
+        }else{
+            FiltrarMapaPrincipal.mostrar_sucursales = false;
+        }
+        if(switch_cortes_interes.isChecked()){
+            FiltrarMapaPrincipal.mostrar_cortes_interes = true;
+        }else{
+            FiltrarMapaPrincipal.mostrar_cortes_interes = false;
+        }
+        if(switch_cortes_programados.isChecked()){
+            FiltrarMapaPrincipal.mostrar_cortes_programados = true;
+        }else{
+            FiltrarMapaPrincipal.mostrar_cortes_programados = false;
+        }
+        if(switch_puntos_interes.isChecked()){
+            FiltrarMapaPrincipal.mostrar_puntos_interes = true;
+        }else{
+            FiltrarMapaPrincipal.mostrar_puntos_interes = false;
         }
 
         if(this.spinner_empresas.getSelectedItem().toString().equals("No")) {
