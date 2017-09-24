@@ -40,11 +40,16 @@ import static losmarinos.blackout.Constantes.TIEMPO_RESOLVER_AUTOMATICAMENTE_REP
  * Created by garci on 15/8/2017.
  */
 
-public class ServicioPeriodico extends Service implements Runnable {
+public class ServicioPeriodico extends Service implements Runnable, ObservadorAPI {
 
     public Context context = this;
     public Handler handler = null;
     public static Runnable runnable = null;
+    public static List<Corte> cortes = null;
+    public static List<PuntoInteres> puntos_interes = null;
+    public static List<CorteInteres> cortes_interes = null;
+    public static List<Reporte> reportes = null;
+
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -72,7 +77,27 @@ public class ServicioPeriodico extends Service implements Runnable {
         int[] id = new int[1];
         boolean ok_usuario = LocalDB.leerArchivoJSONUsuario(this, id, nombre, pass, mail, token);
 
-        if(ok_usuario) {
+        // region FORMA ASINCRONICA
+        if (ok_usuario) {
+            new ConsultorGETAPI("cortes", token.toString(), OBTENER_CORTES, this).execute();
+            new ConsultorGETAPI("usuarios/" + String.valueOf(id[0]) + "/puntos-de-interes", token.toString(), OBTENER_PUNTOSINTERES_POR_USUARIO, this).execute();
+            new ConsultorGETAPI("usuarios/" + String.valueOf(id[0]) + "/cortes-de-interes", token.toString(), OBTENER_CORTESINTERES_POR_USUARIO, this).execute();
+            new ConsultorGETAPI("reporte", token.toString(), OBTENER_REPORTES, this).execute();
+
+            if(cortes != null && puntos_interes != null){
+                checkearPuntosInteres(puntos_interes, cortes);
+            }
+            if(cortes != null && cortes_interes != null){
+                checkearCortesInteres(cortes, cortes_interes);
+            }
+            if(reportes != null){
+                checkearReportes(reportes);
+            }
+        }
+        // endregion
+
+        //region FORMA SINCRONICA
+        /*if(ok_usuario) {
             List<Corte> cortes = actualizarCortes(token.toString());
 
             List<PuntoInteres> puntos_interes = actualizarPtosInteres(id[0], token.toString());
@@ -83,9 +108,38 @@ public class ServicioPeriodico extends Service implements Runnable {
 
             List<Reporte> reportes_usuario = actualizarReportes(id[0], token.toString());
             checkearReportes(reportes_usuario);
-        }
+        }*/
+        // endregion
 
         handler.postDelayed(runnable, TIEMPO_CHECKEO_SERVICIO);
+    }
+
+    @Override
+    public void obtenerRespuestaAPI(String respuesta, Constantes.TAGAPI tag, boolean correcto)
+    {
+        try {
+            StringBuilder msg_error = new StringBuilder();
+            if(ParserJSON.esError(respuesta, msg_error)){
+                return;
+            }
+
+            switch (tag) {
+                case OBTENER_CORTES:
+                    cortes = ParserJSON.obtenerCortes(respuesta);
+                    break;
+                case OBTENER_PUNTOSINTERES_POR_USUARIO:
+                    puntos_interes = ParserJSON.obtenerPuntosInteres(respuesta);
+                    break;
+                case OBTENER_CORTESINTERES_POR_USUARIO:
+                    cortes_interes = ParserJSON.obtenerCortesInteres(respuesta);
+                    break;
+                case OBTENER_REPORTES:
+                    reportes = ParserJSON.obtenerReportes(respuesta);
+                    break;
+            }
+        }catch (Exception e){
+
+        }
     }
 
     public static List<Corte> actualizarCortes(String token){
@@ -185,7 +239,17 @@ public class ServicioPeriodico extends Service implements Runnable {
         }
     }
 
-    public void checkearCortesInteres(List<Corte> cortes_interes){
+    public void checkearCortesInteres(List<Corte> cortes, List<CorteInteres> interes){
+        List<Corte> cortes_interes = new ArrayList<>();
+
+        for(int i = 0; i < interes.size(); i++){
+            for(int j = 0; j < cortes.size(); j++){
+                if (interes.get(i).getCorteId() == cortes.get(j).getId()){
+                    cortes_interes.add(cortes.get(j));
+                }
+            }
+        }
+
         for(int i = 0; i < cortes_interes.size(); i++){
             Corte corte_actual = cortes_interes.get(i);
 

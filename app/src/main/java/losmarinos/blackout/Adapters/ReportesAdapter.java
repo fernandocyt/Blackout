@@ -36,6 +36,7 @@ public class ReportesAdapter extends BaseAdapter implements ListAdapter {
     static MisReportes actividad;
     TextView textview_texto;
     TextView textview_activo;
+    TextView textview_confirmacion;
     Button button_resolver;
     Button button_confirmar;
 
@@ -75,6 +76,7 @@ public class ReportesAdapter extends BaseAdapter implements ListAdapter {
         textview_texto.setText(list.get(position).generarTexto());
 
         textview_activo = (TextView)view.findViewById(R.id.lbl_activo_reporte_mis_objetos);
+        textview_confirmacion = (TextView)view.findViewById(R.id.lbl_confirmacion_reporte_mis_objetos);
         button_resolver = (Button)view.findViewById(R.id.btn_resolver_reporte_mis_objetos);
         button_confirmar = (Button)view.findViewById(R.id.btn_confirmar_reporte_mis_objetos);
 
@@ -86,9 +88,19 @@ public class ReportesAdapter extends BaseAdapter implements ListAdapter {
             textview_activo.setText("Pendiente");
             button_resolver.setVisibility(View.VISIBLE);
 
-            if(LocalDB.estaEnArchivoJSONReportesConfirmados(context, list.get(position).getId()) == null){
+            Date fecha_confirm = LocalDB.estaEnArchivoJSONReportesConfirmados(context, list.get(position).getId());
+            if(fecha_confirm == null){
                 button_confirmar.setVisibility(View.GONE);
+                textview_confirmacion.setVisibility(View.GONE);
             }else{
+                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy");
+                String str_fecha = format.format(fecha_confirm);
+
+                Date ahora = Calendar.getInstance().getTime();
+                long dif_horas_conf_horas = (ahora.getTime() - fecha_confirm.getTime()) / (60 * 60 * 1000);
+
+                textview_confirmacion.setText("Ultima confirmacion: " + str_fecha + " (hace " + String.valueOf(dif_horas_conf_horas) + "hs)");
+
                 button_confirmar.setVisibility(View.VISIBLE);
             }
         }

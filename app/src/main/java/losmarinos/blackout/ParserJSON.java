@@ -345,6 +345,18 @@ public class ParserJSON {
         }
     }
 
+    public static int obtenerIdReporte(String json)
+    {
+        try {
+            JSONObject obj = new JSONObject(json);
+            JSONObject obj_resp = obj.getJSONObject("reporte");
+            int id = obj_resp.getInt("id");
+            return id;
+        } catch (JSONException e) {
+            return -1;
+        }
+    }
+
     public static Reporte obtenerReporte(String json)
     {
         try {
@@ -358,7 +370,13 @@ public class ParserJSON {
             }
             String ubicacion = obj_resp.getString("ubicacion");
             int radio = Integer.parseInt(obj_resp.getString("radio"));
-            int resuelto = Integer.parseInt(obj_resp.getString("resuelto"));
+            int resuelto = 0;
+            try {
+                resuelto = Integer.parseInt(obj_resp.getString("resuelto"));
+            }catch (Exception e){
+                boolean resuelto_bool = obj_resp.getBoolean("resuelto");
+                if(resuelto_bool){resuelto = 1;}else{resuelto = 0;}
+            }
             String fecha = obj_resp.getString("created_at");
 
             // SI NO ES HH es kk

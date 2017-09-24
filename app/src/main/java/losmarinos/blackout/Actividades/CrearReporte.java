@@ -1,6 +1,7 @@
 package losmarinos.blackout.Actividades;
 
 import losmarinos.blackout.Global;
+import losmarinos.blackout.LocalDB;
 import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.ParserJSON;
 import losmarinos.blackout.R;
@@ -190,6 +191,12 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
             StringBuilder mensaje_error = new StringBuilder();
             if(ParserJSON.esError(resultado, mensaje_error)){
                 Toast.makeText(this, mensaje_error, Toast.LENGTH_LONG).show();
+            }else{
+
+                JSONObject obj = new JSONObject(resultado);
+                JSONObject obj_resp = obj.getJSONObject("reporte");
+                Reporte nuevo = ParserJSON.obtenerReporte(obj_resp.toString());
+                LocalDB.agregarArchivoJSONReportesConfirmados(this, nuevo.getId(), nuevo.getFecha());
             }
         }catch (Exception e){
             Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();

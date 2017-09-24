@@ -32,9 +32,6 @@
             <item
                 android:id="@+id/drawer_mis_puntos_interes"
                 android:title="Mis Puntos de Interes" />
-            <item
-                android:id="@+id/drawer_mis_cortes_interes"
-                android:title="Mis Cortes de Interes" />
         </menu>
     </item>
     <item android:title="Acciones">
