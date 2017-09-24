@@ -186,6 +186,9 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         } else if (id == R.id.drawer_estadisticas){
             Intent i = new Intent(getApplicationContext(), ConsultarEstadisticas.class);
             startActivity(i);
+        } else if (id == R.id.drawer_preferencias){
+            Intent i = new Intent(getApplicationContext(), Preferencias.class);
+            startActivity(i);
         } else if (id == R.id.drawer_agregar_corte_programado){
             Intent i = new Intent(getApplicationContext(), CrearCorteProgramado.class);
             startActivity(i);

@@ -49,6 +49,7 @@ public class LocalDB {
     static String file_name_cortes_avisados = "cortesAvisados";
     static String file_name_cortes_resueltos_avisados = "cortesResueltosAvisados";
     static String file_name_reportes_confirmados = "reportesConfirmados";
+    static String file_name_preferencias = "preferencias";
 
     // region Archivos XML
     public static void crearXMLUsuario(Context contexto, String nombre, String pass, String mail, String token)
@@ -373,5 +374,73 @@ public class LocalDB {
 
     public static void borrarArchivoJSONReportesConfirmados(Context context){
         context.deleteFile(file_name_reportes_confirmados);
+    }
+
+    public static void crearArchivoJSONPreferencias(Context contexto, boolean notificar, boolean vibrar, boolean sonar, boolean gps) {
+        try {
+            JSONObject pref = new JSONObject();
+            pref.put("notificar", notificar);
+            pref.put("vibrar", vibrar);
+            pref.put("sonar", sonar);
+            pref.put("gps", gps);
+
+            FileOutputStream fileos = contexto.openFileOutput(file_name_preferencias, 0);
+            fileos.write(pref.toString().getBytes());
+            fileos.close();
+        }catch (Exception e){
+
+        }
+    }
+
+    public static boolean leerArchivoJSONPreferencias(Context contexto, int[] notificar, int[] vibrar, int[] sonar, int[] gps) {
+        try {
+            FileInputStream fis = contexto.openFileInput(file_name_preferencias);
+            InputStreamReader isr = new InputStreamReader(fis);
+            char[] inputBuffer = new char[fis.available()];
+            isr.read(inputBuffer);
+            String data = new String(inputBuffer);
+
+            JSONObject obj = new JSONObject(data);
+            boolean bool_notif = obj.getBoolean("notificar");
+            boolean bool_vib = obj.getBoolean("vibrar");
+            boolean bool_son = obj.getBoolean("sonar");
+            boolean bool_gps = obj.getBoolean("gps");
+
+            if(notificar != null) {
+                if (bool_notif) {
+                    notificar[0] = 1;
+                } else {
+                    notificar[0] = 0;
+                }
+            }
+            if(vibrar != null) {
+                if (bool_vib) {
+                    vibrar[0] = 1;
+                } else {
+                    vibrar[0] = 0;
+                }
+            }
+            if(sonar != null) {
+                if (bool_son) {
+                    sonar[0] = 1;
+                } else {
+                    sonar[0] = 0;
+                }
+            }
+            if (gps != null) {
+                if(bool_gps){
+                    gps[0] = 1;
+                } else {
+                    gps[0] = 0;
+                }
+            }
+
+            isr.close();
+            fis.close();
+
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 }

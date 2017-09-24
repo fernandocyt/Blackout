@@ -298,6 +298,15 @@ public class ServicioPeriodico extends Service implements Runnable, ObservadorAP
     }
 
     public void notificar(String mensaje){
+        int[] notificar = new int[1];
+        int[] vibrar = new int[1];
+        int[] sonar = new int[1];
+        LocalDB.leerArchivoJSONPreferencias(this, notificar, vibrar, sonar, null);
+
+        if(notificar[0] == 0){
+            return;
+        }
+
         // Creo la notificacion
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this.context);
         mBuilder.setAutoCancel(true)
@@ -305,9 +314,15 @@ public class ServicioPeriodico extends Service implements Runnable, ObservadorAP
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("ATENCION")
-                .setContentText(mensaje)
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
+                .setContentText(mensaje);
+
+        if(sonar[0] == 1){
+            mBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+        }
+
+        if(vibrar[0] == 1) {
+            mBuilder.setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
+        }
 
         // Para que se abra el login cuando clickeo la notificacion
         // TODO: por ahora este codigo abre una actividad nueva, yo quiero que habra la vieja
