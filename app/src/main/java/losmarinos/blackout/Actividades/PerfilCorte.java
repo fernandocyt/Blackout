@@ -93,7 +93,7 @@ public class PerfilCorte extends AppCompatActivity {
             textview_motivo.setText("Generado por " + Integer.toString(corte.cantidadReportes()) + " reportes");
         }
 
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
         textview_fecha_inicio.setText(df.format(corte.getFechaInicio()));
         if(corte.getFechaFin() != null) {
             textview_fecha_fin.setText(df.format(corte.getFechaFin()));

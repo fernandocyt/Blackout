@@ -455,7 +455,7 @@ public class ParserJSON {
                 id_empresa = Integer.parseInt(obj_resp.getString("empresa_id"));
             }
             String ubicacion = obj_resp.getString("ubicacion");
-            int radio = Integer.parseInt(obj_resp.getString("radio"));
+            int radio = (int)Double.parseDouble(obj_resp.getString("radio"));
             //No traigo cantidad de reportes ya que lo calculo
             //No traigo duración
             int resuelto = 0;
@@ -483,6 +483,8 @@ public class ParserJSON {
         } catch (JSONException e) {
             return null;
         } catch (ParseException e){
+            return null;
+        } catch (Exception e) {
             return null;
         }
     }
