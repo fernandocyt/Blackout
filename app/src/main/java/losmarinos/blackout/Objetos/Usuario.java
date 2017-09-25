@@ -147,7 +147,7 @@ public class Usuario {
         return lista_cortes;
     }
 
-    public void actualizarReportes(Context context){
+    public boolean actualizarReportes(Context context){
         try {
             String respuesta = new ConsultorGETAPI("usuarios/" + String.valueOf(this.id) + "/reportes", Global.token_usuario_actual, OBTENER_REPORTES_POR_USUARIO, null).execute().get();
             StringBuilder msg_error = new StringBuilder();
@@ -155,11 +155,14 @@ public class Usuario {
                 if(context != null) {
                     Toast.makeText(context, "No es posible obtener los reportes", Toast.LENGTH_LONG).show();
                 }
-                return;
+                return false;
             }else{
                 this.reportes = ParserJSON.obtenerReportesPorUsuario(respuesta);
             }
-        }catch (Exception e){}
+        }catch (Exception e){
+            return false;
+        }
+        return true;
     }
 
     public void actualizarPuntosInteres(Context context){
