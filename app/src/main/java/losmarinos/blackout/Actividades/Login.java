@@ -105,7 +105,10 @@ public class Login extends AppCompatActivity {
                             password.getText().toString(),
                             Global.usuario_actual.getMail(),
                             Global.token_usuario_actual);
-                    LocalDB.crearArchivoJSONPreferencias(this, true, true, true, true);
+
+                    if(!LocalDB.leerArchivoJSONPreferencias(this, null, null, null, null)) {
+                        LocalDB.crearArchivoJSONPreferencias(this, true, true, true, true);
+                    }
 
                     Intent i = new Intent(getApplicationContext(), MapaPrincipal.class);
                     startActivity(i);

@@ -163,6 +163,7 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
 
         // Me fijo si hay mas de 2 reportes activos con el mismo servicio no lo agrego
         int cant_mismo_servicio_activos = 0;
+        Global.usuario_actual.actualizarReportes(this);
         List<Reporte> reportes_usuario = Global.usuario_actual.getReportes();
         for(int i = 0; i < reportes_usuario.size(); i++){
             if(reportes_usuario.get(i).getServicio() == servicio && !reportes_usuario.get(i).isResuelto()){

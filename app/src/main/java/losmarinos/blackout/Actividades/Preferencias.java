@@ -27,6 +27,19 @@ public class Preferencias extends AppCompatActivity implements CompoundButton.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferencias);
 
+        int[] notificar = new int[1];
+        int[] vibrar = new int[1];
+        int[] sonar = new int[1];
+        int[] gps = new int[1];
+        boolean correcto = LocalDB.leerArchivoJSONPreferencias(this, notificar, vibrar, sonar, gps);
+
+        if(correcto) {
+            Preferencias.notificaciones = (notificar[0] == 1);
+            Preferencias.vibrar = (vibrar[0] == 1);
+            Preferencias.sonar = (sonar[0] == 1);
+            Preferencias.gps = (gps[0] == 1);
+        }
+
         switch_notificaciones = (Switch) findViewById(R.id.switch_notificaciones_preferencias);
         switch_notificaciones.setChecked(Preferencias.notificaciones);
         switch_notificaciones.setOnCheckedChangeListener(this);

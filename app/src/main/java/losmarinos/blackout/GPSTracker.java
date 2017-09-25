@@ -70,8 +70,8 @@ public class GPSTracker extends Service implements LocationListener {
                 }
                 // If GPS enabled, get latitude/longitude using GPS Services
                 if (isGPSEnabled) {
-                    locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null);
-                    //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                    //locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null);
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                 }
             }
         } catch (Exception e) {
@@ -111,7 +111,6 @@ public class GPSTracker extends Service implements LocationListener {
         }
 
     }
-
 
     @Override
     public void onProviderDisabled(String provider) {
