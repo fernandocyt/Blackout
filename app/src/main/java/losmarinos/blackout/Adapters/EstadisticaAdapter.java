@@ -69,7 +69,11 @@ public class EstadisticaAdapter extends BaseAdapter implements ListAdapter {
         textview_empresa.setText(empresa.getNombre());
 
         textview_valor = (TextView)view.findViewById(R.id.lbl_valor_estadistica_mis_objetos);
-        textview_valor.setText((int)list.get(position).valor + " " + list.get(position).unidad);
+        if((int)list.get(position).valor != -1) {
+            textview_valor.setText((int) list.get(position).valor + " " + list.get(position).unidad);
+        }else{
+            textview_valor.setText("no hay datos");
+        }
 
         LinearLayout linea_empresa = (LinearLayout)view.findViewById(R.id.estadistica_mis_objetos);
         linea_empresa.setOnClickListener(new View.OnClickListener() {

@@ -45,6 +45,7 @@ public class ServicioPeriodico extends Service implements Runnable, ObservadorAP
     public Context context = this;
     public Handler handler = null;
     public static Runnable runnable = null;
+    public static int id_usuario = -1;
     public static List<Corte> cortes = null;
     public static List<PuntoInteres> puntos_interes = null;
     public static List<CorteInteres> cortes_interes = null;
@@ -79,9 +80,10 @@ public class ServicioPeriodico extends Service implements Runnable, ObservadorAP
 
         // region FORMA ASINCRONICA
         if (ok_usuario) {
+            id_usuario = id[0];
             new ConsultorGETAPI("cortes", token.toString(), OBTENER_CORTES, this).execute();
-            new ConsultorGETAPI("usuarios/" + String.valueOf(id[0]) + "/puntos-de-interes", token.toString(), OBTENER_PUNTOSINTERES_POR_USUARIO, this).execute();
-            new ConsultorGETAPI("usuarios/" + String.valueOf(id[0]) + "/cortes-de-interes", token.toString(), OBTENER_CORTESINTERES_POR_USUARIO, this).execute();
+            new ConsultorGETAPI("usuarios/" + String.valueOf(id_usuario) + "/puntos-de-interes", token.toString(), OBTENER_PUNTOSINTERES_POR_USUARIO, this).execute();
+            new ConsultorGETAPI("usuarios/" + String.valueOf(id_usuario) + "/cortes-de-interes", token.toString(), OBTENER_CORTESINTERES_POR_USUARIO, this).execute();
             new ConsultorGETAPI("reporte", token.toString(), OBTENER_REPORTES, this).execute();
 
             if(cortes != null && puntos_interes != null){
@@ -134,7 +136,15 @@ public class ServicioPeriodico extends Service implements Runnable, ObservadorAP
                     cortes_interes = ParserJSON.obtenerCortesInteres(respuesta);
                     break;
                 case OBTENER_REPORTES:
-                    reportes = ParserJSON.obtenerReportes(respuesta);
+                    List<Reporte> todos_reportes = ParserJSON.obtenerReportes(respuesta);
+                    if(id_usuario != -1) {
+                        reportes.clear();
+                        for (int i = 0; i < todos_reportes.size(); i++) {
+                            if (todos_reportes.get(i).getIdUsuario() == id_usuario) {
+                                reportes.add(todos_reportes.get(i));
+                            }
+                        }
+                    }
                     break;
             }
         }catch (Exception e){

@@ -231,7 +231,7 @@ public class Calculos {
             if(servicio == null || empresas.get(i).getTipoServicio() == servicio) {
                 valorEmpresa nuevo_stat = new valorEmpresa();
                 nuevo_stat.id_empresa = empresas.get(i).getSubId();
-                nuevo_stat.valor = 0;
+                nuevo_stat.valor = -1;
                 nuevo_stat.unidad = "dias";
                 stat_empresas.add(nuevo_stat);
             }
@@ -250,14 +250,18 @@ public class Calculos {
                         Date inicio = cortes.get(i).getFechaInicio();
                         Date fin = cortes.get(i).getFechaFin();
 
+                        if(inicio == null || fin == null){
+                            continue;
+                        }
+
                         long diferencia = fin.getTime() - inicio.getTime();
-                        long dias = diferencia / (24 * 60 * 60 * 1000);
+                        long horas = diferencia / (60 * 60 * 1000);
 
                         // Si ya habia una cantidad de dias saco el promedio, sino la meto directo
                         if(stat_empresas.get(j).valor == 0){
-                            stat_empresas.get(j).valor = dias;
+                            stat_empresas.get(j).valor = horas;
                         }else{
-                            stat_empresas.get(j).valor = (stat_empresas.get(j).valor + dias) / 2;
+                            stat_empresas.get(j).valor = (stat_empresas.get(j).valor + horas) / 2;
                         }
                     }
                 }

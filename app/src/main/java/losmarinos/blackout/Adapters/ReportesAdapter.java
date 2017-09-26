@@ -21,6 +21,7 @@ import java.util.List;
 
 import losmarinos.blackout.Actividades.MisReportes;
 import losmarinos.blackout.Actividades.PerfilCorte;
+import losmarinos.blackout.Constantes;
 import losmarinos.blackout.LocalDB;
 import losmarinos.blackout.Objetos.Reporte;
 import losmarinos.blackout.Objetos.Respuesta;
@@ -108,10 +109,15 @@ public class ReportesAdapter extends BaseAdapter implements ListAdapter {
         button_resolver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                list.get(position).resolver();
-                MisReportes mis_reportes = (MisReportes)context;
-                mis_reportes.cargarListView();
-                mis_reportes.cargarMapa();
+                boolean correcto = list.get(position).resolver();
+                if(correcto) {
+                    Toast.makeText(context, "Reporte de " + Constantes.servicioToString(list.get(position).getServicio()) + " resuelto", Toast.LENGTH_LONG).show();
+                    MisReportes mis_reportes = (MisReportes) context;
+                    mis_reportes.cargarListView();
+                    mis_reportes.cargarMapa();
+                }else{
+                    Toast.makeText(context, "No se pudo resolver reporte", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -121,10 +127,12 @@ public class ReportesAdapter extends BaseAdapter implements ListAdapter {
                 list.get(position).confirmar(context);
                 Date ahora = Calendar.getInstance().getTime();
 
-                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy");
+                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy HH:mm");
                 String str_fecha = format.format(ahora);
-                Toast.makeText(context, "Reporte confirmado (" + str_fecha + ")", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Reporte confirmado\n(" + str_fecha + ")", Toast.LENGTH_LONG).show();
 
+                MisReportes mis_reportes = (MisReportes) context;
+                mis_reportes.cargarListView();
             }
         });
 
