@@ -34,6 +34,7 @@ public class Corte{
     private int id_empresa;
     private LatLng ubicacion;
     private int radio;
+    private int cantidad_reportes;
     private Date fecha_inicio;
     private Date fecha_fin;
     private int resuelto;
@@ -89,6 +90,14 @@ public class Corte{
         this.fecha_fin = fecha_fin;
     }
 
+    public int getCantidadReportes() {
+        return cantidad_reportes;
+    }
+
+    public void setCantidadReportes(int cantidad_reportes) {
+        this.cantidad_reportes = cantidad_reportes;
+    }
+
     public boolean isResuelto() {
         return (resuelto == 1);
     }
@@ -131,13 +140,14 @@ public class Corte{
         return id;
     }
 
-    public Corte(int id, Constantes.SERVICIO servicio, int id_empresa, LatLng ubicacion, int radio, Date fecha_inicio, Date fecha_fin, int resuelto, int programado)
+    public Corte(int id, Constantes.SERVICIO servicio, int id_empresa, LatLng ubicacion, int radio, int cantidad_reportes, Date fecha_inicio, Date fecha_fin, int resuelto, int programado)
     {
         this.id = id;
         this.servicio = servicio;
         this.id_empresa = id_empresa;
         this.ubicacion = ubicacion;
         this.radio = radio;
+        this.cantidad_reportes = cantidad_reportes;
         this.fecha_inicio = fecha_inicio;
         this.fecha_fin = fecha_fin;
         this.resuelto = resuelto;
@@ -172,6 +182,7 @@ public class Corte{
         this.id_empresa = -1;
         this.ubicacion = reporte.getUbicacion();
         this.radio = 0;
+        this.cantidad_reportes = 0;
         this.fecha_inicio = Calendar.getInstance().getTime();
         this.fecha_fin = null;
         this.resuelto = 0;
@@ -194,11 +205,6 @@ public class Corte{
         return false;
     }
 
-    public int cantidadReportes()
-    {
-        return this.reportes.size();
-    }
-
     public boolean asociar(Reporte reporte)
     {
         if (Calculos.hayInterseccion(
@@ -211,8 +217,8 @@ public class Corte{
             reporte.setAsociado(true);
 
             // Modifico la posicion del corte
-            double desplazarse_lat = (reporte.getUbicacion().latitude - this.ubicacion.latitude) / this.cantidadReportes();
-            double desplazarse_long = (reporte.getUbicacion().longitude - this.ubicacion.longitude) / this.cantidadReportes();
+            double desplazarse_lat = (reporte.getUbicacion().latitude - this.ubicacion.latitude) / this.getCantidadReportes();
+            double desplazarse_long = (reporte.getUbicacion().longitude - this.ubicacion.longitude) / this.getCantidadReportes();
             this.ubicacion = new LatLng(this.ubicacion.latitude + desplazarse_lat, this.ubicacion.longitude + desplazarse_long);
 
             // Modifico el radio del corte

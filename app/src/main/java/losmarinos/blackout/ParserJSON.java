@@ -377,11 +377,13 @@ public class ParserJSON {
                 boolean resuelto_bool = obj_resp.getBoolean("resuelto");
                 if(resuelto_bool){resuelto = 1;}else{resuelto = 0;}
             }
-            String fecha = obj_resp.getString("created_at");
+            String fecha_inicio = obj_resp.getString("created_at");
+            String fecha_confirmacion = obj_resp.getString("updated_at");
 
             // SI NO ES HH es kk
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date date = format.parse(fecha);
+            Date date_inicio = format.parse(fecha_inicio);
+            Date date_confirmacion = format.parse(fecha_confirmacion);
 
             return new Reporte(id,
                     Constantes.getServicioById(id_servicio),
@@ -389,7 +391,8 @@ public class ParserJSON {
                     id_usuario,
                     Constantes.stringToLatLng(ubicacion),
                     radio,
-                    date,
+                    date_inicio,
+                    date_confirmacion,
                     resuelto);
 
         } catch (JSONException e) {
@@ -456,7 +459,11 @@ public class ParserJSON {
             }
             String ubicacion = obj_resp.getString("ubicacion");
             int radio = (int)Double.parseDouble(obj_resp.getString("radio"));
-            //No traigo cantidad de reportes ya que lo calculo
+            int cantidad_reportes = 0;
+            if(!obj_resp.isNull("cantidad_reportes")) {
+                cantidad_reportes = obj_resp.getInt("cantidad_reportes");
+            }
+
             //No traigo duración
             int resuelto = 0;
             if(!obj_resp.isNull("resuelto")) {
@@ -478,7 +485,16 @@ public class ParserJSON {
                 date_fin = format.parse(fecha_fin);
             }
 
-            return new Corte(id, Constantes.getServicioById(id_servicio), id_empresa, Constantes.stringToLatLng(ubicacion), radio, date_inicio, date_fin, resuelto, programado);
+            return new Corte(id,
+                    Constantes.getServicioById(id_servicio),
+                    id_empresa,
+                    Constantes.stringToLatLng(ubicacion),
+                    radio,
+                    cantidad_reportes,
+                    date_inicio,
+                    date_fin,
+                    resuelto,
+                    programado);
 
         } catch (JSONException e) {
             return null;

@@ -88,23 +88,18 @@ public class ReportesAdapter extends BaseAdapter implements ListAdapter {
         }else{
             textview_activo.setText("Pendiente");
             button_resolver.setVisibility(View.VISIBLE);
-
-            Date fecha_confirm = LocalDB.estaEnArchivoJSONReportesConfirmados(context, list.get(position).getId());
-            if(fecha_confirm == null){
-                button_confirmar.setVisibility(View.GONE);
-                textview_confirmacion.setVisibility(View.GONE);
-            }else{
-                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy");
-                String str_fecha = format.format(fecha_confirm);
-
-                Date ahora = Calendar.getInstance().getTime();
-                long dif_horas_conf_horas = (ahora.getTime() - fecha_confirm.getTime()) / (60 * 60 * 1000);
-
-                textview_confirmacion.setText("Ultima confirmacion: " + str_fecha + " (hace " + String.valueOf(dif_horas_conf_horas) + "hs)");
-
-                button_confirmar.setVisibility(View.VISIBLE);
-            }
+            button_confirmar.setVisibility(View.VISIBLE);
         }
+
+        Date fecha_confirm = list.get(position).getFechaConfirmacion();
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy HH:mm");
+        String str_fecha = format.format(fecha_confirm);
+
+        Date ahora = Calendar.getInstance().getTime();
+        long dif_horas_conf_horas = (ahora.getTime() - fecha_confirm.getTime()) / (60 * 60 * 1000);
+
+        textview_confirmacion.setText("Ultima confirmacion:\n" + str_fecha + " (hace " + String.valueOf(dif_horas_conf_horas) + "hs)");
+
 
         button_resolver.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,15 +119,15 @@ public class ReportesAdapter extends BaseAdapter implements ListAdapter {
         button_confirmar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                list.get(position).confirmar(context);
-                Date ahora = Calendar.getInstance().getTime();
+                boolean correcto = list.get(position).confirmar();
+                if(correcto) {
+                    Toast.makeText(context, "Reporte confirmado", Toast.LENGTH_LONG).show();
 
-                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy HH:mm");
-                String str_fecha = format.format(ahora);
-                Toast.makeText(context, "Reporte confirmado\n(" + str_fecha + ")", Toast.LENGTH_LONG).show();
-
-                MisReportes mis_reportes = (MisReportes) context;
-                mis_reportes.cargarListView();
+                    MisReportes mis_reportes = (MisReportes) context;
+                    mis_reportes.cargarListView();
+                }else{
+                    Toast.makeText(context, "No fue posible confirmar el reporte", Toast.LENGTH_LONG).show();
+                }
             }
         });
 

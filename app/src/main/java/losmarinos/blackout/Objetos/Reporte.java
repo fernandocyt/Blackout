@@ -4,18 +4,22 @@ import android.content.Context;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.json.JSONObject;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 import losmarinos.blackout.Constantes;
+import losmarinos.blackout.ConsultorGETAPI;
 import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.Global;
 import losmarinos.blackout.LocalDB;
 import losmarinos.blackout.ParserJSON;
 
 import static losmarinos.blackout.Constantes.TAGAPI.ACTUALIZAR_REPORTE_RESUELTO;
+import static losmarinos.blackout.Constantes.TAGAPI.ACTUALIZAR_REPORTE_UPDATE_AT;
 
 /**
  * Created by garci on 22/7/2017.
@@ -31,6 +35,7 @@ public class Reporte {
     private LatLng ubicacion;
     private int radio;
     private Date fecha;
+    private Date fecha_confirmacion;
     private int resuelto;
     private boolean asociado;
 
@@ -82,6 +87,14 @@ public class Reporte {
         this.fecha = fecha;
     }
 
+    public Date getFechaConfirmacion() {
+        return fecha_confirmacion;
+    }
+
+    public void setFechaConfirmacion(Date fecha_confirmacion) {
+        this.fecha_confirmacion = fecha_confirmacion;
+    }
+
     public boolean isResuelto() {
         return (resuelto == 1);
     }
@@ -106,7 +119,7 @@ public class Reporte {
         this.asociado = asociado;
     }
 
-    public Reporte(int id, Constantes.SERVICIO servicio, int id_empresa, int id_usuario, LatLng ubicacion, int radio, Date fecha, int resuelto)
+    public Reporte(int id, Constantes.SERVICIO servicio, int id_empresa, int id_usuario, LatLng ubicacion, int radio, Date fecha, Date fecha_confirmacion, int resuelto)
     {
         this.id = id;
         this.servicio = servicio;
@@ -115,6 +128,7 @@ public class Reporte {
         this.ubicacion = ubicacion;
         this.radio = radio;
         this.fecha = fecha;
+        this.fecha_confirmacion = fecha_confirmacion;
         this.resuelto = resuelto;
         this.asociado = false;
     }
@@ -156,9 +170,25 @@ public class Reporte {
         }
     }
 
-    public void confirmar(Context contexto){
-        Date ahora = Calendar.getInstance().getTime();
-        LocalDB.agregarArchivoJSONReportesConfirmados(contexto, this.id, ahora);
+    public boolean confirmar(){
+        try {
+            String respuesta = new ConsultorGETAPI( "reporte/" + String.valueOf(this.id) + "/actualizar-updated-at", Global.token_usuario_actual, ACTUALIZAR_REPORTE_UPDATE_AT, null).execute().get();
+            StringBuilder mensaje_error = new StringBuilder();
+            if(ParserJSON.esError(respuesta, mensaje_error)) {
+                return false;
+            }else{
+                JSONObject reporte = new JSONObject(respuesta);
+                String fecha_confirm = reporte.getString("updated_at");
+
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date date = format.parse(fecha_confirm);
+
+                this.fecha_confirmacion = date;
+                return true;
+            }
+        }catch (Exception e){
+            return false;
+        }
     }
 
 }

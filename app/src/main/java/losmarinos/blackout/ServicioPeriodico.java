@@ -67,7 +67,6 @@ public class ServicioPeriodico extends Service implements Runnable, ObservadorAP
         handler.postDelayed(runnable, 15000);
     }
 
-
     @Override
     public void run() {
 
@@ -138,7 +137,7 @@ public class ServicioPeriodico extends Service implements Runnable, ObservadorAP
                 case OBTENER_REPORTES:
                     List<Reporte> todos_reportes = ParserJSON.obtenerReportes(respuesta);
                     if(id_usuario != -1) {
-                        reportes.clear();
+                        reportes = new ArrayList<>();
                         for (int i = 0; i < todos_reportes.size(); i++) {
                             if (todos_reportes.get(i).getIdUsuario() == id_usuario) {
                                 reportes.add(todos_reportes.get(i));
@@ -282,27 +281,22 @@ public class ServicioPeriodico extends Service implements Runnable, ObservadorAP
             if(reporte_actual.isResuelto())
                 continue;
 
-            Date fecha_conf = LocalDB.estaEnArchivoJSONReportesConfirmados(this, reporte_actual.getId());
+            Date fecha_conf = reporte_actual.getFechaConfirmacion();
+            Date ahora = Calendar.getInstance().getTime();
+            long dif_mins_conf_horas = (ahora.getTime() - fecha_conf.getTime()) / (60 * 1000);
 
-            if(fecha_conf == null){
-                LocalDB.agregarArchivoJSONReportesConfirmados(this, reporte_actual.getId(), reporte_actual.getFecha());
-            }else{
-                Date ahora = Calendar.getInstance().getTime();
-                long dif_mins_conf_horas = (ahora.getTime() - fecha_conf.getTime()) / (60 * 1000);
+            if(dif_mins_conf_horas > TIEMPO_PEDIR_CONFIRMACION_REPORTES &&
+                    dif_mins_conf_horas < TIEMPO_RESOLVER_AUTOMATICAMENTE_REPORTES)
+            {
+                String str_servicio = Constantes.servicioToString(reporte_actual.getServicio());
+                this.notificar("Confirma o resuelve tu reporte de " + str_servicio);
+            }
+            else if (dif_mins_conf_horas > TIEMPO_RESOLVER_AUTOMATICAMENTE_REPORTES)
+            {
+                reporte_actual.resolver();
 
-                if(dif_mins_conf_horas > TIEMPO_PEDIR_CONFIRMACION_REPORTES &&
-                        dif_mins_conf_horas < TIEMPO_RESOLVER_AUTOMATICAMENTE_REPORTES)
-                {
-                    String str_servicio = Constantes.servicioToString(reporte_actual.getServicio());
-                    this.notificar("Confirma o resuelve tu reporte de " + str_servicio);
-                }
-                else if (dif_mins_conf_horas > TIEMPO_RESOLVER_AUTOMATICAMENTE_REPORTES)
-                {
-                    reporte_actual.resolver();
-
-                    String str_servicio = Constantes.servicioToString(reporte_actual.getServicio());
-                    this.notificar("Se resolvio el reporte de " + str_servicio);
-                }
+                String str_servicio = Constantes.servicioToString(reporte_actual.getServicio());
+                this.notificar("Se resolvio el reporte de " + str_servicio);
             }
         }
     }
@@ -356,6 +350,11 @@ public class ServicioPeriodico extends Service implements Runnable, ObservadorAP
         /* IF YOU WANT THIS SERVICE KILLED WITH THE APP THEN UNCOMMENT THE FOLLOWING LINE */
         //handler.removeCallbacks(runnable);
         //Toast.makeText(this, "Service stopped", Toast.LENGTH_LONG).show();
+
+        cortes.clear();
+        puntos_interes.clear();
+        cortes_interes.clear();
+        reportes.clear();
     }
 
     @Override

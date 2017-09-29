@@ -90,7 +90,7 @@ public class PerfilCorte extends AppCompatActivity {
         if(corte.isProgramado()){
             textview_motivo.setText("Programado por empresa");
         }else{
-            textview_motivo.setText("Generado por " + Integer.toString(corte.cantidadReportes()) + " reportes");
+            textview_motivo.setText("Generado por " + Integer.toString(corte.getCantidadReportes()) + " reportes");
         }
 
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
