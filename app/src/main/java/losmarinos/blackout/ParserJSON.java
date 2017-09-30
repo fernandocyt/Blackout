@@ -73,6 +73,21 @@ public class ParserJSON {
         return json_usu;
     }
 
+    public static JSONObject crearJSONEmpresaUsuario(String nombre, String direccion, String website, String telefono, String email_contacto, String email, String pass1, String pass2) throws JSONException
+    {
+        JSONObject json_emp_user = new JSONObject();
+        json_emp_user.put("name", nombre);
+        json_emp_user.put("direccion", direccion);
+        json_emp_user.put("website", website);
+        json_emp_user.put("telefono", telefono);
+        //json_emp_user.put("", email_contacto); AGREGAR CUANDO ESTE LISTO
+        json_emp_user.put("email", email);
+        json_emp_user.put("password", pass1);
+        json_emp_user.put("password_confirmation", pass1);
+
+        return json_emp_user;
+    }
+
     public static JSONObject crearJSONEmpresa(String nombre, String email, String telefono, String website, String direccion) throws JSONException
     {
         JSONObject json_emp = new JSONObject();
@@ -194,10 +209,11 @@ public class ParserJSON {
             if(!obj_resp.isNull("persona_id")) {
                 sub_id = obj_resp.getInt("persona_id");
                 tipo = Constantes.TIPOSUSUARIO.PERSONA;
-            }
-            if(!obj_resp.isNull("empresa_id")) {
+            } else if(!obj_resp.isNull("empresa_id")) {
                 sub_id = obj_resp.getInt("empresa_id");
                 tipo = Constantes.TIPOSUSUARIO.EMPRESA;
+            } else {
+                tipo = Constantes.TIPOSUSUARIO.ADMINISTRADOR;
             }
 
             return new Usuario(usu_id, sub_id, usu_nombre, "", usu_email, tipo);

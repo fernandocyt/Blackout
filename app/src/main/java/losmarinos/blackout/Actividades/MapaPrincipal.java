@@ -147,10 +147,19 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             navigationView.getMenu().findItem(R.id.drawer_agregar_corte_programado).setVisible(false);
             navigationView.getMenu().findItem(R.id.drawer_agregar_sucursal).setVisible(false);
             navigationView.getMenu().findItem(R.id.drawer_mis_cortes_programados).setVisible(false);
-        }else{
+            navigationView.getMenu().findItem(R.id.drawer_crear_empresa).setVisible(false);
+            navigationView.getMenu().findItem(R.id.drawer_eliminar_empresa).setVisible(false);
+        }else if(Global.usuario_actual.getTipo() == Constantes.TIPOSUSUARIO.EMPRESA){
             tipo = " (EMPRESA)";
             navigationView.getMenu().findItem(R.id.drawer_crear_reporte).setVisible(false);
             navigationView.getMenu().findItem(R.id.drawer_mis_reportes).setVisible(false);
+            navigationView.getMenu().findItem(R.id.drawer_crear_empresa).setVisible(false);
+            navigationView.getMenu().findItem(R.id.drawer_eliminar_empresa).setVisible(false);
+        }else{
+            tipo = " (ADMIN)";
+            navigationView.getMenu().findItem(R.id.drawer_agregar_corte_programado).setVisible(false);
+            navigationView.getMenu().findItem(R.id.drawer_agregar_sucursal).setVisible(false);
+            navigationView.getMenu().findItem(R.id.drawer_mis_cortes_programados).setVisible(false);
         }
 
         username_header.setText(Global.usuario_actual.getNombre() + tipo);
@@ -196,6 +205,9 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             startActivity(i);
         } else if (id == R.id.drawer_agregar_sucursal){
             Intent i = new Intent(getApplicationContext(), CrearSucursal.class);
+            startActivity(i);
+        } else if (id == R.id.drawer_crear_empresa){
+            Intent i = new Intent(getApplicationContext(), CrearEmpresa.class);
             startActivity(i);
         } else if (id == R.id.drawer_cerrar_sesion){
             LocalDB.borrarTodasLasDB(this);

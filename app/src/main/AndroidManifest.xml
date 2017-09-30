@@ -97,7 +97,8 @@
         <activity android:name=".Actividades.ConsultarEstadisticas" />
         <activity android:name=".Actividades.CrearSucursal" />
         <activity android:name=".Actividades.ModificarPerfilEmpresa" />
-        <activity android:name=".Actividades.Preferencias"></activity>
+        <activity android:name=".Actividades.Preferencias" />
+        <activity android:name=".Actividades.CrearEmpresa"></activity>
     </application>
 
 </manifest>

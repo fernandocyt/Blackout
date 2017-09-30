@@ -37,6 +37,12 @@
     <item android:title="Acciones">
         <menu>
             <item
+                android:id="@+id/drawer_crear_empresa"
+                android:title="Crear Empresa" />
+            <item
+                android:id="@+id/drawer_eliminar_empresa"
+                android:title="Eliminar Empresa" />
+            <item
                 android:id="@+id/drawer_buscar_empresa"
                 android:title="Buscar Empresa" />
             <item
