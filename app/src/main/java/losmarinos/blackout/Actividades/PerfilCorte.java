@@ -1,6 +1,7 @@
 package losmarinos.blackout.Actividades;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -82,6 +83,29 @@ public class PerfilCorte extends AppCompatActivity {
 
     void cargarCorte()
     {
+        switch(corte.getServicio())
+        {
+            case AGUA:
+                this.getWindow().getDecorView().setBackgroundColor(Color.parseColor("#CEE3F6"));
+                break;
+            case LUZ:
+                this.getWindow().getDecorView().setBackgroundColor(Color.parseColor("#F5F6CE"));
+                break;
+            case GAS:
+                this.getWindow().getDecorView().setBackgroundColor(Color.parseColor("#F8E0E0"));
+                break;
+            case CABLE:
+                this.getWindow().getDecorView().setBackgroundColor(Color.parseColor("#F5ECCE"));
+                break;
+            case TELEFONO:
+                this.getWindow().getDecorView().setBackgroundColor(Color.parseColor("#CEF6CE"));
+                break;
+            case INTERNET:
+                this.getWindow().getDecorView().setBackgroundColor(Color.parseColor("#ECCEF5"));
+                break;
+
+        }
+
         textview_servicio.setText(Constantes.servicioToString(corte.getServicio()));
 
         if(corte.getEmpresa() != null)

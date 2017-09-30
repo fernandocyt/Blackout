@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import losmarinos.blackout.Adapters.EmpresaAdapter;
@@ -24,6 +25,7 @@ import losmarinos.blackout.R;
 public class ConsultarEstadisticas extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     Spinner spnEstadistica;
+    Spinner spnOrdenar;
     Spinner spnServicios;
     List<Calculos.valorEmpresa> estadisticas = new ArrayList<>();
     Constantes.SERVICIO servicio = null;
@@ -39,7 +41,11 @@ public class ConsultarEstadisticas extends AppCompatActivity implements AdapterV
         spnEstadistica = (Spinner)findViewById(R.id.spn_estadisticas_consultar_estadisticas);
         spnEstadistica.setOnItemSelectedListener(this);
 
+        spnOrdenar = (Spinner)findViewById(R.id.spn_ordenar_consultar_estadisticas);
+        spnOrdenar.setOnItemSelectedListener(this);
+
         this.cargarSpinnerEstadisticas();
+        this.cargarSpinnerOrdenar();
         this.cargarSpinnerServicios();
         this.cargarListView();
     }
@@ -76,6 +82,20 @@ public class ConsultarEstadisticas extends AppCompatActivity implements AdapterV
         this.spnEstadistica.setAdapter(adapter);
     }
 
+    private void cargarSpinnerOrdenar()
+    {
+        List<String> spinnerArray =  new ArrayList<String>();
+        spinnerArray.add("Mayor a menor");
+        spinnerArray.add("Menor a mayor");
+        spinnerArray.add("Alfabeticamente");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, spinnerArray);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        this.spnOrdenar.setAdapter(adapter);
+    }
+
     public void cargarListView(){
         EstadisticaAdapter adapter = new EstadisticaAdapter(this.estadisticas, this, this);
         ListView mi_lista = (ListView)findViewById(R.id.lst_empresa_consultar_estadisticas);
@@ -106,6 +126,10 @@ public class ConsultarEstadisticas extends AppCompatActivity implements AdapterV
                 this.estadisticas = Calculos.tiempoPromedioDeResolucionPorEmpresa(this.servicio);
                 break;
         }
+
+        Calculos.valorEmpresa.ordenar = spnOrdenar.getSelectedItemPosition();
+        Collections.sort(this.estadisticas);
+
         this.cargarListView();
     }
 

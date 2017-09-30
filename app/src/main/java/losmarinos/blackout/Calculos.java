@@ -28,18 +28,38 @@ public class Calculos {
         public String unidad;
         public int id_empresa;
 
+        public static int ordenar = 0;
+        // ordenar = 0 -> mayor a menor
+        // ordenar = 1 -> menor a mayor
+        // ordenar = 2 -> alfabeticamente
+
         public int compareTo(valorEmpresa v) {
-
-            if (this.valor > v.valor) {
-                return -1;
+            switch (ordenar)
+            {
+                case 0:
+                    if (this.valor > v.valor) {
+                        return -1;
+                    } else if (this.valor < v.valor) {
+                        return 1;
+                    }
+                    break;
+                case 1:
+                    if (this.valor < v.valor) {
+                        return -1;
+                    } else if (this.valor > v.valor) {
+                        return 1;
+                    }
+                    break;
+                case 2:
+                    String emp1 = Global.encontrarEmpresaPorId(this.id_empresa).getNombre();
+                    String emp2 = Global.encontrarEmpresaPorId(v.id_empresa).getNombre();
+                    int comp = emp1.compareTo(emp2);
+                    if(comp != 0) {
+                        return comp;
+                    }
+                    break;
             }
-            else if (this.valor < v.valor) {
-                return 1;
-            }
-            else {
-                return 0;
-            }
-
+            return 0;
         }
     }
 
@@ -172,9 +192,6 @@ public class Calculos {
         for(int i = 0; i < stat_empresas.size(); i++){
             stat_empresas.get(i).valor = stat_empresas.get(i).valor * 100 / total_cortes_servicio;
         }
-
-        Collections.sort(stat_empresas);
-
         return stat_empresas;
     }
 
@@ -213,9 +230,6 @@ public class Calculos {
                 }
             }
         }
-
-        Collections.sort(stat_empresas);
-
         return stat_empresas;
     }
 
@@ -267,9 +281,6 @@ public class Calculos {
                 }
             }
         }
-
-        Collections.sort(stat_empresas);
-
         return stat_empresas;
     }
 }

@@ -37,6 +37,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.Marker;
 
@@ -66,6 +67,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
                                                                 ObservadorGPS{
     GoogleMap mMap;
     Marker marcador_posicion_actual = null;
+    Circle radio_reporte_seleccionado = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -244,6 +246,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+        marker.showInfoWindow();
+
         if(marker.getTitle().equals("Corte"))
         {
             Corte corte_seleccionado = (Corte)marker.getTag();
@@ -257,6 +261,20 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             {
                 throw e;
             }
+        }
+        else if(marker.getTitle().equals("Reporte"))
+        {
+            if(this.radio_reporte_seleccionado != null){
+                this.radio_reporte_seleccionado.remove();
+            }
+
+            Reporte rep_actual = (Reporte)marker.getTag();
+            this.radio_reporte_seleccionado = mMap.addCircle(new CircleOptions()
+                    .center(rep_actual.getUbicacion())
+                    .radius(rep_actual.getRadio())
+                    .strokeColor(Constantes.STROKE_COLOR_CIRCLE)
+                    .fillColor(Constantes.COLOR_CIRCLE)
+                    .strokeWidth(5));
         }
         return true;
     }
@@ -407,14 +425,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             mMap.addMarker(new MarkerOptions()
                     .position(rep_actual.getUbicacion())
                     .title("Reporte")
-                    .icon(Constantes.getIconoReporte(rep_actual.getServicio())));
-
-            mMap.addCircle(new CircleOptions()
-                    .center(rep_actual.getUbicacion())
-                    .radius(rep_actual.getRadio())
-                    .strokeColor(Constantes.STROKE_COLOR_CIRCLE)
-                    .fillColor(Constantes.COLOR_CIRCLE)
-                    .strokeWidth(5));
+                    .icon(Constantes.getIconoReporte(rep_actual.getServicio())))
+            .setTag(rep_actual);
         }
     }
 
@@ -425,7 +437,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         {
             mMap.addMarker(new MarkerOptions()
                     .position(sucursales.get(i).getUbicacion())
-                    .title("Sucursal " + empresa.getNombre())
+                    .title("Sucursal " + empresa.getNombre() + "\n" + empresa.getDireccion())
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_sucursal)));
         }
     }

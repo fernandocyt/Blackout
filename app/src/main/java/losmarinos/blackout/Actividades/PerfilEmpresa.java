@@ -43,7 +43,7 @@ public class PerfilEmpresa extends AppCompatActivity {
     TextView textview_telefono;
     TextView textview_direccion;
     TextView textview_servicio;
-    TextView textview_calificacion;
+    TextView textview_email;
     TextView textview_pagina;
     EditText edittext_comentario;
     RatingBar rtb_calificacion;
@@ -66,7 +66,7 @@ public class PerfilEmpresa extends AppCompatActivity {
         textview_telefono = (TextView)findViewById(R.id.lbl_telefono_perfil_empresa);
         textview_direccion = (TextView)findViewById(R.id.lbl_direccion_perfil_empresa);
         textview_servicio = (TextView)findViewById(R.id.lbl_servicio_perfil_empresa);
-        //textview_calificacion = (TextView)findViewById(R.id.lbl_calificacion_perfil_empresa);
+        textview_email = (TextView)findViewById(R.id.lbl_email_perfil_empresa);
         textview_pagina = (TextView)findViewById(R.id.lbl_pagina_perfil_empresa);
         edittext_comentario = (EditText)findViewById(R.id.txt_comentario_perfil_empresa);
         rtb_calificacion = (RatingBar)findViewById(R.id.rtb_calificacion_perfil_empresa);
@@ -95,7 +95,7 @@ public class PerfilEmpresa extends AppCompatActivity {
         textview_telefono.setText(empresa.getTelefono());
         textview_direccion.setText(empresa.getDireccion());
         textview_servicio.setText(Constantes.servicioToString(empresa.getTipoServicio()));
-        //textview_calificacion.setText(Double.toString(empresa.getCalificacion()));
+        textview_email.setText(empresa.getMail());
         textview_pagina.setText(empresa.getPagina());
         rtb_calificacion.setRating((float) Calculos.calificacionEmpresa(empresa));
 
