@@ -110,7 +110,6 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
     private void cargarSpinnerEmpresas(Constantes.SERVICIO servicio)
     {
         List<String> spinnerArray =  new ArrayList<String>();
-        spinnerArray.add("No especificar");
 
         for(int i = 0; i < Global.empresas.size(); i++)
         {

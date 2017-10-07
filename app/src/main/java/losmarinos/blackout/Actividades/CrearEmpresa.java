@@ -32,16 +32,23 @@ public class CrearEmpresa extends AppCompatActivity implements AdapterView.OnIte
     EditText edittext_password;
     EditText edittext_password2;
     Spinner spinner_opciones;
+    Spinner spinner_servicios;
+    Spinner spinner_empresas;
 
-    TextView textview_email;
-    TextView textview_password;
-    TextView textview_password2;
+    View layout_empresa;
+    View layout_usuario;
+    View layout_seleccionar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle("Crear empresa");
+        setTitle("Gestionar empresas");
         setContentView(R.layout.activity_crear_empresa);
+
+
+        layout_empresa = findViewById(R.id.lyt_empresa_crear_empresa);
+        layout_usuario = findViewById(R.id.lyt_usuario_crear_empresa);
+        layout_seleccionar = findViewById(R.id.lyt_seleccionar_crear_empresa);
 
         edittext_nombre = (EditText)findViewById(R.id.txt_nombre_crear_empresa);
         edittext_direccion = (EditText)findViewById(R.id.txt_direccion_crear_empresa);
@@ -54,32 +61,38 @@ public class CrearEmpresa extends AppCompatActivity implements AdapterView.OnIte
 
         spinner_opciones = (Spinner) findViewById(R.id.spn_opciones_crear_empresa);
         spinner_opciones.setOnItemSelectedListener(this);
-
-        textview_email = (TextView) findViewById(R.id.lbl_email_crear_empresa);
-        textview_password = (TextView)findViewById(R.id.lbl_password_crear_empresa);
-        textview_password2 = (TextView)findViewById(R.id.lbl_password2_crear_empresa);
+        spinner_servicios = (Spinner)findViewById(R.id.spn_servicios_crear_empresa);
+        spinner_servicios.setOnItemSelectedListener(this);
+        spinner_empresas = (Spinner)findViewById(R.id.spn_empresa_crear_empresa);
+        spinner_empresas.setOnItemSelectedListener(this);
 
         this.cargarSpinnerOpciones();
+        this.cargarSpinnerServicios();
+        this.cargarSpinnerEmpresas();
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
         switch (spinner_opciones.getSelectedItemPosition()){
             case 0:
-                edittext_email.setVisibility(View.GONE);
-                edittext_password.setVisibility(View.GONE);
-                edittext_password2.setVisibility(View.GONE);
-                textview_email.setVisibility(View.GONE);
-                textview_password.setVisibility(View.GONE);
-                textview_password2.setVisibility(View.GONE);
+                layout_empresa.setVisibility(View.VISIBLE);
+                layout_usuario.setVisibility(View.GONE);
+                layout_seleccionar.setVisibility(View.GONE);
                 break;
             case 1:
-                edittext_email.setVisibility(View.VISIBLE);
-                edittext_password.setVisibility(View.VISIBLE);
-                edittext_password2.setVisibility(View.VISIBLE);
-                textview_email.setVisibility(View.VISIBLE);
-                textview_password.setVisibility(View.VISIBLE);
-                textview_password2.setVisibility(View.VISIBLE);
+                layout_empresa.setVisibility(View.VISIBLE);
+                layout_usuario.setVisibility(View.VISIBLE);
+                layout_seleccionar.setVisibility(View.GONE);
+                break;
+            case 2:
+                layout_empresa.setVisibility(View.GONE);
+                layout_usuario.setVisibility(View.VISIBLE);
+                layout_seleccionar.setVisibility(View.VISIBLE);
+                break;
+            case 3:
+                layout_empresa.setVisibility(View.GONE);
+                layout_usuario.setVisibility(View.GONE);
+                layout_seleccionar.setVisibility(View.VISIBLE);
                 break;
         }
     }
@@ -94,6 +107,8 @@ public class CrearEmpresa extends AppCompatActivity implements AdapterView.OnIte
         spinnerArray.add("Crear empresa");
         spinnerArray.add("Crear usuario y empresa");
         spinnerArray.add("Asignar usuario a empresa");
+        spinnerArray.add("Borrar empresa");
+
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, spinnerArray);
@@ -102,7 +117,40 @@ public class CrearEmpresa extends AppCompatActivity implements AdapterView.OnIte
         this.spinner_opciones.setAdapter(adapter);
     }
 
-    public void registrarUsuario(View view)
+    private void cargarSpinnerServicios()
+    {
+        List<String> spinnerArray =  new ArrayList<String>();
+        spinnerArray.add(Constantes.servicioToString(Constantes.SERVICIO.AGUA));
+        spinnerArray.add(Constantes.servicioToString(Constantes.SERVICIO.LUZ));
+        spinnerArray.add(Constantes.servicioToString(Constantes.SERVICIO.GAS));
+        spinnerArray.add(Constantes.servicioToString(Constantes.SERVICIO.TELEFONO));
+        spinnerArray.add(Constantes.servicioToString(Constantes.SERVICIO.INTERNET));
+        spinnerArray.add(Constantes.servicioToString(Constantes.SERVICIO.CABLE));
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, spinnerArray);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        this.spinner_servicios.setAdapter(adapter);
+    }
+
+    private void cargarSpinnerEmpresas()
+    {
+        List<String> spinnerArray =  new ArrayList<String>();
+
+        for(int i = 0; i < Global.empresas.size(); i++)
+        {
+            spinnerArray.add(Global.empresas.get(i).getNombre());
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, spinnerArray);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        this.spinner_empresas.setAdapter(adapter);
+    }
+
+    public void realizarOperacion(View view)
     {
         String nombre = edittext_nombre.getText().toString();
         String direccion = edittext_direccion.getText().toString();

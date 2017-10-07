@@ -210,7 +210,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             Intent i = new Intent(getApplicationContext(), CrearEmpresa.class);
             startActivity(i);
         } else if (id == R.id.drawer_cerrar_sesion){
-            LocalDB.borrarTodasLasDB(this);
+            LocalDB.borrarArchivoJSONUsuario(this);
             Global.vaciarTodo();
 
             if(isMyServiceRunning(ServicioPeriodico.class))
@@ -368,6 +368,10 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         for(int i = 0; i < cortes.size(); i++)
         {
             Corte corte_actual = cortes.get(i);
+
+            if(corte_actual.isResuelto()) {
+                continue;
+            }
 
             if(FiltrarMapaPrincipal.id_empresa != -1 &&
                 FiltrarMapaPrincipal.id_empresa != corte_actual.getIdEmpresa())

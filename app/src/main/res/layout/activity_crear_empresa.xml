@@ -23,27 +23,28 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:gravity="center">
+        android:gravity="left">
 
         <Spinner
             android:id="@+id/spn_opciones_crear_empresa"
-            android:layout_width="200dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="30sp" />
+            android:textSize="40sp" />
 
         <LinearLayout
+            android:id="@+id/lyt_seleccionar_crear_empresa"
             android:layout_width="368dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             tools:layout_editor_absoluteY="8dp"
             tools:layout_editor_absoluteX="8dp"
-            android:gravity="center"
-            android:layout_marginTop="10dp">
+            android:gravity="center">
 
             <TextView
+                android:id="@+id/lbl_empresa_crear_empresa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nombre"
+                android:text="Empresa"
                 android:layout_margin="5dp"
                 android:textSize="20sp"/>
 
@@ -52,230 +53,291 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
-            <EditText
-                android:id="@+id/txt_nombre_crear_empresa"
-                android:layout_width="200dp"
+            <Spinner
+                android:id="@+id/spn_empresa_crear_empresa"
+                android:layout_width="170dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:padding="5dp"
-                android:background="#D8D8D8"/>
+                android:textSize="30sp" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="368dp"
+            android:id="@+id/lyt_empresa_crear_empresa"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            tools:layout_editor_absoluteY="8dp"
-            tools:layout_editor_absoluteX="8dp"
-            android:gravity="center"
-            android:layout_marginTop="10dp">
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="368dp"
                 android:layout_height="wrap_content"
-                android:text="Dirección"
-                android:layout_margin="5dp"
-                android:textSize="20sp"/>
+                android:orientation="horizontal"
+                tools:layout_editor_absoluteY="8dp"
+                tools:layout_editor_absoluteX="8dp"
+                android:gravity="center">
 
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                <TextView
+                    android:id="@+id/lbl_servicio_crear_empresa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Servicio"
+                    android:layout_margin="5dp"
+                    android:textSize="20sp"/>
 
-            <EditText
-                android:id="@+id/txt_direccion_crear_empresa"
-                android:layout_width="200dp"
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Spinner
+                    android:id="@+id/spn_servicios_crear_empresa"
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="368dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:padding="5dp"
-                android:background="#D8D8D8"/>
+                android:orientation="horizontal"
+                tools:layout_editor_absoluteY="8dp"
+                tools:layout_editor_absoluteX="8dp"
+                android:gravity="center"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nombre"
+                    android:layout_margin="5dp"
+                    android:textSize="20sp"/>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <EditText
+                    android:id="@+id/txt_nombre_crear_empresa"
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:padding="5dp"
+                    android:background="#D8D8D8"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="368dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                tools:layout_editor_absoluteY="8dp"
+                tools:layout_editor_absoluteX="8dp"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dirección"
+                    android:layout_margin="5dp"
+                    android:textSize="20sp"/>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <EditText
+                    android:id="@+id/txt_direccion_crear_empresa"
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:padding="5dp"
+                    android:background="#D8D8D8"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="368dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                tools:layout_editor_absoluteY="8dp"
+                tools:layout_editor_absoluteX="8dp"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Página web"
+                    android:layout_margin="5dp"
+                    android:textSize="20sp"/>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <EditText
+                    android:id="@+id/txt_pagina_crear_empresa"
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:padding="5dp"
+                    android:background="#D8D8D8"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="368dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                tools:layout_editor_absoluteY="8dp"
+                tools:layout_editor_absoluteX="8dp"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Teléfono"
+                    android:layout_margin="5dp"
+                    android:textSize="20sp"/>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <EditText
+                    android:id="@+id/txt_telefono_crear_empresa"
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:padding="5dp"
+                    android:background="#D8D8D8"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="368dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                tools:layout_editor_absoluteY="8dp"
+                tools:layout_editor_absoluteX="8dp"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email contacto"
+                    android:layout_margin="5dp"
+                    android:textSize="20sp"/>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <EditText
+                    android:id="@+id/txt_email_contacto_crear_empresa"
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:padding="5dp"
+                    android:background="#D8D8D8"/>
+            </LinearLayout>
+
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="368dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            tools:layout_editor_absoluteY="8dp"
-            tools:layout_editor_absoluteX="8dp"
-            android:gravity="center"
-            android:layout_marginTop="10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Página web"
-                android:layout_margin="5dp"
-                android:textSize="20sp"/>
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <EditText
-                android:id="@+id/txt_pagina_crear_empresa"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:padding="5dp"
-                android:background="#D8D8D8"/>
-        </LinearLayout>
 
         <LinearLayout
-            android:layout_width="368dp"
+            android:id="@+id/lyt_usuario_crear_empresa"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            tools:layout_editor_absoluteY="8dp"
-            tools:layout_editor_absoluteX="8dp"
-            android:gravity="center"
-            android:layout_marginTop="10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/lyt_email_crear_empresa"
+                android:layout_width="368dp"
                 android:layout_height="wrap_content"
-                android:text="Teléfono"
-                android:layout_margin="5dp"
-                android:textSize="20sp"/>
+                android:orientation="horizontal"
+                tools:layout_editor_absoluteY="8dp"
+                tools:layout_editor_absoluteX="8dp"
+                android:gravity="center">
 
-            <Space
-                android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email usuario"
+                    android:layout_margin="5dp"
+                    android:textSize="20sp"/>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <EditText
+                    android:id="@+id/txt_email_crear_empresa"
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:padding="5dp"
+                    android:background="#D8D8D8"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lyt_clave_crear_empresa"
+                android:layout_width="368dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:orientation="horizontal"
+                tools:layout_editor_absoluteY="8dp"
+                tools:layout_editor_absoluteX="8dp"
+                android:gravity="center">
 
-            <EditText
-                android:id="@+id/txt_telefono_crear_empresa"
-                android:layout_width="200dp"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Clave"
+                    android:layout_margin="5dp"
+                    android:textSize="20sp"/>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <EditText
+                    android:id="@+id/txt_password_crear_empresa"
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:padding="5dp"
+                    android:background="#D8D8D8"
+                    android:inputType="textPassword"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="368dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:padding="5dp"
-                android:background="#D8D8D8"/>
-        </LinearLayout>
+                android:orientation="horizontal"
+                tools:layout_editor_absoluteY="8dp"
+                tools:layout_editor_absoluteX="8dp"
+                android:gravity="center">
 
-        <LinearLayout
-            android:layout_width="368dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            tools:layout_editor_absoluteY="8dp"
-            tools:layout_editor_absoluteX="8dp"
-            android:gravity="center"
-            android:layout_marginTop="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Repetir clave"
+                    android:layout_margin="5dp"
+                    android:textSize="20sp"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Email contacto"
-                android:layout_margin="5dp"
-                android:textSize="20sp"/>
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
 
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <EditText
-                android:id="@+id/txt_email_contacto_crear_empresa"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:padding="5dp"
-                android:background="#D8D8D8"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/lyt_email_crear_empresa"
-            android:layout_width="368dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            tools:layout_editor_absoluteY="8dp"
-            tools:layout_editor_absoluteX="8dp"
-            android:gravity="center"
-            android:layout_marginTop="10dp">
-
-            <TextView
-                android:id="@+id/lbl_email_crear_empresa"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Email usuario"
-                android:layout_margin="5dp"
-                android:textSize="20sp"/>
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <EditText
-                android:id="@+id/txt_email_crear_empresa"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:padding="5dp"
-                android:background="#D8D8D8"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/lyt_clave_crear_empresa"
-            android:layout_width="368dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            tools:layout_editor_absoluteY="8dp"
-            tools:layout_editor_absoluteX="8dp"
-            android:gravity="center"
-            android:layout_marginTop="10dp">
-
-            <TextView
-                android:id="@+id/lbl_password_crear_empresa"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Clave"
-                android:layout_margin="5dp"
-                android:textSize="20sp"/>
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <EditText
-                android:id="@+id/txt_password_crear_empresa"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:padding="5dp"
-                android:background="#D8D8D8"
-                android:inputType="textPassword"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="368dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            tools:layout_editor_absoluteY="8dp"
-            tools:layout_editor_absoluteX="8dp"
-            android:gravity="center"
-            android:layout_marginTop="10dp">
-
-            <TextView
-                android:id="@+id/lbl_password2_crear_empresa"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Repetir clave"
-                android:layout_margin="5dp"
-                android:textSize="20sp"/>
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <EditText
-                android:id="@+id/txt_password2_crear_empresa"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:padding="5dp"
-                android:background="#D8D8D8"
-                android:inputType="textPassword"/>
+                <EditText
+                    android:id="@+id/txt_password2_crear_empresa"
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:padding="5dp"
+                    android:background="#D8D8D8"
+                    android:inputType="textPassword"/>
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -283,7 +345,9 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            tools:layout_editor_absoluteY="0dp"
+            tools:layout_editor_absoluteX="8dp">
 
             <Space
                 android:layout_width="match_parent"
@@ -294,8 +358,8 @@
                 android:id="@+id/btn_registrar_registrar_usuario"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Registrar"
-                android:onClick="registrarUsuario"/>
+                android:text="Realizar"
+                android:onClick="realizarOperacion"/>
 
         </LinearLayout>
 

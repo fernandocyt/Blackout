@@ -80,7 +80,7 @@ public class ParserJSON {
         json_emp_user.put("direccion", direccion);
         json_emp_user.put("website", website);
         json_emp_user.put("telefono", telefono);
-        //json_emp_user.put("", email_contacto); AGREGAR CUANDO ESTE LISTO
+        json_emp_user.put("email_contacto", email_contacto);
         json_emp_user.put("email", email);
         json_emp_user.put("password", pass1);
         json_emp_user.put("password_confirmation", pass1);
