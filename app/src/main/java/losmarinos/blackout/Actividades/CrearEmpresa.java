@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.Global;
 import losmarinos.blackout.ParserJSON;
 import losmarinos.blackout.R;
+import losmarinos.blackout.Validador;
 
 public class CrearEmpresa extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     EditText edittext_nombre;
@@ -152,6 +154,9 @@ public class CrearEmpresa extends AppCompatActivity implements AdapterView.OnIte
 
     public void realizarOperacion(View view)
     {
+        if(!this.validar())
+            return;
+
         String nombre = edittext_nombre.getText().toString();
         String direccion = edittext_direccion.getText().toString();
         String website = edittext_website.getText().toString();
@@ -161,55 +166,103 @@ public class CrearEmpresa extends AppCompatActivity implements AdapterView.OnIte
         String pass1 = edittext_password.getText().toString();
         String pass2 = edittext_password2.getText().toString();
 
-        if(direccion.isEmpty() || website.isEmpty() || telefono.isEmpty() || email_contacto.isEmpty())
-        {
-            Toast.makeText(this, "Debe completar todos los campos", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-
-        if(spinner_opciones.getSelectedItemPosition() == 1){
-            if(nombre.isEmpty() || email.isEmpty() || pass1.isEmpty() || pass2.isEmpty())
-            {
-                Toast.makeText(this, "Debe completar todos los campos", Toast.LENGTH_LONG).show();
-                return;
-            }
-
-            if(!pass1.equals(pass2))
-            {
-                Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_LONG).show();
-                return;
-            }
-        }
-
         try {
-            String respuesta = "";
+            // CREAR EMPRESA SIN USUARIO
             if(spinner_opciones.getSelectedItemPosition() == 0) {
+
                 JSONObject nuevo_emp = ParserJSON.crearJSONEmpresa(nombre, email_contacto, telefono, website, direccion);
 
-                respuesta = new ConsultorPOSTAPI("empresa", Global.token_usuario_actual, nuevo_emp, Constantes.TAGAPI.REGISTRAR_EMPRESA, null).execute().get();
+                String respuesta = new ConsultorPOSTAPI("empresa", Global.token_usuario_actual, nuevo_emp, Constantes.TAGAPI.REGISTRAR_EMPRESA, null).execute().get();
 
+                StringBuilder msj_error = new StringBuilder();
+                if(ParserJSON.esError(respuesta, msj_error))
+                {
+                    Toast.makeText(this, msj_error, Toast.LENGTH_LONG).show();
+                    return;
+                }
+                else
+                {
+                    Toast.makeText(this, "Empresa creada correctamente", Toast.LENGTH_LONG).show();
+                    super.onBackPressed();
+                }
+
+            // CREAR EMPRESA CON USUARIO
             } else if(spinner_opciones.getSelectedItemPosition() == 1) {
+
                 JSONObject nuevo_emp_user = ParserJSON.crearJSONEmpresaUsuario(nombre, direccion, website, telefono, email_contacto, email, pass1, pass2);
 
-                respuesta = new ConsultorPOSTAPI("register-empresa", Global.token_usuario_actual, nuevo_emp_user, Constantes.TAGAPI.REGISTRAR_EMPRESA_USUARIO, null).execute().get();
+                String respuesta = new ConsultorPOSTAPI("register-empresa", Global.token_usuario_actual, nuevo_emp_user, Constantes.TAGAPI.REGISTRAR_EMPRESA_USUARIO, null).execute().get();
+
+                StringBuilder msj_error = new StringBuilder();
+                if(ParserJSON.esError(respuesta, msj_error))
+                {
+                    Toast.makeText(this, msj_error, Toast.LENGTH_LONG).show();
+                    return;
+                }
+                else
+                {
+                    Toast.makeText(this, "Empresa creada correctamente", Toast.LENGTH_LONG).show();
+                    super.onBackPressed();
+                }
+
+            // CREAR USUARIO PARA EMPRESA
+            }else if(spinner_opciones.getSelectedItemPosition() == 2) {
+
+
+            // BORRAR EMPRESA
+            }else if(spinner_opciones.getSelectedItemPosition() == 3) {
+
+
             }
 
-            StringBuilder msj_error = new StringBuilder();
-            if(ParserJSON.esError(respuesta, msj_error))
-            {
-                Toast.makeText(this, msj_error, Toast.LENGTH_LONG).show();
-                return;
-            }
-            else
-            {
-                Toast.makeText(this, "Empresa creada correctamente", Toast.LENGTH_LONG).show();
-                super.onBackPressed();
-            }
+
 
         }catch (Exception e){
             Toast.makeText(this, "Ha surgido un problema", Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    public boolean validar(){
+        String nombre = edittext_nombre.getText().toString();
+        String direccion = edittext_direccion.getText().toString();
+        String website = edittext_website.getText().toString();
+        String telefono = edittext_telefono.getText().toString();
+        String email_contacto = edittext_email_contacto.getText().toString();
+        String email = edittext_email.getText().toString();
+        String pass1 = edittext_password.getText().toString();
+        String pass2 = edittext_password2.getText().toString();
+
+        switch (spinner_opciones.getSelectedItemPosition()){
+            case 0:
+                if(!Validador.validarCamposVacios(this, (LinearLayout)findViewById(R.id.lyt_empresa_crear_empresa)))
+                    return false;
+                if(!Validador.validarMail(this, email_contacto))
+                    return false;
+                break;
+
+            case 1:
+                if(!Validador.validarCamposVacios(this, (LinearLayout)findViewById(R.id.lyt_empresa_crear_empresa)))
+                    return false;
+                if(!Validador.validarCamposVacios(this, (LinearLayout)findViewById(R.id.lyt_usuario_crear_empresa)))
+                    return false;
+                if(!Validador.validarMail(this, email_contacto))
+                    return false;
+                if(!Validador.validarMail(this, email))
+                    return false;
+                if(!Validador.validarPasswords(this, pass1, pass2))
+                    return false;
+                break;
+
+            case 2:
+                if(!Validador.validarCamposVacios(this, (LinearLayout)findViewById(R.id.lyt_usuario_crear_empresa)))
+                    return false;
+                if(!Validador.validarMail(this, email))
+                    return false;
+                if(!Validador.validarPasswords(this, pass1, pass2))
+                    return false;
+                break;
+        }
+        return true;
     }
 }

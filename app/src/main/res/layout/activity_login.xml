@@ -7,6 +7,7 @@
     tools:context="losmarinos.blackout.Actividades.Login">
 
     <LinearLayout
+        android:id="@+id/lyt_login"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
@@ -22,7 +23,6 @@
 
 
         <ImageView
-            android:id="@+id/imageView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/logo_blackout"
@@ -35,7 +35,8 @@
             android:hint="Ingresar correo"
             android:layout_margin="5dp"
             android:paddingTop="30dp"
-            android:fontFamily="Arial"/>
+            android:fontFamily="Arial"
+            android:inputType="text"/>
 
 
         <EditText

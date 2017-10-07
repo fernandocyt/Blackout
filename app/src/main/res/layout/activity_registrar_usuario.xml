@@ -7,6 +7,7 @@
     tools:context="losmarinos.blackout.Actividades.RegistrarUsuario">
 
     <LinearLayout
+        android:id="@+id/lyt_registrar_usuario"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
@@ -51,7 +52,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
                 android:padding="5dp"
-                android:background="#D8D8D8"/>
+                android:background="#D8D8D8"
+                android:inputType="text"
+                android:maxLines="1"/>
         </LinearLayout>
 
         <LinearLayout
@@ -81,7 +84,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
                 android:padding="5dp"
-                android:background="#D8D8D8"/>
+                android:background="#D8D8D8"
+                android:inputType="textEmailAddress"/>
         </LinearLayout>
 
         <LinearLayout

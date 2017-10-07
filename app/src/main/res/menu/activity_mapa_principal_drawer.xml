@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/drawer_accion_filtrar"
-        android:title="FILTRAR" />
+        android:title="FILTRAR MAPA" />
 
     <item android:title="Agregar">
     <menu>
@@ -38,10 +38,7 @@
         <menu>
             <item
                 android:id="@+id/drawer_crear_empresa"
-                android:title="Crear Empresa" />
-            <item
-                android:id="@+id/drawer_eliminar_empresa"
-                android:title="Eliminar Empresa" />
+                android:title="Gestionar Empresas" />
             <item
                 android:id="@+id/drawer_buscar_empresa"
                 android:title="Buscar Empresa" />

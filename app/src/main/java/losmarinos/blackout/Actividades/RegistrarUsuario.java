@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.json.JSONObject;
@@ -13,6 +14,7 @@ import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.ObservadorAPI;
 import losmarinos.blackout.ParserJSON;
 import losmarinos.blackout.R;
+import losmarinos.blackout.Validador;
 
 import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_USUARIO;
 
@@ -42,17 +44,14 @@ public class RegistrarUsuario extends AppCompatActivity {
         String pass1 = edittext_password.getText().toString();
         String pass2 = edittext_password2.getText().toString();
 
-        if(nombre.isEmpty() || email.isEmpty() || pass1.isEmpty() || pass2.isEmpty())
-        {
-            Toast.makeText(this, "Debe completar todos los campos", Toast.LENGTH_LONG).show();
+        if(!Validador.validarCamposVacios(this, (LinearLayout)findViewById(R.id.lyt_registrar_usuario)))
             return;
-        }
 
-        if(!pass1.equals(pass2))
-        {
-            Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_LONG).show();
+        if(!Validador.validarMail(this, email))
             return;
-        }
+
+        if(!Validador.validarPasswords(this, pass1, pass2))
+            return;
 
         try {
             JSONObject nuevo_usu = ParserJSON.crearJSONUsuario(nombre, email, pass1, pass2);

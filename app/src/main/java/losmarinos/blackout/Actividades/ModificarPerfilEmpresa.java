@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,6 +17,7 @@ import losmarinos.blackout.Global;
 import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.ParserJSON;
 import losmarinos.blackout.R;
+import losmarinos.blackout.Validador;
 
 import static losmarinos.blackout.Constantes.TAGAPI.ACTUALIZAR_EMPRESA;
 import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_REPORTE;
@@ -64,10 +66,11 @@ public class ModificarPerfilEmpresa extends AppCompatActivity {
         String pagina = textview_pagina.getText().toString();
         String email = textview_email.getText().toString();
 
-        if(nombre.isEmpty() || telefono.isEmpty() || direccion.isEmpty() || pagina.isEmpty() || email.isEmpty()){
-            Toast.makeText(this, "Debe completar todos los campos", Toast.LENGTH_LONG).show();
+        if(!Validador.validarCamposVacios(this, (LinearLayout)findViewById(R.id.lyt_modificar_perfil_empresa)))
             return;
-        }
+
+        if(!Validador.validarMail(this, email))
+            return;
 
         try{
             JSONObject nuevo_rep = ParserJSON.crearJSONEmpresa(nombre, email, telefono, pagina, direccion);

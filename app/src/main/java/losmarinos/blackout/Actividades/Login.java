@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -24,6 +25,7 @@ import losmarinos.blackout.Objetos.Usuario;
 import losmarinos.blackout.ObservadorAPI;
 import losmarinos.blackout.ParserJSON;
 import losmarinos.blackout.R;
+import losmarinos.blackout.Validador;
 
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_USUARIO_POR_TOKEN;
 import static losmarinos.blackout.Constantes.TAGAPI.LOGUEAR_USUARIO;
@@ -58,13 +60,13 @@ public class Login extends AppCompatActivity {
     }
 
     public void loguearUsuario(View view){
-        String str_usuario = usuario.getText().toString();
-        String str_password = password.getText().toString();
 
-        if (str_password.isEmpty() || str_usuario.isEmpty()){
-            Toast.makeText(this, "Debe completar todos los campos", Toast.LENGTH_LONG).show();
+        if(!Validador.validarCamposVacios(this, (LinearLayout)findViewById(R.id.lyt_login))){
             return;
         }
+
+        String str_usuario = usuario.getText().toString();
+        String str_password = password.getText().toString();
 
         try {
             // Logeo usuario y obtengo token
@@ -93,6 +95,8 @@ public class Login extends AppCompatActivity {
                     return;
                 } else {
                     Usuario nuevo_usuario = ParserJSON.obtenerUsuario(respuesta);
+                    nuevo_usuario.setPass(str_password);
+
                     if (nuevo_usuario == null) {
                         Toast.makeText(this, "Error: usuario inexistente", Toast.LENGTH_LONG).show();
                         return;

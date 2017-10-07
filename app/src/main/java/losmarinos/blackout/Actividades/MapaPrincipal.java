@@ -148,13 +148,11 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             navigationView.getMenu().findItem(R.id.drawer_agregar_sucursal).setVisible(false);
             navigationView.getMenu().findItem(R.id.drawer_mis_cortes_programados).setVisible(false);
             navigationView.getMenu().findItem(R.id.drawer_crear_empresa).setVisible(false);
-            navigationView.getMenu().findItem(R.id.drawer_eliminar_empresa).setVisible(false);
         }else if(Global.usuario_actual.getTipo() == Constantes.TIPOSUSUARIO.EMPRESA){
             tipo = " (EMPRESA)";
             navigationView.getMenu().findItem(R.id.drawer_crear_reporte).setVisible(false);
             navigationView.getMenu().findItem(R.id.drawer_mis_reportes).setVisible(false);
             navigationView.getMenu().findItem(R.id.drawer_crear_empresa).setVisible(false);
-            navigationView.getMenu().findItem(R.id.drawer_eliminar_empresa).setVisible(false);
         }else{
             tipo = " (ADMIN)";
             navigationView.getMenu().findItem(R.id.drawer_agregar_corte_programado).setVisible(false);

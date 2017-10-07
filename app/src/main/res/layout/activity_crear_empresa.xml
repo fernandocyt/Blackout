@@ -121,7 +121,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="15dp"
                     android:padding="5dp"
-                    android:background="#D8D8D8"/>
+                    android:background="#D8D8D8"
+                    android:inputType="text"
+                    android:maxLines="1"/>
             </LinearLayout>
 
             <LinearLayout
@@ -150,7 +152,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="15dp"
                     android:padding="5dp"
-                    android:background="#D8D8D8"/>
+                    android:background="#D8D8D8"
+                    android:inputType="text"
+                    android:maxLines="1"/>
             </LinearLayout>
 
             <LinearLayout
@@ -179,7 +183,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="15dp"
                     android:padding="5dp"
-                    android:background="#D8D8D8"/>
+                    android:background="#D8D8D8"
+                    android:inputType="text"
+                    android:maxLines="1"/>
             </LinearLayout>
 
             <LinearLayout
@@ -208,7 +214,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="15dp"
                     android:padding="5dp"
-                    android:background="#D8D8D8"/>
+                    android:background="#D8D8D8"
+                    android:inputType="text"/>
             </LinearLayout>
 
             <LinearLayout
@@ -237,7 +244,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="15dp"
                     android:padding="5dp"
-                    android:background="#D8D8D8"/>
+                    android:background="#D8D8D8"
+                    android:inputType="textEmailAddress"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -249,7 +257,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <LinearLayout
-                android:id="@+id/lyt_email_crear_empresa"
                 android:layout_width="368dp"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -275,11 +282,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="15dp"
                     android:padding="5dp"
-                    android:background="#D8D8D8"/>
+                    android:background="#D8D8D8"
+                    android:inputType="textEmailAddress"/>
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/lyt_clave_crear_empresa"
                 android:layout_width="368dp"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"

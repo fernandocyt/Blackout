@@ -17,57 +17,223 @@
         app:layout_constraintRight_toRightOf="parent"
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center_horizontal">
 
-        <Switch
-            android:id="@+id/switch_notificaciones_preferencias"
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Notificaciones"
-            android:textSize="20dp" />
+            android:layout_height="match_parent">
 
-        <Switch
-            android:id="@+id/switch_sonar_preferencias"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Sonar"
-            android:textSize="20dp"
-            android:paddingLeft="20dp"/>
-
-        <Switch
-            android:id="@+id/switch_vibrar_preferencias"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Vibrar"
-            android:textSize="20dp"
-            android:paddingLeft="20dp" />
+            <LinearLayout
+                android:id="@+id/lyt_preferencias"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
 
 
-        <Switch
-            android:id="@+id/switch_gps_preferencias"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="GPS"
-            android:textSize="20dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Preferencias de app"
+                    android:textSize="25sp"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+                <Switch
+                    android:id="@+id/switch_notificaciones_preferencias"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Notificaciones"
+                    android:textSize="20dp" />
 
-            <Button
-                android:id="@+id/btn_aplicar_filtrar_mapa_principal"
-                android:layout_width="wrap_content"
+                <Switch
+                    android:id="@+id/switch_sonar_preferencias"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Sonar"
+                    android:textSize="20dp"
+                    android:paddingLeft="20dp"/>
+
+                <Switch
+                    android:id="@+id/switch_vibrar_preferencias"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Vibrar"
+                    android:textSize="20dp"
+                    android:paddingLeft="20dp" />
+
+
+                <Switch
+                    android:id="@+id/switch_gps_preferencias"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="GPS"
+                    android:textSize="20dp" />
+
+
+                <Button
+                    android:id="@+id/btn_aplicar_filtrar_mapa_principal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Guardar"
+                    android:onClick="guardarPreferencias"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Preferencias de usuario"
+                    android:layout_marginTop="30dp"
+                    android:textSize="25sp"/>
+
+                <LinearLayout
+                    android:layout_width="368dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    tools:layout_editor_absoluteY="8dp"
+                    tools:layout_editor_absoluteX="8dp"
+                    android:gravity="center"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nombre"
+                        android:layout_margin="5dp"
+                        android:textSize="20sp"/>
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <EditText
+                        android:id="@+id/txt_nombre_preferencias"
+                        android:layout_width="170dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="15dp"
+                        android:padding="5dp"
+                        android:background="#D8D8D8"
+                        android:inputType="text"
+                        android:maxLines="1"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="368dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    tools:layout_editor_absoluteY="8dp"
+                    tools:layout_editor_absoluteX="8dp"
+                    android:gravity="center"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Email"
+                        android:layout_margin="5dp"
+                        android:textSize="20sp"/>
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <EditText
+                        android:id="@+id/txt_email_preferencias"
+                        android:layout_width="170dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="15dp"
+                        android:padding="5dp"
+                        android:background="#D8D8D8"
+                        android:inputType="textEmailAddress"/>
+                </LinearLayout>
+
+                <LinearLayout
+                android:layout_width="368dp"
                 android:layout_height="wrap_content"
-                android:text="Guardar"
-                android:onClick="guardarPreferencias"/>
+                android:orientation="horizontal"
+                tools:layout_editor_absoluteY="8dp"
+                tools:layout_editor_absoluteX="8dp"
+                android:gravity="center"
+                android:layout_marginTop="10dp">
 
-        </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Clave"
+                        android:layout_margin="5dp"
+                        android:textSize="20sp"/>
 
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <EditText
+                        android:id="@+id/txt_password_preferencias"
+                        android:layout_width="170dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="15dp"
+                        android:padding="5dp"
+                        android:background="#D8D8D8"
+                        android:inputType="textPassword"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="368dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    tools:layout_editor_absoluteY="8dp"
+                    tools:layout_editor_absoluteX="8dp"
+                    android:gravity="center"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Repetir Clave"
+                        android:layout_margin="5dp"
+                        android:textSize="20sp"/>
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <EditText
+                        android:id="@+id/txt_password2_preferencias"
+                        android:layout_width="170dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="15dp"
+                        android:padding="5dp"
+                        android:background="#D8D8D8"
+                        android:inputType="textPassword"/>
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_modificar_preferencias"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Modificar usuario"
+                    android:layout_margin="5dp"
+                    android:onClick="modificarUsuario"/>
+
+
+                <Button
+                    android:id="@+id/btn_baja_preferencias"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Darme de baja"
+                    android:layout_margin="5dp"
+                    android:onClick="bajaUsuario" />
+
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

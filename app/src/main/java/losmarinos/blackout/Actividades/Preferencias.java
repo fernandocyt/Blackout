@@ -4,11 +4,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import losmarinos.blackout.Global;
 import losmarinos.blackout.LocalDB;
 import losmarinos.blackout.R;
+import losmarinos.blackout.Validador;
 
 public class Preferencias extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener{
 
@@ -21,6 +25,11 @@ public class Preferencias extends AppCompatActivity implements CompoundButton.On
     Switch switch_vibrar;
     Switch switch_sonar;
     Switch switch_gps;
+
+    EditText edittext_nombre_usuario;
+    EditText edittext_mail_usuario;
+    EditText edittext_pass_usuario;
+    EditText edittext_pass2_usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +64,16 @@ public class Preferencias extends AppCompatActivity implements CompoundButton.On
         switch_gps = (Switch) findViewById(R.id.switch_gps_preferencias);
         switch_gps.setChecked(Preferencias.notificaciones);
         switch_gps.setOnCheckedChangeListener(this);
+
+        edittext_nombre_usuario = (EditText)findViewById(R.id.txt_nombre_preferencias);
+        edittext_mail_usuario = (EditText)findViewById(R.id.txt_email_preferencias);
+        edittext_pass_usuario = (EditText)findViewById(R.id.txt_password_preferencias);
+        edittext_pass2_usuario = (EditText)findViewById(R.id.txt_password2_preferencias);
+
+        edittext_nombre_usuario.setText(Global.usuario_actual.getNombre());
+        edittext_mail_usuario.setText(Global.usuario_actual.getMail());
+        edittext_pass_usuario.setText(Global.usuario_actual.getPass());
+        edittext_pass2_usuario.setText(Global.usuario_actual.getPass());
     }
 
     @Override
@@ -78,5 +97,26 @@ public class Preferencias extends AppCompatActivity implements CompoundButton.On
                 Preferencias.gps);
 
         Toast.makeText(this, "Preferencias guardadas", Toast.LENGTH_LONG).show();
+    }
+
+    public void modificarUsuario(View view){
+        String nombre = edittext_nombre_usuario.getText().toString();
+        String email = edittext_mail_usuario.getText().toString();
+        String pass = edittext_pass_usuario.getText().toString();
+        String pass2 = edittext_pass2_usuario.getText().toString();
+
+        if(!Validador.validarCamposVacios(this, (LinearLayout)findViewById(R.id.lyt_preferencias)))
+            return;
+
+        if(!Validador.validarMail(this, email))
+            return;
+
+        if(!Validador.validarPasswords(this, pass, pass2))
+            return;
+
+    }
+
+    public void bajaUsuario(View view){
+
     }
 }
