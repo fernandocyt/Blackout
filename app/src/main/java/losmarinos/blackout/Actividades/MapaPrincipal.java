@@ -211,6 +211,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             LocalDB.borrarArchivoJSONUsuario(this);
             Global.vaciarTodo();
 
+            // TODO: ARREGLAR ESTE CRASH
             if(isMyServiceRunning(ServicioPeriodico.class))
                 stopService(new Intent(this, ServicioPeriodico.class));
 
