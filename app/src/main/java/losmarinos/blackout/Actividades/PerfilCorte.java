@@ -2,6 +2,7 @@ package losmarinos.blackout.Actividades;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,6 +57,7 @@ public class PerfilCorte extends AppCompatActivity {
     Button button_de_interes;
     Button button_agregar_respuesta;
     Button button_borrar_respuesta;
+    ImageView imageview_servicio;
 
     Corte corte;
 
@@ -76,6 +79,7 @@ public class PerfilCorte extends AppCompatActivity {
         button_de_interes = (Button)findViewById(R.id.btn_corte_interes_perfil_corte);
         button_agregar_respuesta = (Button)findViewById(R.id.btn_agregar_respuesta_perfil_corte);
         button_borrar_respuesta = (Button)findViewById(R.id.btn_borrar_respuesta_perfil_corte);
+        imageview_servicio = (ImageView)findViewById(R.id.img_perfil_corte);
 
         this.corte.actualizarRespuestas(this);
         this.cargarCorte();
@@ -86,21 +90,27 @@ public class PerfilCorte extends AppCompatActivity {
         switch(corte.getServicio())
         {
             case AGUA:
+                imageview_servicio.setImageResource(R.drawable.icono_corte_agua);
                 this.getWindow().getDecorView().setBackgroundColor(Color.parseColor("#CEE3F6"));
                 break;
             case LUZ:
+                imageview_servicio.setImageResource(R.drawable.icono_corte_luz);
                 this.getWindow().getDecorView().setBackgroundColor(Color.parseColor("#F5F6CE"));
                 break;
             case GAS:
+                imageview_servicio.setImageResource(R.drawable.icono_corte_gas);
                 this.getWindow().getDecorView().setBackgroundColor(Color.parseColor("#F8E0E0"));
                 break;
             case CABLE:
+                imageview_servicio.setImageResource(R.drawable.icono_corte_cable);
                 this.getWindow().getDecorView().setBackgroundColor(Color.parseColor("#F5ECCE"));
                 break;
             case TELEFONO:
+                imageview_servicio.setImageResource(R.drawable.icono_corte_telefono);
                 this.getWindow().getDecorView().setBackgroundColor(Color.parseColor("#CEF6CE"));
                 break;
             case INTERNET:
+                imageview_servicio.setImageResource(R.drawable.icono_corte_internet);
                 this.getWindow().getDecorView().setBackgroundColor(Color.parseColor("#ECCEF5"));
                 break;
 
@@ -174,6 +184,11 @@ public class PerfilCorte extends AppCompatActivity {
 
         RespuestaAdapter adapter_usuarios = new RespuestaAdapter(respuestas_usuarios, false, this, this);
         ListView mi_lista_usuarios = (ListView)findViewById(R.id.lst_respuesta_perfil_corte);
+        if(respuestas_usuarios.size() == 0){
+            mi_lista_usuarios.setVisibility(View.GONE);
+        }else{
+            mi_lista_usuarios.setVisibility(View.VISIBLE);
+        }
         mi_lista_usuarios.setAdapter(adapter_usuarios);
     }
 

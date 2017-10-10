@@ -4,54 +4,65 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginRight="10dp"
     tools:context="losmarinos.blackout.Actividades.PerfilCorte">
 
     <ScrollView
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintRight_toRightOf="parent"
-        tools:layout_constraintLeft_creator="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:gravity="center"
+            android:orientation="vertical"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <ImageView
+                android:id="@+id/img_perfil_corte"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/icono_corte_agua"
+                android:layout_marginTop="10dp"/>
 
             <TableLayout
                 android:layout_width="368dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                tools:layout_editor_absoluteY="0dp"
-                tools:layout_editor_absoluteX="8dp">
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="0dp">
 
                 <TableRow
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="Servicio:" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Servicio:"
+                        android:textSize="20sp" />
 
-                <Space
+                    <Space
                         android:layout_width="20dp"
                         android:layout_height="wrap_content" />
 
-                <TextView
-                    android:id="@+id/lbl_servicio_perfil_corte"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="-" />
+                    <TextView
+                        android:id="@+id/lbl_servicio_perfil_corte"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="-"
+                        android:textSize="20sp" />
 
                 </TableRow>
 
@@ -63,8 +74,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:text="Empresa:" />
+                        android:text="Empresa:"
+                        android:textSize="20sp" />
 
                     <Space
                         android:layout_width="20dp"
@@ -74,12 +85,12 @@
                         android:id="@+id/lbl_empresa_perfil_corte"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:onClick="irAPerfilEmpresa"
                         android:clickable="true"
+                        android:onClick="irAPerfilEmpresa"
                         android:text="-"
-                        android:textStyle="italic"
-                        android:textColor="#0080FF"/>
+                        android:textColor="#0080FF"
+                        android:textSize="20sp"
+                        android:textStyle="italic" />
 
                 </TableRow>
 
@@ -91,8 +102,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:text="Motivo:" />
+                        android:text="Motivo:"
+                        android:textSize="20sp" />
 
                     <Space
                         android:layout_width="20dp"
@@ -102,8 +113,8 @@
                         android:id="@+id/lbl_motivo_perfil_corte"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="20sp" />
 
                 </TableRow>
 
@@ -115,8 +126,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:text="Inicio:" />
+                        android:text="Inicio:"
+                        android:textSize="20sp" />
 
                     <Space
                         android:layout_width="20dp"
@@ -126,8 +137,8 @@
                         android:id="@+id/lbl_fecha_inicio_perfil_corte"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="20sp" />
 
                 </TableRow>
 
@@ -139,8 +150,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:text="Fin:" />
+                        android:text="Fin:"
+                        android:textSize="20sp" />
 
                     <Space
                         android:layout_width="20dp"
@@ -150,8 +161,8 @@
                         android:id="@+id/lbl_fecha_fin_perfil_corte"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="20sp" />
 
                 </TableRow>
             </TableLayout>
@@ -160,17 +171,17 @@
                 android:id="@+id/btn_corte_interes_perfil_corte"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Marcar de interes"
                 android:layout_gravity="center"
-                android:onClick="marcarCorteDeInteres" />
+                android:onClick="marcarCorteDeInteres"
+                android:text="Marcar de interes" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textSize="25sp"
+                android:layout_marginTop="20dp"
                 android:text="Respuestas"
-                android:layout_marginTop="20dp"/>
+                android:textSize="25sp" />
 
 
             <LinearLayout
@@ -182,30 +193,30 @@
                     android:id="@+id/txt_respuesta_perfil_corte"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Escribir respuesta..."
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:hint="Escribir respuesta..." />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
                     <Button
                         android:id="@+id/btn_agregar_respuesta_perfil_corte"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Agregar"
                         android:layout_marginRight="10dp"
-                        android:onClick="agregarRespuesta"/>
+                        android:onClick="agregarRespuesta"
+                        android:text="Agregar" />
 
                     <Button
                         android:id="@+id/btn_borrar_respuesta_perfil_corte"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Borrar"
                         android:layout_marginRight="10dp"
-                        android:onClick="borrarRespuesta"/>
+                        android:onClick="borrarRespuesta"
+                        android:text="Borrar" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -219,10 +230,9 @@
             <ListView
                 android:id="@+id/lst_respuesta_perfil_corte"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="200dp"
                 android:layout_margin="10dp"
-                android:background="#2408"/>
-
+                android:background="#2408" />
 
 
         </LinearLayout>

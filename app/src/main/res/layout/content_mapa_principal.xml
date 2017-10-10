@@ -26,8 +26,28 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="bottom|right"
+            android:gravity="bottom|center"
             android:orientation="horizontal">
+
+            <ProgressBar
+                android:id="@+id/prog_mapa_principal"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="15dp"/>
+
+
+            <TextView
+                android:id="@+id/txt_cargando_mapa_principal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
             <ImageButton
                 android:id="@+id/btn_actualizar"
@@ -35,6 +55,7 @@
                 android:layout_height="wrap_content"
                 app:srcCompat="@android:drawable/ic_menu_rotate"
                 android:onClick="actualizarMapaPrincipal"/>
+
 
             <ImageButton
                 android:id="@+id/btn_centrar"

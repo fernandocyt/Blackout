@@ -8,6 +8,7 @@ import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.Objetos.PuntoInteres;
 import losmarinos.blackout.Objetos.Sucursal;
+import losmarinos.blackout.ProgressTask;
 import losmarinos.blackout.R;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ObservadorGPS;
@@ -32,6 +33,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +51,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -68,6 +71,10 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
     GoogleMap mMap;
     Marker marcador_posicion_actual = null;
     Circle radio_reporte_seleccionado = null;
+
+    ProgressBar progress_bar;
+    TextView textview_carga;
+    List<String> textos_carga;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +99,10 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        progress_bar = (ProgressBar)findViewById(R.id.prog_mapa_principal);
+        textview_carga = (TextView)findViewById(R.id.txt_cargando_mapa_principal);
+        textos_carga = new ArrayList<>();
+
         // CARGA DE DATOS
         this.cargarDrawer();
 
@@ -101,6 +112,9 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         new ConsultorGETAPI("usuarios", Global.token_usuario_actual, OBTENER_USUARIOS, new Global()).execute();
         new ConsultorGETAPI("usuarios/" + String.valueOf(Global.usuario_actual.getIdUsuario()) + "/puntos-de-interes", Global.token_usuario_actual, OBTENER_PUNTOSINTERES_POR_USUARIO, new Global()).execute();
         new ConsultorGETAPI("usuarios/" + String.valueOf(Global.usuario_actual.getIdUsuario()) + "/cortes-de-interes", Global.token_usuario_actual, OBTENER_CORTESINTERES_POR_USUARIO, new Global()).execute();
+
+        textos_carga.add("Cargando puntos de interes...");
+        this.inicioCarga();
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
@@ -306,8 +320,14 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         new ConsultorGETAPI("cortes", Global.token_usuario_actual, OBTENER_CORTES, new Global()).execute();
         new ConsultorGETAPI("reporte", Global.token_usuario_actual, OBTENER_REPORTES, new Global()).execute();
 
+        textos_carga.add("Cargando cortes...");
+        textos_carga.add("Cargando reportes...");
+
+        this.inicioCarga();
+
         if(FiltrarMapaPrincipal.mostrar_sucursales && FiltrarMapaPrincipal.id_empresa != -1){
             Empresa empresa = Global.encontrarEmpresaPorId(FiltrarMapaPrincipal.id_empresa);
+            textos_carga.add("Cargando sucursales...");
             empresa.actualizarSucursales(this);
             this.cargarSucursalesEnMapa(empresa);
         }
@@ -335,6 +355,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
     public void cargarPuntosInteresEnMapa()
     {
         if (!FiltrarMapaPrincipal.mostrar_puntos_interes){
+            this.terminoCarga();
             return;
         }
 
@@ -357,10 +378,12 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
                     .strokeWidth(5));
         }
 
+        this.terminoCarga();
     }
 
     public void cargarCortesEnMapa() {
         if (!FiltrarMapaPrincipal.mostrar_cortes){
+            this.terminoCarga();
             return;
         }
 
@@ -409,11 +432,13 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
                     .fillColor(Constantes.COLOR_CIRCLE)
                     .strokeWidth(5));
         }
+        this.terminoCarga();
     }
 
     public void cargarReportesEnMapa()
     {
         if(!FiltrarMapaPrincipal.mostrar_reportes) {
+            this.terminoCarga();
             return;
         }
 
@@ -445,6 +470,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
                     .icon(Constantes.getIconoReporte(rep_actual.getServicio())))
             .setTag(rep_actual);
         }
+
+        this.terminoCarga();
     }
 
     public void cargarSucursalesEnMapa(Empresa empresa)
@@ -459,6 +486,23 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
                     .title("Sucursal " + empresa.getNombre())
                     .snippet(sucursal.getDireccion() + " (Tel: " + sucursal.getTelefono() + ")")
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_sucursal)));
+        }
+    }
+
+    public void inicioCarga(){
+        textview_carga.setVisibility(View.VISIBLE);
+        progress_bar.setVisibility(View.VISIBLE);
+        textview_carga.setText(textos_carga.get(0));
+    }
+
+    public void terminoCarga(){
+        if(textos_carga.size() > 1) {
+            textos_carga.remove(0);
+            textview_carga.setText(textos_carga.get(0));
+        }else{
+            textos_carga.clear();
+            textview_carga.setVisibility(View.GONE);
+            progress_bar.setVisibility(View.GONE);
         }
     }
 
