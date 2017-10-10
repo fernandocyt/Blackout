@@ -292,4 +292,10 @@ public class Corte{
         String texto = "Inicio: " + str_fecha_inicio + "\nFin: " + str_fecha_fin;
         return texto;
     }
+
+    public String generarSnippet()
+    {
+        String texto = "Corte n°: " + this.id + Constantes.servicioToString(this.servicio) + this.getEmpresa().getNombre();
+        return texto;
+    }
 }

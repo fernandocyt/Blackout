@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import losmarinos.blackout.Constantes;
+import losmarinos.blackout.ConsultorGETAPI;
 import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.Global;
 import losmarinos.blackout.Objetos.Empresa;
@@ -233,12 +234,24 @@ public class CrearEmpresa extends AppCompatActivity implements AdapterView.OnIte
                     super.onBackPressed();
                 }
 
-
-
                 // BORRAR EMPRESA
             }else if(spinner_opciones.getSelectedItemPosition() == 3) {
+                String str_empresa = this.spinner_empresas.getSelectedItem().toString();
+                Empresa empresa = Global.encontrarEmpresaPorNombre(str_empresa);
 
+                String respuesta = new ConsultorGETAPI("empresa/"+String.valueOf(empresa.getSubId())+"/deshabilitar", Global.token_usuario_actual, Constantes.TAGAPI.DESHABILITAR_EMPRESA, null).execute().get();
 
+                StringBuilder msj_error = new StringBuilder();
+                if(ParserJSON.esError(respuesta, msj_error))
+                {
+                    Toast.makeText(this, msj_error, Toast.LENGTH_LONG).show();
+                    return;
+                }
+                else
+                {
+                    Toast.makeText(this, str_empresa + " fue deshabilitada", Toast.LENGTH_LONG).show();
+                    super.onBackPressed();
+                }
             }
 
 

@@ -70,7 +70,7 @@ public class Constantes {
         BORRAR_SUCURSAL,
         BORRAR_RESPUESTA,
         BORRAR_COMENTARIO,
-
+        DESHABILITAR_EMPRESA
     }
 
     public enum SERVICIO

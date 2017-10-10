@@ -344,7 +344,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
             Marker punto = mMap.addMarker(new MarkerOptions()
                     .position(punto_actual.getUbicacion())
-                    .title("punto")
+                    .title("Punto de interes")
+                    .snippet(punto_actual.generarTexto())
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_punto_interes)));
             punto.setTag(punto_actual);
 
@@ -440,6 +441,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             mMap.addMarker(new MarkerOptions()
                     .position(rep_actual.getUbicacion())
                     .title("Reporte")
+                    .snippet(rep_actual.generarSnippet())
                     .icon(Constantes.getIconoReporte(rep_actual.getServicio())))
             .setTag(rep_actual);
         }
@@ -450,9 +452,12 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         List<Sucursal> sucursales = empresa.getSucursales();
         for(int i = 0; i < sucursales.size(); i++)
         {
+            Sucursal sucursal = sucursales.get(i);
+
             mMap.addMarker(new MarkerOptions()
                     .position(sucursales.get(i).getUbicacion())
-                    .title("Sucursal " + empresa.getNombre() + "\n" + empresa.getDireccion())
+                    .title("Sucursal " + empresa.getNombre())
+                    .snippet(sucursal.getDireccion() + " (Tel: " + sucursal.getTelefono() + ")")
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_sucursal)));
         }
     }

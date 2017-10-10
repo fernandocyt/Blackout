@@ -150,6 +150,18 @@ public class Reporte {
         return texto;
     }
 
+    public String generarSnippet()
+    {
+        String texto = "Reporte n° " + this.id + " - " + Constantes.servicioToString(this.servicio);
+
+
+        Empresa emp = Global.encontrarEmpresaPorId(this.id_empresa);
+        if(emp != null) {
+            texto += " - " + emp.getNombre();
+        }
+        return texto;
+    }
+
     public Empresa getEmpresa()
     {
         return Global.encontrarEmpresaPorId(this.id_empresa);
