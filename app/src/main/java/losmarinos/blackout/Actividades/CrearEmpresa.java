@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import java.util.List;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.Global;
+import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.ParserJSON;
 import losmarinos.blackout.R;
 import losmarinos.blackout.Validador;
@@ -166,11 +168,15 @@ public class CrearEmpresa extends AppCompatActivity implements AdapterView.OnIte
         String pass1 = edittext_password.getText().toString();
         String pass2 = edittext_password2.getText().toString();
 
+        String str_servicio = this.spinner_servicios.getSelectedItem().toString();
+        int id_servicio =  Constantes.getIdServicio(Constantes.stringToServicio(str_servicio));
+
         try {
             // CREAR EMPRESA SIN USUARIO
             if(spinner_opciones.getSelectedItemPosition() == 0) {
 
                 JSONObject nuevo_emp = ParserJSON.crearJSONEmpresa(nombre, email_contacto, telefono, website, direccion);
+                nuevo_emp.put("servicio_id", id_servicio);
 
                 String respuesta = new ConsultorPOSTAPI("empresa", Global.token_usuario_actual, nuevo_emp, Constantes.TAGAPI.REGISTRAR_EMPRESA, null).execute().get();
 
@@ -190,6 +196,7 @@ public class CrearEmpresa extends AppCompatActivity implements AdapterView.OnIte
             } else if(spinner_opciones.getSelectedItemPosition() == 1) {
 
                 JSONObject nuevo_emp_user = ParserJSON.crearJSONEmpresaUsuario(nombre, direccion, website, telefono, email_contacto, email, pass1, pass2);
+                nuevo_emp_user.put("servicio_id", id_servicio);
 
                 String respuesta = new ConsultorPOSTAPI("register-empresa", Global.token_usuario_actual, nuevo_emp_user, Constantes.TAGAPI.REGISTRAR_EMPRESA_USUARIO, null).execute().get();
 
@@ -207,9 +214,28 @@ public class CrearEmpresa extends AppCompatActivity implements AdapterView.OnIte
 
             // CREAR USUARIO PARA EMPRESA
             }else if(spinner_opciones.getSelectedItemPosition() == 2) {
+                String str_empresa = this.spinner_empresas.getSelectedItem().toString();
+                Empresa empresa = Global.encontrarEmpresaPorNombre(str_empresa);
+
+                JSONObject nuevo_user = ParserJSON.crearJSONUsuario(str_empresa, email, pass1, pass2);
+
+                String respuesta = new ConsultorPOSTAPI("empresa/"+String.valueOf(empresa.getSubId())+"/asociar-usuario", Global.token_usuario_actual, nuevo_user, Constantes.TAGAPI.REGISTRAR_USUARIO_EMPRESA_EXISTENTE, null).execute().get();
+
+                StringBuilder msj_error = new StringBuilder();
+                if(ParserJSON.esError(respuesta, msj_error))
+                {
+                    Toast.makeText(this, msj_error, Toast.LENGTH_LONG).show();
+                    return;
+                }
+                else
+                {
+                    Toast.makeText(this, "Usuario para empresa creado correctamente", Toast.LENGTH_LONG).show();
+                    super.onBackPressed();
+                }
 
 
-            // BORRAR EMPRESA
+
+                // BORRAR EMPRESA
             }else if(spinner_opciones.getSelectedItemPosition() == 3) {
 
 

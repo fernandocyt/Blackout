@@ -87,11 +87,11 @@ public class Validador {
             Toast.makeText(context, "La primer parte del mail debe contener al menos 5 caracteres", Toast.LENGTH_LONG).show();
             return false;
         }
-        String[] separado_punto = separado_arroba[1].split(".");
+        /*String[] separado_punto = separado_arroba[1].split(".");
         if(separado_punto[0].length() <= 4){
             Toast.makeText(context, "La segunda parte del mail debe contener al menos 5 caracteres", Toast.LENGTH_LONG).show();
             return false;
-        }
+        }*/
 
         return true;
     }

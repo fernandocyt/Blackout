@@ -21,12 +21,14 @@ import losmarinos.blackout.ConsultorGETAPI;
 import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.Global;
 import losmarinos.blackout.LocalDB;
+import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.Objetos.Usuario;
 import losmarinos.blackout.ObservadorAPI;
 import losmarinos.blackout.ParserJSON;
 import losmarinos.blackout.R;
 import losmarinos.blackout.Validador;
 
+import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_EMPRESA_POR_ID;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_USUARIO_POR_TOKEN;
 import static losmarinos.blackout.Constantes.TAGAPI.LOGUEAR_USUARIO;
 
@@ -95,12 +97,35 @@ public class Login extends AppCompatActivity {
                     return;
                 } else {
                     Usuario nuevo_usuario = ParserJSON.obtenerUsuario(respuesta);
+
                     nuevo_usuario.setPass(str_password);
 
                     if (nuevo_usuario == null) {
                         Toast.makeText(this, "Error: usuario inexistente", Toast.LENGTH_LONG).show();
                         return;
                     }
+
+
+                    // Si es una empresa me fijo que este habilitada
+                    if(nuevo_usuario.getTipo() == Constantes.TIPOSUSUARIO.EMPRESA){
+                        String resp_empresa = new ConsultorGETAPI("empresa/" + nuevo_usuario.getSubId(), Global.token_usuario_actual, OBTENER_EMPRESA_POR_ID, null).execute().get();
+
+                        if(ParserJSON.esError(resp_empresa, msg_error)) {
+                            Toast.makeText(this, msg_error.toString(), Toast.LENGTH_LONG).show();
+                            return;
+                        }else{
+                            JSONObject emp = new JSONObject(resp_empresa);
+                            JSONObject json_emp = emp.getJSONObject("empresa");
+
+                            int habilitada = json_emp.getInt("habilitada");
+                            if(habilitada == 0){
+                                Toast.makeText(this, "La empresa del usuario no se encuentra habilitada", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                        }
+                    }
+
+
                     Global.usuario_actual = nuevo_usuario;
 
                     LocalDB.crearArchivoJSONUsuario(this.getApplicationContext(),

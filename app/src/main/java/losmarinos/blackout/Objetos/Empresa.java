@@ -29,6 +29,7 @@ public class Empresa extends Usuario {
     private List<Sucursal> sucursales;
     private String pagina;
     private List<Comentario> comentarios;
+    private int habilitada;
 
     public String getTelefono() {
         return telefono;
@@ -93,7 +94,15 @@ public class Empresa extends Usuario {
         return this.comentarios;
     }
 
-    public Empresa(int empresa_id, String nombre, String pass, String mail,String telefono, String direccion, Constantes.SERVICIO tipo_servicio, String pagina)
+    public void setHabilitada(int habilitada) {
+        this.habilitada = habilitada;
+    }
+
+    public boolean isHabilitada() {
+        return (habilitada == 1);
+    }
+
+    public Empresa(int empresa_id, String nombre, String pass, String mail,String telefono, String direccion, Constantes.SERVICIO tipo_servicio, String pagina, int habilitada)
     {
         super(-1, empresa_id, nombre, pass, mail, Constantes.TIPOSUSUARIO.EMPRESA);
         this.telefono = telefono;
@@ -103,7 +112,7 @@ public class Empresa extends Usuario {
         this.sucursales = new ArrayList<>();
         this.pagina = pagina;
         this.comentarios = new ArrayList<>();
-
+        this.habilitada = habilitada;
     }
 
     public List<Corte> obtenerCortesProgramados(){

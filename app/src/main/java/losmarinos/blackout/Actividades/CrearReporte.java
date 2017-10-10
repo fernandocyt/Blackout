@@ -113,7 +113,7 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
 
         for(int i = 0; i < Global.empresas.size(); i++)
         {
-            if(Global.empresas.get(i).getTipoServicio() == servicio)
+            if(Global.empresas.get(i).getTipoServicio() == servicio && Global.empresas.get(i).isHabilitada())
             {
                 spinnerArray.add(Global.empresas.get(i).getNombre());
             }

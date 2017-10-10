@@ -92,7 +92,7 @@ public class ParserJSON {
     {
         JSONObject json_emp = new JSONObject();
         json_emp.put("nombre", nombre);
-        json_emp.put("email", email);
+        json_emp.put("email_contacto", email);
         json_emp.put("telefono", telefono);
         json_emp.put("direccion", direccion);
         json_emp.put("website", website);
@@ -250,14 +250,15 @@ public class ParserJSON {
             int id = obj_resp.getInt("id");
             String nombre = obj_resp.getString("nombre");
             String password = obj_resp.getString("password");
-            String email = obj_resp.getString("email");
+            String email = obj_resp.getString("email_contacto");
             String telefono = obj_resp.getString("telefono");
             String direccion = obj_resp.getString("direccion");
             String website = obj_resp.getString("website");
+            int habilitada = obj_resp.getInt("habilitada");
             JSONArray array_servicio = obj_resp.getJSONArray("servicios");
             JSONObject obj_servicio = array_servicio.getJSONObject(0);
             int id_servicio = obj_servicio.getInt("id");
-            return new Empresa(id, nombre, password, email, telefono, direccion, Constantes.getServicioById(id_servicio), website);
+            return new Empresa(id, nombre, password, email, telefono, direccion, Constantes.getServicioById(id_servicio), website, habilitada);
         } catch (JSONException e) {
             return null;
         }
