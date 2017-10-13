@@ -1,24 +1,20 @@
 package losmarinos.blackout;
 
 import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
 
-import org.json.JSONObject;
-
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import losmarinos.blackout.Actividades.MapaPrincipal;
 import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Empresa;
-import losmarinos.blackout.Objetos.PuntoInteres;
 import losmarinos.blackout.Objetos.Reporte;
-import losmarinos.blackout.Objetos.Respuesta;
-import losmarinos.blackout.Objetos.Sucursal;
 import losmarinos.blackout.Objetos.Usuario;
 
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_CORTES;
@@ -345,5 +341,27 @@ public class Global implements ObservadorAPI {
                 Global.cortes.add(nuevo_corte);
             }
         }
+    }
+
+    public static void setearLargoEnBaseAContenido(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            // pre-condition
+            return;
+        }
+
+        int totalHeight = 0;
+        //int largo = listView.getWidth();
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(1028, View.MeasureSpec.AT_MOST);
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
     }
 }

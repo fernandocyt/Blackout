@@ -37,7 +37,5 @@
                 android:textStyle="italic"/>
         </LinearLayout>
 
-
-
     </LinearLayout>
 </RelativeLayout>

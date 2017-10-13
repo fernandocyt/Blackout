@@ -2,16 +2,15 @@ package losmarinos.blackout.Actividades;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,10 +25,8 @@ import java.util.List;
 
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorDELETEAPI;
-import losmarinos.blackout.ConsultorGETAPI;
 import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.Global;
-import losmarinos.blackout.Objetos.Comentario;
 import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Respuesta;
 import losmarinos.blackout.ParserJSON;
@@ -37,11 +34,7 @@ import losmarinos.blackout.R;
 import losmarinos.blackout.Adapters.RespuestaAdapter;
 
 import static losmarinos.blackout.Constantes.TAGAPI.BORRAR_CORTE_DE_INTERES;
-import static losmarinos.blackout.Constantes.TAGAPI.BORRAR_PUNTO_DE_INTERES;
 import static losmarinos.blackout.Constantes.TAGAPI.BORRAR_RESPUESTA;
-import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_COMENTARIOS_POR_EMPRESA;
-import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_RESPUESTAS_POR_CORTE;
-import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_COMENTARIO;
 import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_CORTE_DE_INTERES;
 import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_RESPUESTA;
 import static losmarinos.blackout.Global.token_usuario_actual;
@@ -181,15 +174,18 @@ public class PerfilCorte extends AppCompatActivity {
         RespuestaAdapter adapter_empresa = new RespuestaAdapter(respuesta_empresa, true, this, this);
         ListView mi_lista_empresa = (ListView)findViewById(R.id.lst_respuesta_empresa_perfil_corte);
         mi_lista_empresa.setAdapter(adapter_empresa);
+        Global.setearLargoEnBaseAContenido(mi_lista_empresa);
 
         RespuestaAdapter adapter_usuarios = new RespuestaAdapter(respuestas_usuarios, false, this, this);
         ListView mi_lista_usuarios = (ListView)findViewById(R.id.lst_respuesta_perfil_corte);
+
         if(respuestas_usuarios.size() == 0){
             mi_lista_usuarios.setVisibility(View.GONE);
         }else{
             mi_lista_usuarios.setVisibility(View.VISIBLE);
         }
         mi_lista_usuarios.setAdapter(adapter_usuarios);
+        Global.setearLargoEnBaseAContenido(mi_lista_usuarios);
     }
 
     public void agregarRespuesta(View view)

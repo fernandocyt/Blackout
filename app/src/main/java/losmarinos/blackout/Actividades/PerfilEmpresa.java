@@ -13,8 +13,6 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +20,6 @@ import losmarinos.blackout.Adapters.ComentarioAdapter;
 import losmarinos.blackout.Calculos;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorDELETEAPI;
-import losmarinos.blackout.ConsultorGETAPI;
 import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.Global;
 import losmarinos.blackout.Objetos.Comentario;
@@ -31,10 +28,7 @@ import losmarinos.blackout.ParserJSON;
 import losmarinos.blackout.R;
 
 import static losmarinos.blackout.Constantes.TAGAPI.BORRAR_COMENTARIO;
-import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_COMENTARIOS_POR_EMPRESA;
-import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_EMPRESAS;
 import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_COMENTARIO;
-import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_REPORTE;
 import static losmarinos.blackout.Global.token_usuario_actual;
 
 public class PerfilEmpresa extends AppCompatActivity {
@@ -131,6 +125,7 @@ public class PerfilEmpresa extends AppCompatActivity {
         ComentarioAdapter adapter = new ComentarioAdapter(comentarios_usuarios, this, this);
         ListView mi_lista_comentarios = (ListView)findViewById(R.id.lst_comentario_perfil_empresa);
         mi_lista_comentarios.setAdapter(adapter);
+        Global.setearLargoEnBaseAContenido(mi_lista_comentarios);
     }
 
     public void agregarComentario(View view)
