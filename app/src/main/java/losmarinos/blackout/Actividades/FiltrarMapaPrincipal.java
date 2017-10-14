@@ -2,6 +2,7 @@ package losmarinos.blackout.Actividades;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,6 +21,7 @@ import losmarinos.blackout.R;
 
 public class FiltrarMapaPrincipal extends AppCompatActivity
         implements CompoundButton.OnCheckedChangeListener,
+        View.OnTouchListener,
         AdapterView.OnItemSelectedListener{
 
     public static boolean mostrar_cortes = true;
@@ -45,6 +47,8 @@ public class FiltrarMapaPrincipal extends AppCompatActivity
     Switch switch_puntos_interes;
     Spinner spinner_empresas;
     Spinner spinner_servicios;
+
+    boolean spinner_presionado = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +82,11 @@ public class FiltrarMapaPrincipal extends AppCompatActivity
 
         spinner_servicios = (Spinner) findViewById(R.id.spn_servicios_filtrar_mapa_principal);
         spinner_servicios.setOnItemSelectedListener(this);
+        spinner_servicios.setOnTouchListener(this);
 
         spinner_empresas = (Spinner) findViewById(R.id.spn_empresas_filtrar_mapa_principal);
         spinner_empresas.setOnItemSelectedListener(this);
+        spinner_empresas.setOnTouchListener(this);
 
         this.cargarSpinnerServicios();
         this.cargarSpinnerEmpresas(FiltrarMapaPrincipal.servicio);
@@ -130,9 +136,22 @@ public class FiltrarMapaPrincipal extends AppCompatActivity
         this.spinner_empresas.setAdapter(adapter);
     }
 
+    @Override
+    public boolean onTouch(View view, MotionEvent event){
+        view.onTouchEvent(event);
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            this.spinner_presionado = true;
+        }
+        return true;
+    }
 
     @Override
     public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+
+        if(!this.spinner_presionado){
+            return;
+        }
+
         Spinner spinner = (Spinner) parentView;
         if(spinner.getId() == this.spinner_servicios.getId())
         {
@@ -147,6 +166,8 @@ public class FiltrarMapaPrincipal extends AppCompatActivity
                 this.switch_sucursales.setVisibility(View.VISIBLE);
             }
         }
+
+        this.spinner_presionado = false;
     }
 
     @Override
