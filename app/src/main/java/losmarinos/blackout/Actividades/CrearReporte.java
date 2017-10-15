@@ -78,6 +78,8 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
         this.seekbar_radio = (SeekBar)findViewById(R.id.skb_radio_crear_reporte);
         this.seekbar_radio.setOnSeekBarChangeListener(this);
         this.seekbar_radio.setMax(500);
+        this.seekbar_radio.setProgress(10);
+
         this.spinner_servicios = (Spinner) findViewById(R.id.spn_servicios_crear_reporte);
         this.spinner_servicios.setOnItemSelectedListener(this);
         this.spinner_empresas = (Spinner) findViewById(R.id.spn_empresas_crear_reporte);
@@ -188,6 +190,9 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
 
         LatLng posicion = marcador_posicion_reporte.getPosition();
         int radio = seekbar_radio.getProgress();
+        if(radio < 10){
+            radio = 10;
+        }
 
         try{
             JSONObject nuevo_rep = ParserJSON.crearJSONReporte(Global.usuario_actual.getIdUsuario(), servicio, id_empresa, posicion, radio);
@@ -227,6 +232,10 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if(progress < 10){
+            progress = 10;
+        }
+
         this.textview_km_radio.setText(String.valueOf(progress) + "m");
 
         if(this.radio_reporte != null)
@@ -258,10 +267,15 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
             this.marcador_posicion_reporte = map_crear_reporte.addMarker(new MarkerOptions()
                     .position(posicion_marcador));
 
+
+            int radio = seekbar_radio.getProgress();
+            if(radio < 10){
+                radio = 10;
+            }
             // Agrego radio
             this.radio_reporte = map_crear_reporte.addCircle(new CircleOptions()
                     .center(posicion_marcador)
-                    .radius(seekbar_radio.getProgress())
+                    .radius(radio)
                     .strokeColor(Constantes.STROKE_COLOR_CIRCLE)
                     .fillColor(Constantes.COLOR_CIRCLE)
                     .strokeWidth(5));
