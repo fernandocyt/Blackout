@@ -10,11 +10,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_margin="10dp"
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         app:layout_constraintRight_toRightOf="parent"
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -25,13 +22,12 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginTop="10dp">
+            android:layout_margin="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Servicio"
-                android:layout_margin="5dp"
                 android:textSize="20sp"/>
 
             <Space
@@ -53,13 +49,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_margin="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Empresa"
-                android:layout_margin="5dp"
                 android:textSize="20sp"/>
 
             <Space
@@ -77,45 +73,53 @@
 
         </LinearLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ubicación"
+            android:layout_margin="10dp"
+            android:textSize="20sp"/>
 
-        <fragment
-            android:id="@+id/map_crear_punto_interes"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="5dp"/>
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="250dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="right">
+            <fragment
+                android:id="@+id/map_crear_punto_interes"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"/>
 
-            <ImageButton
-                android:id="@+id/btn_centrar_marcador_crear_reporte"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/ic_menu_mapmode"
-                android:onClick="centrarMapaEnMarcador"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="bottom|right">
 
-            <ImageButton
-                android:id="@+id/btn_centrar_gps_crear_reporte"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                app:srcCompat="@android:drawable/ic_menu_mylocation"
-                android:onClick="marcarMapaEnPosicionGPS"/>
+                <ImageButton
+                    android:id="@+id/btn_centrar_marcador_crear_reporte"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@android:drawable/ic_menu_mapmode"
+                    android:onClick="centrarMapaEnMarcador"/>
 
-        </LinearLayout>
+                <ImageButton
+                    android:id="@+id/btn_centrar_gps_crear_reporte"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    app:srcCompat="@android:drawable/ic_menu_mylocation"
+                    android:onClick="marcarMapaEnPosicionGPS"/>
+
+            </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            tools:layout_editor_absoluteY="8dp"
-            tools:layout_editor_absoluteX="8dp"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_margin="10dp">
 
             <TextView
                 android:layout_width="wrap_content"

@@ -31,7 +31,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Servicio"
-                android:layout_margin="5dp"
                 android:textSize="20sp"/>
 
             <Space
@@ -60,7 +59,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Empresa"
-                    android:layout_margin="5dp"
                     android:textSize="20sp"/>
 
                 <Space
@@ -78,38 +76,43 @@
 
         </LinearLayout>
 
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <TextView
             android:layout_width="wrap_content"
-            android:layout_height="250dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp">
+            android:layout_height="wrap_content"
+            android:text="Ubicación"
+            android:layout_margin="10dp"
+            android:textSize="20sp"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="250dp">
 
             <fragment
                 android:id="@+id/map_crear_reporte"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"/>
+                android:layout_height="250dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:gravity="bottom|right">
+                android:gravity="bottom|right"
+                android:orientation="horizontal">
 
                 <ImageButton
                     android:id="@+id/btn_centrar_marcador_crear_reporte"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@android:drawable/ic_menu_mapmode"
-                    android:onClick="centrarMapaEnMarcador"/>
+                    android:onClick="centrarMapaEnMarcador"
+                    app:srcCompat="@android:drawable/ic_menu_mapmode" />
 
                 <ImageButton
                     android:id="@+id/btn_centrar_gps_crear_reporte"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="15dp"
-                    app:srcCompat="@android:drawable/ic_menu_mylocation"
-                    android:onClick="marcarMapaEnPosicionGPS"/>
+                    android:onClick="marcarMapaEnPosicionGPS"
+                    app:srcCompat="@android:drawable/ic_menu_mylocation" />
 
             </LinearLayout>
         </RelativeLayout>
