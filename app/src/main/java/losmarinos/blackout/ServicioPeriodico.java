@@ -227,6 +227,9 @@ public class ServicioPeriodico extends Service implements Runnable, ObservadorAP
             for (int j = 0; j < cortes.size(); j++) {
                 Corte corte_actual = cortes.get(j);
 
+                if(corte_actual.isResuelto())
+                    continue;
+
                 if (punto_actual.getServicio() != null && punto_actual.getServicio() != corte_actual.getServicio())
                     continue;
 

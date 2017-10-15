@@ -16,12 +16,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import losmarinos.blackout.Adapters.CorteProgramadoAdapter;
 import losmarinos.blackout.Adapters.PuntoInteresAdapter;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorDELETEAPI;
+import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.Global;
 import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Empresa;
@@ -31,6 +33,7 @@ import losmarinos.blackout.R;
 
 import static losmarinos.blackout.Constantes.TAGAPI.BORRAR_CORTE_PROGRAMADO;
 import static losmarinos.blackout.Constantes.TAGAPI.BORRAR_PUNTO_DE_INTERES;
+import static losmarinos.blackout.Constantes.TAGAPI.RESOLVER_CORTE_PROGRAMADO;
 import static losmarinos.blackout.Global.token_usuario_actual;
 
 public class MisCortesProgramados extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
@@ -68,21 +71,27 @@ public class MisCortesProgramados extends AppCompatActivity implements OnMapRead
     }
 
     public void cargarListView(){
-        CorteProgramadoAdapter adapter = new CorteProgramadoAdapter(empresaActual.obtenerCortesProgramados(), this, this);
+        List<Corte> programados =  empresaActual.obtenerCortesProgramados();
+        CorteProgramadoAdapter adapter = new CorteProgramadoAdapter(programados, this, this);
         ListView mi_lista = (ListView)findViewById(R.id.lst_cortes_mis_cortes_programados);
         mi_lista.setAdapter(adapter);
     }
 
-    public void borrarCorteProgramado(int id_corte_programado)
+    public boolean resolverCorteProgramado(Corte corte_programado)
     {
         try{
-            String resultado = new ConsultorDELETEAPI("corte-programado/" + String.valueOf(id_corte_programado), token_usuario_actual, BORRAR_CORTE_PROGRAMADO, null).execute().get();
+            String resultado = new ConsultorPOSTAPI("corte-programado/" + String.valueOf(corte_programado.getId()) + "/resolver", token_usuario_actual, null, RESOLVER_CORTE_PROGRAMADO, null).execute().get();
             StringBuilder mensaje_error = new StringBuilder();
             if(ParserJSON.esError(resultado, mensaje_error)){
                 Toast.makeText(this, mensaje_error, Toast.LENGTH_LONG).show();
+                return false;
+            }else{
+                corte_programado.setResuelto(1);
+                return true;
             }
         }catch (Exception e){
             Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
+            return false;
         }
     }
 

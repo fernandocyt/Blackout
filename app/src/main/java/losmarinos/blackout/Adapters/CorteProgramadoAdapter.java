@@ -9,12 +9,14 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import losmarinos.blackout.Actividades.MisCortesProgramados;
 import losmarinos.blackout.Actividades.MisPuntosInteres;
+import losmarinos.blackout.Constantes;
 import losmarinos.blackout.Global;
 import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.PuntoInteres;
@@ -31,7 +33,7 @@ public class CorteProgramadoAdapter extends BaseAdapter implements ListAdapter {
     TextView textview_texto;
     //TextView textview_activo;
     //Button button_activar;
-    Button button_borrar;
+    Button button_resolver;
 
     public CorteProgramadoAdapter(List<Corte> list, Context context, MisCortesProgramados actividad) {
         this.list = list;
@@ -68,15 +70,25 @@ public class CorteProgramadoAdapter extends BaseAdapter implements ListAdapter {
         textview_texto = (TextView)view.findViewById(R.id.lbl_texto_corte_programado_mis_objetos);
         textview_texto.setText(list.get(position).generarTexto());
 
-        button_borrar = (Button)view.findViewById(R.id.btn_borrar_corte_programado_mis_objetos);
-        button_borrar.setOnClickListener(new View.OnClickListener() {
+        button_resolver = (Button)view.findViewById(R.id.btn_resolver_corte_programado_mis_objetos);
+        if(list.get(position).isResuelto()){
+            button_resolver.setVisibility(View.GONE);
+        }else{
+            button_resolver.setVisibility(View.VISIBLE);
+        }
+
+        button_resolver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MisCortesProgramados mis_cortes_programados = (MisCortesProgramados)context;
-                mis_cortes_programados.borrarCorteProgramado(list.get(position).getId());
-                Global.actualizarCortes(context);
-                mis_cortes_programados.cargarListView();
-                CorteProgramadoAdapter.actividad.cargarMapa();
+                boolean correcto = mis_cortes_programados.resolverCorteProgramado(list.get(position));
+                if(correcto){
+                    Toast.makeText(context, "Corte resuelto", Toast.LENGTH_LONG).show();
+                    mis_cortes_programados.cargarListView();
+                    mis_cortes_programados.cargarMapa();
+                }else{
+                    Toast.makeText(context, "No se pudo resolver el corte", Toast.LENGTH_LONG).show();
+                }
             }
         });
 

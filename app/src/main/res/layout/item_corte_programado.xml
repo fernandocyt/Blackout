@@ -40,10 +40,10 @@
             android:textSize="12sp" />-->
 
         <Button
-            android:id="@+id/btn_borrar_corte_programado_mis_objetos"
+            android:id="@+id/btn_resolver_corte_programado_mis_objetos"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
-            android:text="Borrar"
+            android:text="Resolver"
             android:textSize="12sp" />
 
     </LinearLayout>
