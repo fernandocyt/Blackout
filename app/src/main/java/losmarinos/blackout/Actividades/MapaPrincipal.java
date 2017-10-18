@@ -226,8 +226,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             Global.vaciarTodo();
 
             // TODO: ARREGLAR ESTE CRASH
-            if(isMyServiceRunning(ServicioPeriodico.class))
-                stopService(new Intent(this, ServicioPeriodico.class));
+            //if(isMyServiceRunning(ServicioPeriodico.class))
+            //    stopService(new Intent(this, ServicioPeriodico.class));
 
             Intent i = new Intent(getApplicationContext(), Login.class);
             startActivity(i);

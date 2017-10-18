@@ -1,5 +1,6 @@
 package losmarinos.blackout.Actividades;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -32,16 +33,20 @@ import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_EMPRESA_POR_ID;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_USUARIO_POR_TOKEN;
 import static losmarinos.blackout.Constantes.TAGAPI.LOGUEAR_USUARIO;
 
-public class Login extends AppCompatActivity {
+public class Login extends AppCompatActivity implements Runnable {
 
     EditText usuario;
     EditText password;
+
+    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_login);
+
+        dialog = new ProgressDialog(this);
 
         usuario = (EditText)findViewById(R.id.txt_usuario_login);
         password = (EditText)findViewById(R.id.txt_password_login);
@@ -61,9 +66,22 @@ public class Login extends AppCompatActivity {
         }
     }
 
+
     public void loguearUsuario(View view){
+        dialog.setIndeterminate(true);
+        dialog.setMessage("Logeando usuario...");
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+        new Thread(this).start();
+    }
+
+    public void run(){
 
         if(!Validador.validarCamposVacios(this, (LinearLayout)findViewById(R.id.lyt_login))){
+            if(dialog.isShowing()){
+                dialog.dismiss();
+            }
             return;
         }
 
@@ -79,13 +97,11 @@ public class Login extends AppCompatActivity {
             String respuesta = new ConsultorPOSTAPI("login", null, obj, LOGUEAR_USUARIO, null).execute().get();
             StringBuilder msg_error = new StringBuilder();
             if(ParserJSON.esError(respuesta, msg_error)){
-                Toast.makeText(this, msg_error.toString(), Toast.LENGTH_LONG).show();
-                return;
+                this.showToast(msg_error.toString());
             }else{
                 String access_token = ParserJSON.obtenerAccessToken(respuesta);
                 if(access_token == null){
-                    Toast.makeText(this, "Error: usuario inexistente", Toast.LENGTH_LONG).show();
-                    return;
+                    this.showToast("Error: usuario inexistente");
                 }
                 Global.token_usuario_actual = access_token;
 
@@ -93,7 +109,7 @@ public class Login extends AppCompatActivity {
                 respuesta = new ConsultorGETAPI("user", Global.token_usuario_actual, OBTENER_USUARIO_POR_TOKEN, null).execute().get();
 
                 if(ParserJSON.esError(respuesta, msg_error)){
-                    Toast.makeText(this, msg_error.toString(), Toast.LENGTH_LONG).show();
+                    this.showToast(msg_error.toString());
                     return;
                 } else {
                     Usuario nuevo_usuario = ParserJSON.obtenerUsuario(respuesta);
@@ -101,7 +117,7 @@ public class Login extends AppCompatActivity {
                     nuevo_usuario.setPass(str_password);
 
                     if (nuevo_usuario == null) {
-                        Toast.makeText(this, "Error: usuario inexistente", Toast.LENGTH_LONG).show();
+                        this.showToast("Error: usuario inexistente");
                         return;
                     }
 
@@ -111,7 +127,7 @@ public class Login extends AppCompatActivity {
                         String resp_empresa = new ConsultorGETAPI("empresa/" + nuevo_usuario.getSubId(), Global.token_usuario_actual, OBTENER_EMPRESA_POR_ID, null).execute().get();
 
                         if(ParserJSON.esError(resp_empresa, msg_error)) {
-                            Toast.makeText(this, msg_error.toString(), Toast.LENGTH_LONG).show();
+                            this.showToast(msg_error.toString());
                             return;
                         }else{
                             JSONObject emp = new JSONObject(resp_empresa);
@@ -119,7 +135,7 @@ public class Login extends AppCompatActivity {
 
                             int habilitada = json_emp.getInt("habilitada");
                             if(habilitada == 0){
-                                Toast.makeText(this, "La empresa del usuario no se encuentra habilitada", Toast.LENGTH_LONG).show();
+                                this.showToast("La empresa del usuario no se encuentra habilitada");
                                 return;
                             }
                         }
@@ -139,19 +155,42 @@ public class Login extends AppCompatActivity {
                         LocalDB.crearArchivoJSONPreferencias(this, true, true, true, true);
                     }
 
-                    Intent i = new Intent(getApplicationContext(), MapaPrincipal.class);
-                    startActivity(i);
-                    finish();
+                    //Intent i = new Intent(getApplicationContext(), MapaPrincipal.class);
+                    //startActivity(i);
+                    //finish();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialog.dismiss();
+                            Intent i = new Intent(getApplicationContext(), MapaPrincipal.class);
+                            startActivity(i);
+                            finish();
+                        }
+                    });
                 }
             }
 
         }
         catch (Exception e)
         {
-            Toast.makeText(this, "Se ah producido un error", Toast.LENGTH_LONG).show();
+            this.showToast("Se ah producido un error logeando");
             return;
         }
 
+
+    }
+
+    public void showToast(final String toast)
+    {
+        if(dialog.isShowing()){
+            dialog.dismiss();
+        }
+        runOnUiThread(new Runnable() {
+            public void run()
+            {
+                Toast.makeText(getApplicationContext(), toast, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void registrarUsuario(View view)

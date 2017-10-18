@@ -1,5 +1,6 @@
 package losmarinos.blackout;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.Layout;
 import android.view.View;
@@ -27,19 +28,19 @@ public class Validador {
         return true;
     }
 
-    public static boolean validarCamposVacios(Context context, LinearLayout layout){
+    public static boolean validarCamposVacios(Activity activity, LinearLayout layout){
         for (int i = 0; i < layout.getChildCount(); i++){
             Object child = layout.getChildAt(i);
             if (child instanceof EditText){
                 // EDIT TEXT
                 EditText e = (EditText)child;
                 if(e.getText().toString().isEmpty()){
-                    Toast.makeText(context, "Debe completar todos los campos", Toast.LENGTH_LONG).show();
+                    showToast(activity, "Debe completar todos los campos");
                     return false;
                 }
             }else if(child instanceof LinearLayout){
                 // LAYOUT
-                if(!validarCamposVacios(context, (LinearLayout)child)){
+                if(!validarCamposVacios(activity, (LinearLayout)child)){
                     return false;
                 }
             }else if(child instanceof TableLayout) {
@@ -47,7 +48,7 @@ public class Validador {
                 TableLayout tabla = (TableLayout) child;
                 for (int j = 0; j < tabla.getChildCount(); j++) {
                     if (tabla.getChildAt(j) instanceof TableRow) {
-                        if (!validarCamposVacios(context, (TableRow) tabla.getChildAt(j))) {
+                        if (!validarCamposVacios(activity, (TableRow) tabla.getChildAt(j))) {
                             return false;
                         }
                     }
@@ -57,13 +58,13 @@ public class Validador {
         return true;
     }
 
-    public static boolean validarCamposVacios(Context context, TableRow table_row){
+    public static boolean validarCamposVacios(Activity activity, TableRow table_row){
         for (int i = 0; i < table_row.getChildCount(); i++){
             Object child = table_row.getChildAt(i);
             if (child instanceof EditText){
                 EditText e = (EditText)child;
                 if(e.getText().toString().isEmpty()){
-                    Toast.makeText(context, "Debe completar todos los campos", Toast.LENGTH_LONG).show();
+                    showToast(activity, "Debe completar todos los campos");
                     return false;
                 }
             }
@@ -94,5 +95,15 @@ public class Validador {
         }*/
 
         return true;
+    }
+
+    public static void showToast(final Activity activity, final String toast)
+    {
+        activity.runOnUiThread(new Runnable() {
+            public void run()
+            {
+                Toast.makeText(activity, toast, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
