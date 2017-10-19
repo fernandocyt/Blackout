@@ -1,11 +1,13 @@
 package losmarinos.blackout.Objetos;
 
+import android.app.Activity;
 import android.content.Context;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import losmarinos.blackout.Aviso;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorGETAPI;
 import losmarinos.blackout.Global;
@@ -180,13 +182,13 @@ public class Usuario {
         }catch (Exception e){}
     }
 
-    public void actualizarCortesInteres(Context context){
+    public void actualizarCortesInteres(Activity activity){
         try {
             String respuesta = new ConsultorGETAPI("usuarios/" + String.valueOf(this.id) + "/cortes-de-interes", Global.token_usuario_actual, OBTENER_CORTESINTERES_POR_USUARIO, null).execute().get();
             StringBuilder msg_error = new StringBuilder();
             if(ParserJSON.esError(respuesta, msg_error)){
-                if(context != null) {
-                    Toast.makeText(context, "No es posible obtener los cortes de interes", Toast.LENGTH_LONG).show();
+                if(activity != null) {
+                    Aviso.showToast(activity, "No es posible actualizar los cortes de interes");
                 }
                 return;
             }else{

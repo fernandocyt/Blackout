@@ -17,6 +17,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import losmarinos.blackout.Aviso;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorGETAPI;
 import losmarinos.blackout.ConsultorPOSTAPI;
@@ -33,7 +34,7 @@ import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_EMPRESA_POR_ID;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_USUARIO_POR_TOKEN;
 import static losmarinos.blackout.Constantes.TAGAPI.LOGUEAR_USUARIO;
 
-public class Login extends AppCompatActivity implements Runnable {
+public class Login extends AppCompatActivity {
 
     EditText usuario;
     EditText password;
@@ -68,129 +69,117 @@ public class Login extends AppCompatActivity implements Runnable {
 
 
     public void loguearUsuario(View view){
-        dialog.setIndeterminate(true);
-        dialog.setMessage("Logeando usuario...");
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
+        dialog = Aviso.showProgressDialog(this, "Logeando usuario...");
 
-        new Thread(this).start();
-    }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
 
-    public void run(){
-
-        if(!Validador.validarCamposVacios(this, (LinearLayout)findViewById(R.id.lyt_login))){
-            if(dialog.isShowing()){
-                dialog.dismiss();
-            }
-            return;
-        }
-
-        String str_usuario = usuario.getText().toString();
-        String str_password = password.getText().toString();
-
-        try {
-            // Logeo usuario y obtengo token
-            JSONObject obj = new JSONObject();
-            obj.put("username", str_usuario);
-            obj.put("password", str_password);
-
-            String respuesta = new ConsultorPOSTAPI("login", null, obj, LOGUEAR_USUARIO, null).execute().get();
-            StringBuilder msg_error = new StringBuilder();
-            if(ParserJSON.esError(respuesta, msg_error)){
-                this.showToast(msg_error.toString());
-            }else{
-                String access_token = ParserJSON.obtenerAccessToken(respuesta);
-                if(access_token == null){
-                    this.showToast("Error: usuario inexistente");
-                }
-                Global.token_usuario_actual = access_token;
-
-                // Obtengo datos de usuario
-                respuesta = new ConsultorGETAPI("user", Global.token_usuario_actual, OBTENER_USUARIO_POR_TOKEN, null).execute().get();
-
-                if(ParserJSON.esError(respuesta, msg_error)){
-                    this.showToast(msg_error.toString());
+                if(!Validador.validarCamposVacios(Login.this, (LinearLayout)findViewById(R.id.lyt_login))){
+                    Aviso.hideProgressDialog(Login.this, dialog);
                     return;
-                } else {
-                    Usuario nuevo_usuario = ParserJSON.obtenerUsuario(respuesta);
+                }
 
-                    nuevo_usuario.setPass(str_password);
+                String str_usuario = usuario.getText().toString();
+                String str_password = password.getText().toString();
 
-                    if (nuevo_usuario == null) {
-                        this.showToast("Error: usuario inexistente");
-                        return;
-                    }
+                try {
+                    // Logeo usuario y obtengo token
+                    JSONObject obj = new JSONObject();
+                    obj.put("username", str_usuario);
+                    obj.put("password", str_password);
 
+                    String respuesta = new ConsultorPOSTAPI("login", null, obj, LOGUEAR_USUARIO, null).execute().get();
+                    StringBuilder msg_error = new StringBuilder();
+                    if(ParserJSON.esError(respuesta, msg_error)){
+                        Aviso.hideProgressDialog(Login.this, dialog);
+                        Aviso.showToast(Login.this, msg_error.toString());
+                    }else{
+                        String access_token = ParserJSON.obtenerAccessToken(respuesta);
+                        if(access_token == null){
+                            Aviso.showToast(Login.this, "Error: usuario inexistente");
+                        }
+                        Global.token_usuario_actual = access_token;
 
-                    // Si es una empresa me fijo que este habilitada
-                    if(nuevo_usuario.getTipo() == Constantes.TIPOSUSUARIO.EMPRESA){
-                        String resp_empresa = new ConsultorGETAPI("empresa/" + nuevo_usuario.getSubId(), Global.token_usuario_actual, OBTENER_EMPRESA_POR_ID, null).execute().get();
+                        // Obtengo datos de usuario
+                        respuesta = new ConsultorGETAPI("user", Global.token_usuario_actual, OBTENER_USUARIO_POR_TOKEN, null).execute().get();
 
-                        if(ParserJSON.esError(resp_empresa, msg_error)) {
-                            this.showToast(msg_error.toString());
+                        if(ParserJSON.esError(respuesta, msg_error)){
+                            Aviso.hideProgressDialog(Login.this, dialog);
+                            Aviso.showToast(Login.this, msg_error.toString());
                             return;
-                        }else{
-                            JSONObject emp = new JSONObject(resp_empresa);
-                            JSONObject json_emp = emp.getJSONObject("empresa");
+                        } else {
+                            Usuario nuevo_usuario = ParserJSON.obtenerUsuario(respuesta);
 
-                            int habilitada = json_emp.getInt("habilitada");
-                            if(habilitada == 0){
-                                this.showToast("La empresa del usuario no se encuentra habilitada");
+                            nuevo_usuario.setPass(str_password);
+
+                            if (nuevo_usuario == null) {
+                                Aviso.hideProgressDialog(Login.this, dialog);
+                                Aviso.showToast(Login.this, "Error: usuario inexistente");
                                 return;
                             }
+
+
+                            // Si es una empresa me fijo que este habilitada
+                            if(nuevo_usuario.getTipo() == Constantes.TIPOSUSUARIO.EMPRESA){
+                                String resp_empresa = new ConsultorGETAPI("empresa/" + nuevo_usuario.getSubId(), Global.token_usuario_actual, OBTENER_EMPRESA_POR_ID, null).execute().get();
+
+                                if(ParserJSON.esError(resp_empresa, msg_error)) {
+                                    Aviso.hideProgressDialog(Login.this, dialog);
+                                    Aviso.showToast(Login.this, "msg_error.toString()");
+                                    return;
+                                }else{
+                                    JSONObject emp = new JSONObject(resp_empresa);
+                                    JSONObject json_emp = emp.getJSONObject("empresa");
+
+                                    int habilitada = json_emp.getInt("habilitada");
+                                    if(habilitada == 0){
+                                        Aviso.hideProgressDialog(Login.this, dialog);
+                                        Aviso.showToast(Login.this, "La empresa del usuario no se encuentra habilitada");
+                                        return;
+                                    }
+                                }
+                            }
+
+
+                            Global.usuario_actual = nuevo_usuario;
+
+                            LocalDB.crearArchivoJSONUsuario(Login.this.getApplicationContext(),
+                                    Global.usuario_actual.getIdUsuario(),
+                                    Global.usuario_actual.getNombre(),
+                                    password.getText().toString(),
+                                    Global.usuario_actual.getMail(),
+                                    Global.token_usuario_actual);
+
+                            if(!LocalDB.leerArchivoJSONPreferencias(Login.this.getApplicationContext(), null, null, null, null)) {
+                                LocalDB.crearArchivoJSONPreferencias(Login.this.getApplicationContext(), true, true, true, true);
+                            }
+
+                            //Intent i = new Intent(getApplicationContext(), MapaPrincipal.class);
+                            //startActivity(i);
+                            //finish();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Aviso.hideProgressDialog(Login.this, dialog);
+                                    Intent i = new Intent(getApplicationContext(), MapaPrincipal.class);
+                                    startActivity(i);
+                                    finish();
+                                }
+                            });
                         }
                     }
 
-
-                    Global.usuario_actual = nuevo_usuario;
-
-                    LocalDB.crearArchivoJSONUsuario(this.getApplicationContext(),
-                            Global.usuario_actual.getIdUsuario(),
-                            Global.usuario_actual.getNombre(),
-                            password.getText().toString(),
-                            Global.usuario_actual.getMail(),
-                            Global.token_usuario_actual);
-
-                    if(!LocalDB.leerArchivoJSONPreferencias(this, null, null, null, null)) {
-                        LocalDB.crearArchivoJSONPreferencias(this, true, true, true, true);
-                    }
-
-                    //Intent i = new Intent(getApplicationContext(), MapaPrincipal.class);
-                    //startActivity(i);
-                    //finish();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            dialog.dismiss();
-                            Intent i = new Intent(getApplicationContext(), MapaPrincipal.class);
-                            startActivity(i);
-                            finish();
-                        }
-                    });
+                }
+                catch (Exception e)
+                {
+                    Aviso.hideProgressDialog(Login.this, dialog);
+                    Aviso.showToast(Login.this, "Se ah producido un error logeando");
+                    return;
                 }
             }
-
         }
-        catch (Exception e)
-        {
-            this.showToast("Se ah producido un error logeando");
-            return;
-        }
-
-
-    }
-
-    public void showToast(final String toast)
-    {
-        if(dialog.isShowing()){
-            dialog.dismiss();
-        }
-        runOnUiThread(new Runnable() {
-            public void run()
-            {
-                Toast.makeText(getApplicationContext(), toast, Toast.LENGTH_SHORT).show();
-            }
-        });
+        ).start();
     }
 
     public void registrarUsuario(View view)

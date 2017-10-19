@@ -1,5 +1,6 @@
 package losmarinos.blackout.Actividades;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import losmarinos.blackout.Adapters.ComentarioAdapter;
+import losmarinos.blackout.Aviso;
 import losmarinos.blackout.Calculos;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorDELETEAPI;
@@ -47,11 +49,15 @@ public class PerfilEmpresa extends AppCompatActivity {
 
     Empresa empresa = null;
 
+    ProgressDialog progress_dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("Perfil de empresa");
         setContentView(R.layout.activity_perfil_empresa);
+
+        progress_dialog = Aviso.showProgressDialog(this, "Cargando empresa...");
 
         int id_empresa = getIntent().getIntExtra("idEmpresa", 0);
         this.empresa = Global.encontrarEmpresaPorId(id_empresa);
@@ -70,8 +76,20 @@ public class PerfilEmpresa extends AppCompatActivity {
         button_borrar_comentario = (Button)findViewById(R.id.btn_borrar_comentario_perfil_empresa);
         button_modificar_perfil = (Button)findViewById(R.id.btn_modificar_perfil_empresa);
 
-        this.empresa.actualizarComentarios(this);
-        this.cargarEmpresa();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                empresa.actualizarComentarios(PerfilEmpresa.this);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        cargarEmpresa();
+                    }
+                });
+                Aviso.hideProgressDialog(PerfilEmpresa.this, progress_dialog);
+            }
+        }).start();
 
     }
 
@@ -116,7 +134,7 @@ public class PerfilEmpresa extends AppCompatActivity {
             }
         }
 
-        this.cargarListView();
+        cargarListView();
     }
 
     public void cargarListView(){
@@ -130,26 +148,38 @@ public class PerfilEmpresa extends AppCompatActivity {
 
     public void agregarComentario(View view)
     {
-        String comentario = edittext_comentario.getText().toString();
+        progress_dialog = Aviso.showProgressDialog(this, "Agregando comentario...");
 
-        //Comentario nuevo_comentario = new Comentario(Global.usuarios.get(0), comentario);
-        //empresa.addComentario(nuevo_comentario);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String comentario = edittext_comentario.getText().toString();
 
-        try{
-            JSONObject nuevo_com = ParserJSON.crearJSONComentario(Global.usuario_actual.getIdUsuario(), empresa.getSubId(), comentario);
+                //Comentario nuevo_comentario = new Comentario(Global.usuarios.get(0), comentario);
+                //empresa.addComentario(nuevo_comentario);
 
-            String resultado = new ConsultorPOSTAPI("comentario", Global.token_usuario_actual, nuevo_com, REGISTRAR_COMENTARIO, null).execute().get();
-            StringBuilder mensaje_error = new StringBuilder();
-            if(ParserJSON.esError(resultado, mensaje_error)){
-                Toast.makeText(this, mensaje_error, Toast.LENGTH_LONG).show();
+                try{
+                    JSONObject nuevo_com = ParserJSON.crearJSONComentario(Global.usuario_actual.getIdUsuario(), empresa.getSubId(), comentario);
+
+                    String resultado = new ConsultorPOSTAPI("comentario", Global.token_usuario_actual, nuevo_com, REGISTRAR_COMENTARIO, null).execute().get();
+                    StringBuilder mensaje_error = new StringBuilder();
+                    if(ParserJSON.esError(resultado, mensaje_error)){
+                        Aviso.showToast(PerfilEmpresa.this, mensaje_error.toString());
+                    }
+                }catch (Exception e){
+                    Aviso.showToast(PerfilEmpresa.this, "Error");
+                }
+
+                empresa.actualizarComentarios(PerfilEmpresa.this);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        cargarEmpresa();
+                    }
+                });
+                Aviso.hideProgressDialog(PerfilEmpresa.this, progress_dialog);
             }
-        }catch (Exception e){
-            Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
-        }
-
-        this.empresa.actualizarComentarios(this);
-        this.cargarEmpresa();
-
+        }).start();
     }
 
     public void verSucursales(View view)
@@ -168,29 +198,43 @@ public class PerfilEmpresa extends AppCompatActivity {
 
     public void borrarComentario(View view)
     {
-        List<Comentario> comentarios = this.empresa.getComentarios();
-        int id_comentario = -1;
-        for(int i = 0; i < comentarios.size(); i++){
-            if(comentarios.get(i).getUsuario().getIdUsuario() == Global.usuario_actual.getIdUsuario()){
-                id_comentario = comentarios.get(i).getId();
+        progress_dialog = Aviso.showProgressDialog(this, "Borrando comentario...");
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                List<Comentario> comentarios = empresa.getComentarios();
+                int id_comentario = -1;
+                for(int i = 0; i < comentarios.size(); i++){
+                    if(comentarios.get(i).getUsuario().getIdUsuario() == Global.usuario_actual.getIdUsuario()){
+                        id_comentario = comentarios.get(i).getId();
+                    }
+                }
+
+                if(id_comentario == -1)
+                    return;
+
+                try{
+                    String resultado = new ConsultorDELETEAPI("comentario/" + String.valueOf(id_comentario) + "/delete", token_usuario_actual, BORRAR_COMENTARIO, null).execute().get();
+                    StringBuilder mensaje_error = new StringBuilder();
+                    if(ParserJSON.esError(resultado, mensaje_error)){
+                        Aviso.showToast(PerfilEmpresa.this, mensaje_error.toString());
+                    }
+                }catch (Exception e){
+                    Aviso.showToast(PerfilEmpresa.this, "Error");
+                }
+
+                empresa.actualizarComentarios(PerfilEmpresa.this);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        cargarEmpresa();
+                    }
+                });
+                Aviso.hideProgressDialog(PerfilEmpresa.this, progress_dialog);
             }
-        }
-
-        if(id_comentario == -1)
-            return;
-
-        try{
-            String resultado = new ConsultorDELETEAPI("comentario/" + String.valueOf(id_comentario) + "/delete", token_usuario_actual, BORRAR_COMENTARIO, null).execute().get();
-            StringBuilder mensaje_error = new StringBuilder();
-            if(ParserJSON.esError(resultado, mensaje_error)){
-                Toast.makeText(this, mensaje_error, Toast.LENGTH_LONG).show();
-            }
-        }catch (Exception e){
-            Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
-        }
-
-        this.empresa.actualizarComentarios(this);
-        this.cargarEmpresa();
+        }).start();
     }
 
 }

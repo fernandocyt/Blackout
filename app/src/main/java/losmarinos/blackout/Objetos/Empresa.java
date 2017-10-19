@@ -1,5 +1,6 @@
 package losmarinos.blackout.Objetos;
 
+import android.app.Activity;
 import android.content.Context;
 import android.widget.Toast;
 
@@ -8,6 +9,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.List;
 
+import losmarinos.blackout.Aviso;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorGETAPI;
 import losmarinos.blackout.Global;
@@ -141,13 +143,13 @@ public class Empresa extends Usuario {
         }catch (Exception e){}
     }
 
-    public void actualizarComentarios(Context contexto){
+    public void actualizarComentarios(Activity activity){
         try {
             String respuesta = new ConsultorGETAPI("empresa/"+String.valueOf(this.getSubId())+"/comentarios",
                     Global.token_usuario_actual, OBTENER_COMENTARIOS_POR_EMPRESA, null).execute().get();
             StringBuilder msg_error = new StringBuilder();
             if(ParserJSON.esError(respuesta, msg_error)){
-                Toast.makeText(contexto, "No es posible cargar comentarios", Toast.LENGTH_LONG).show();
+                Aviso.showToast(activity, "No es posible cargar comentarios");
                 return;
             }else{
                 this.comentarios = ParserJSON.obtenerComentarios(respuesta);

@@ -20,9 +20,9 @@ import java.util.List;
 
 public class Validador {
 
-    public static boolean validarPasswords(Context context, String pass1, String pass2){
+    public static boolean validarPasswords(Activity activity, String pass1, String pass2){
         if(!pass1.equals(pass2)){
-            Toast.makeText(context, "Las claves no coinciden", Toast.LENGTH_LONG).show();
+            Aviso.showToast(activity, "Las claves no coinciden");
             return false;
         }
         return true;
@@ -35,7 +35,7 @@ public class Validador {
                 // EDIT TEXT
                 EditText e = (EditText)child;
                 if(e.getText().toString().isEmpty()){
-                    showToast(activity, "Debe completar todos los campos");
+                    Aviso.showToast(activity, "Debe completar todos los campos");
                     return false;
                 }
             }else if(child instanceof LinearLayout){
@@ -64,7 +64,7 @@ public class Validador {
             if (child instanceof EditText){
                 EditText e = (EditText)child;
                 if(e.getText().toString().isEmpty()){
-                    showToast(activity, "Debe completar todos los campos");
+                    Aviso.showToast(activity, "Debe completar todos los campos");
                     return false;
                 }
             }
@@ -72,20 +72,20 @@ public class Validador {
         return true;
     }
 
-    public static boolean validarMail(Context context, String mail){
+    public static boolean validarMail(Activity activity, String mail){
         int pos = mail.indexOf(".");
         if(pos == -1){
-            Toast.makeText(context, "Falta el punto en el mail", Toast.LENGTH_LONG).show();
+            Aviso.showToast(activity, "Falta el punto en el mail");
             return false;
         }
         pos = mail.indexOf("@");
         if(pos == -1){
-            Toast.makeText(context, "Falta el @ en el mail", Toast.LENGTH_LONG).show();
+            Aviso.showToast(activity, "Falta el arroba en el mail");
             return false;
         }
         String[] separado_arroba = mail.split("\\@");
         if(separado_arroba[0].length() <= 4){
-            Toast.makeText(context, "La primer parte del mail debe contener al menos 5 caracteres", Toast.LENGTH_LONG).show();
+            Aviso.showToast(activity, "La primer parte del mail debe contener al menos 5 caracteres");
             return false;
         }
         /*String[] separado_punto = separado_arroba[1].split(".");
@@ -95,15 +95,5 @@ public class Validador {
         }*/
 
         return true;
-    }
-
-    public static void showToast(final Activity activity, final String toast)
-    {
-        activity.runOnUiThread(new Runnable() {
-            public void run()
-            {
-                Toast.makeText(activity, toast, Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }

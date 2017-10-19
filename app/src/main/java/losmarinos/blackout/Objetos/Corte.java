@@ -1,5 +1,6 @@
 package losmarinos.blackout.Objetos;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -14,6 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import losmarinos.blackout.Aviso;
 import losmarinos.blackout.Calculos;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorGETAPI;
@@ -161,13 +163,13 @@ public class Corte{
         return Global.encontrarEmpresaPorId(this.id_empresa);
     }
 
-    public void actualizarRespuestas(Context contexto){
+    public void actualizarRespuestas(Activity activity){
         try {
             String respuesta = new ConsultorGETAPI("cortes/"+String.valueOf(this.id)+"/respuestas",
                     Global.token_usuario_actual, OBTENER_RESPUESTAS_POR_CORTE, null).execute().get();
             StringBuilder msg_error = new StringBuilder();
             if(ParserJSON.esError(respuesta, msg_error)){
-                Toast.makeText(contexto, "No es posible cargar respuestas", Toast.LENGTH_LONG).show();
+                Aviso.showToast(activity, "No es posible cargar respuestas");
                 return;
             }else{
                 this.respuestas = ParserJSON.obtenerRespuestas(respuesta);

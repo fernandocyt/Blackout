@@ -1,5 +1,6 @@
 package losmarinos.blackout.Actividades;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import losmarinos.blackout.Aviso;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorDELETEAPI;
 import losmarinos.blackout.ConsultorPOSTAPI;
@@ -54,11 +56,15 @@ public class PerfilCorte extends AppCompatActivity {
 
     Corte corte;
 
+    ProgressDialog progress_dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("Perfil de corte");
         setContentView(R.layout.activity_perfil_corte);
+
+        progress_dialog = Aviso.showProgressDialog(this, "Cargando corte...");
 
         int id_corte = getIntent().getIntExtra("idCorte", 0);
         this.corte = Global.encontrarCortePorId(id_corte);
@@ -74,8 +80,19 @@ public class PerfilCorte extends AppCompatActivity {
         button_borrar_respuesta = (Button)findViewById(R.id.btn_borrar_respuesta_perfil_corte);
         imageview_servicio = (ImageView)findViewById(R.id.img_perfil_corte);
 
-        this.corte.actualizarRespuestas(this);
-        this.cargarCorte();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                corte.actualizarRespuestas(PerfilCorte.this);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        cargarCorte();
+                    }
+                });
+                Aviso.hideProgressDialog(PerfilCorte.this, progress_dialog);
+            }
+        }).start();
     }
 
     void cargarCorte()
@@ -170,7 +187,6 @@ public class PerfilCorte extends AppCompatActivity {
             }
         }
 
-
         RespuestaAdapter adapter_empresa = new RespuestaAdapter(respuesta_empresa, true, this, this);
         ListView mi_lista_empresa = (ListView)findViewById(R.id.lst_respuesta_empresa_perfil_corte);
         mi_lista_empresa.setAdapter(adapter_empresa);
@@ -190,22 +206,37 @@ public class PerfilCorte extends AppCompatActivity {
 
     public void agregarRespuesta(View view)
     {
-        String respuesta = edittext_respuesta.getText().toString();
+        progress_dialog = Aviso.showProgressDialog(this, "Agregando respuesta...");
 
-        try{
-            JSONObject nuevo_com = ParserJSON.crearJSONRespuesta(Global.usuario_actual.getIdUsuario(), this.corte.getId(), respuesta);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
 
-            String resultado = new ConsultorPOSTAPI("respuestas", Global.token_usuario_actual, nuevo_com, REGISTRAR_RESPUESTA, null).execute().get();
-            StringBuilder mensaje_error = new StringBuilder();
-            if(ParserJSON.esError(resultado, mensaje_error)){
-                Toast.makeText(this, mensaje_error, Toast.LENGTH_LONG).show();
+                String respuesta = edittext_respuesta.getText().toString();
+
+                try{
+                    JSONObject nuevo_com = ParserJSON.crearJSONRespuesta(Global.usuario_actual.getIdUsuario(), corte.getId(), respuesta);
+
+                    String resultado = new ConsultorPOSTAPI("respuestas", Global.token_usuario_actual, nuevo_com, REGISTRAR_RESPUESTA, null).execute().get();
+                    StringBuilder mensaje_error = new StringBuilder();
+                    if(ParserJSON.esError(resultado, mensaje_error)){
+                        Aviso.showToast(PerfilCorte.this, mensaje_error.toString());
+                    }
+                }catch (Exception e){
+                    Aviso.showToast(PerfilCorte.this, "Error");
+                }
+
+                corte.actualizarRespuestas(PerfilCorte.this);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        cargarCorte();
+                    }
+                });
+                Aviso.hideProgressDialog(PerfilCorte.this, progress_dialog);
             }
-        }catch (Exception e){
-            Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
-        }
+        }).start();
 
-        this.corte.actualizarRespuestas(this);
-        this.cargarCorte();
     }
 
     public void irAPerfilEmpresa(View view){
@@ -221,70 +252,100 @@ public class PerfilCorte extends AppCompatActivity {
     }
 
     public void marcarCorteDeInteres(View view){
-        if(!Global.usuario_actual.esCorteDeInteres(this.corte.getId())) {
-            // LO MARCO COMO CORTE DE INTERES
-            try {
-                JSONObject nuevo_corte_int = ParserJSON.crearJSONCorteDeInteres(Global.usuario_actual.getIdUsuario(), this.corte.getId());
 
-                String resultado = new ConsultorPOSTAPI("cortes-de-interes", Global.token_usuario_actual, nuevo_corte_int, REGISTRAR_CORTE_DE_INTERES, null).execute().get();
-                StringBuilder mensaje_error = new StringBuilder();
-                if (ParserJSON.esError(resultado, mensaje_error)) {
-                    Toast.makeText(this, mensaje_error, Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(this, "Corte de interes agregado", Toast.LENGTH_LONG).show();
-                }
-            } catch (Exception e) {
-                Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
-            }
-        }else{
-            // LO BORRO COMO CORTE DE INTERES
-            try{
-                int id_corte_interes = Global.usuario_actual.getIdCorteInteres(this.corte.getId());
-                if(id_corte_interes == -1){
-                    Toast.makeText(this, "No se pudo encontrar corte de interes", Toast.LENGTH_LONG).show();
-                    return;
-                }
+        progress_dialog = Aviso.showProgressDialog(this, "Actualizando corte de interes...");
 
-                String resultado = new ConsultorDELETEAPI("cortes-de-interes/" + id_corte_interes, token_usuario_actual, BORRAR_CORTE_DE_INTERES, null).execute().get();
-                StringBuilder mensaje_error = new StringBuilder();
-                if(ParserJSON.esError(resultado, mensaje_error)){
-                    Toast.makeText(this, mensaje_error, Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(this, "Corte de interes borrado", Toast.LENGTH_LONG).show();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                if(!Global.usuario_actual.esCorteDeInteres(corte.getId())) {
+                    // LO MARCO COMO CORTE DE INTERES
+                    try {
+                        JSONObject nuevo_corte_int = ParserJSON.crearJSONCorteDeInteres(Global.usuario_actual.getIdUsuario(), corte.getId());
+
+                        String resultado = new ConsultorPOSTAPI("cortes-de-interes", Global.token_usuario_actual, nuevo_corte_int, REGISTRAR_CORTE_DE_INTERES, null).execute().get();
+                        StringBuilder mensaje_error = new StringBuilder();
+                        if (ParserJSON.esError(resultado, mensaje_error)) {
+                            Aviso.showToast(PerfilCorte.this, mensaje_error.toString());
+                        } else {
+                            Aviso.showToast(PerfilCorte.this, "Corte de interes agregado");
+                        }
+                    } catch (Exception e) {
+                        Aviso.showToast(PerfilCorte.this, "Error");
+                    }
+                }else{
+                    // LO BORRO COMO CORTE DE INTERES
+                    try{
+                        int id_corte_interes = Global.usuario_actual.getIdCorteInteres(corte.getId());
+                        if(id_corte_interes == -1){
+                            Aviso.showToast(PerfilCorte.this, "No se pudo encontrar corte de interes");
+                            return;
+                        }
+
+                        String resultado = new ConsultorDELETEAPI("cortes-de-interes/" + id_corte_interes, token_usuario_actual, BORRAR_CORTE_DE_INTERES, null).execute().get();
+                        StringBuilder mensaje_error = new StringBuilder();
+                        if(ParserJSON.esError(resultado, mensaje_error)){
+                            Aviso.showToast(PerfilCorte.this, mensaje_error.toString());
+                        } else {
+                            Aviso.showToast(PerfilCorte.this, "Corte de interes borrado");
+                        }
+                    }catch (Exception e){
+                        Aviso.showToast(PerfilCorte.this, "Error");
+                    }
                 }
-            }catch (Exception e){
-                Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
+                Global.usuario_actual.actualizarCortesInteres(PerfilCorte.this);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        cargarCorte();
+                    }
+                });
+                Aviso.hideProgressDialog(PerfilCorte.this, progress_dialog);
             }
-        }
-        Global.usuario_actual.actualizarCortesInteres(this);
-        this.cargarCorte();
+        }).start();
     }
 
     public void borrarRespuesta(View view)
     {
-        List<Respuesta> respuestas = this.corte.getRespuestas();
-        int id_respuesta = -1;
-        for(int i = 0; i < respuestas.size(); i++){
-            if(respuestas.get(i).getUsuario().getIdUsuario() == Global.usuario_actual.getIdUsuario()){
-                id_respuesta = respuestas.get(i).getId();
+
+        progress_dialog = Aviso.showProgressDialog(this, "Borrando respuesta...");
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                List<Respuesta> respuestas = corte.getRespuestas();
+                int id_respuesta = -1;
+                for(int i = 0; i < respuestas.size(); i++){
+                    if(respuestas.get(i).getUsuario().getIdUsuario() == Global.usuario_actual.getIdUsuario()){
+                        id_respuesta = respuestas.get(i).getId();
+                    }
+                }
+
+                if(id_respuesta == -1)
+                    return;
+
+                try{
+                    String resultado = new ConsultorDELETEAPI("respuestas/" + String.valueOf(id_respuesta) + "/delete", token_usuario_actual, BORRAR_RESPUESTA, null).execute().get();
+                    StringBuilder mensaje_error = new StringBuilder();
+                    if(ParserJSON.esError(resultado, mensaje_error)){
+                        Aviso.showToast(PerfilCorte.this, mensaje_error.toString());
+                    }
+                }catch (Exception e){
+                    Aviso.showToast(PerfilCorte.this, "Error");
+                }
+
+                corte.actualizarRespuestas(PerfilCorte.this);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        cargarCorte();
+                    }
+                });
+                Aviso.hideProgressDialog(PerfilCorte.this, progress_dialog);
             }
-        }
-
-        if(id_respuesta == -1)
-            return;
-
-        try{
-            String resultado = new ConsultorDELETEAPI("respuestas/" + String.valueOf(id_respuesta) + "/delete", token_usuario_actual, BORRAR_RESPUESTA, null).execute().get();
-            StringBuilder mensaje_error = new StringBuilder();
-            if(ParserJSON.esError(resultado, mensaje_error)){
-                Toast.makeText(this, mensaje_error, Toast.LENGTH_LONG).show();
-            }
-        }catch (Exception e){
-            Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
-        }
-
-        this.corte.actualizarRespuestas(this);
-        this.cargarCorte();
+        }).start();
     }
 
 }
