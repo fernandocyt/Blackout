@@ -92,13 +92,13 @@
         <activity
             android:name=".Actividades.BuscarEmpresa"
             android:screenOrientation="portrait" />
-        <activity android:name=".Actividades.CrearCorteProgramado" />
-        <activity android:name=".Actividades.MisCortesProgramados" />
-        <activity android:name=".Actividades.ConsultarEstadisticas" />
-        <activity android:name=".Actividades.CrearSucursal" />
-        <activity android:name=".Actividades.ModificarPerfilEmpresa" />
-        <activity android:name=".Actividades.Preferencias" />
-        <activity android:name=".Actividades.CrearEmpresa"></activity>
+        <activity android:name=".Actividades.CrearCorteProgramado" android:screenOrientation="portrait"/>
+        <activity android:name=".Actividades.MisCortesProgramados" android:screenOrientation="portrait"/>
+        <activity android:name=".Actividades.ConsultarEstadisticas" android:screenOrientation="portrait"/>
+        <activity android:name=".Actividades.CrearSucursal" android:screenOrientation="portrait"/>
+        <activity android:name=".Actividades.ModificarPerfilEmpresa" android:screenOrientation="portrait"/>
+        <activity android:name=".Actividades.Preferencias" android:screenOrientation="portrait"/>
+        <activity android:name=".Actividades.CrearEmpresa" android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
