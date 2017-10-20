@@ -1,5 +1,6 @@
 package losmarinos.blackout.Adapters;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import java.util.List;
 
 import losmarinos.blackout.Actividades.MisReportes;
 import losmarinos.blackout.Actividades.PerfilCorte;
+import losmarinos.blackout.Aviso;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.LocalDB;
 import losmarinos.blackout.Objetos.Reporte;
@@ -40,6 +42,8 @@ public class ReportesAdapter extends BaseAdapter implements ListAdapter {
     TextView textview_confirmacion;
     Button button_resolver;
     Button button_confirmar;
+
+    ProgressDialog progress_dialog;
 
     public ReportesAdapter(List<Reporte> list, Context context, MisReportes actividad) {
         this.list = list;
@@ -104,30 +108,52 @@ public class ReportesAdapter extends BaseAdapter implements ListAdapter {
         button_resolver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean correcto = list.get(position).resolver();
-                if(correcto) {
-                    Toast.makeText(context, "Reporte de " + Constantes.servicioToString(list.get(position).getServicio()) + " resuelto", Toast.LENGTH_LONG).show();
-                    MisReportes mis_reportes = (MisReportes) context;
-                    mis_reportes.cargarListView();
-                    mis_reportes.cargarMapa();
-                }else{
-                    Toast.makeText(context, "No se pudo resolver reporte", Toast.LENGTH_LONG).show();
-                }
+                progress_dialog = Aviso.showProgressDialog(ReportesAdapter.actividad, "Resolviendo reporte");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        boolean correcto = list.get(position).resolver();
+                        if(correcto) {
+                            ReportesAdapter.actividad.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ReportesAdapter.actividad.cargarListView();
+                                    ReportesAdapter.actividad.cargarMapa();
+                                }
+                            });
+                            Aviso.showToast(ReportesAdapter.actividad, "Reporte de " + Constantes.servicioToString(list.get(position).getServicio()) + " resuelto");
+                        }else{
+                            Aviso.showToast(ReportesAdapter.actividad, "No se pudo resolver reporte");
+                        }
+                        Aviso.hideProgressDialog(ReportesAdapter.actividad, progress_dialog);
+                    }
+                }).start();
             }
         });
 
         button_confirmar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+            progress_dialog = Aviso.showProgressDialog(ReportesAdapter.actividad, "Confirmando reporte");
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
                 boolean correcto = list.get(position).confirmar();
                 if(correcto) {
-                    Toast.makeText(context, "Reporte confirmado", Toast.LENGTH_LONG).show();
-
-                    MisReportes mis_reportes = (MisReportes) context;
-                    mis_reportes.cargarListView();
+                    ReportesAdapter.actividad.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ReportesAdapter.actividad.cargarListView();
+                            ReportesAdapter.actividad.cargarMapa();
+                        }
+                    });
+                    Aviso.showToast(ReportesAdapter.actividad, "Reporte confirmado");
                 }else{
-                    Toast.makeText(context, "No fue posible confirmar el reporte", Toast.LENGTH_LONG).show();
+                    Aviso.showToast(ReportesAdapter.actividad, "No se pudo confirmar el reporte");
                 }
+                Aviso.hideProgressDialog(ReportesAdapter.actividad, progress_dialog);
+                }
+            }).start();
             }
         });
 

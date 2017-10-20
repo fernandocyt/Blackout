@@ -91,14 +91,12 @@ public class MisCortesProgramados extends AppCompatActivity implements OnMapRead
             String resultado = new ConsultorPOSTAPI("corte-programado/" + String.valueOf(corte_programado.getId()) + "/resolver", token_usuario_actual, null, RESOLVER_CORTE_PROGRAMADO, null).execute().get();
             StringBuilder mensaje_error = new StringBuilder();
             if(ParserJSON.esError(resultado, mensaje_error)){
-                Toast.makeText(this, mensaje_error, Toast.LENGTH_LONG).show();
                 return false;
             }else{
                 corte_programado.setResuelto(1);
                 return true;
             }
         }catch (Exception e){
-            Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
             return false;
         }
     }

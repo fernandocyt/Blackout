@@ -105,16 +105,18 @@ public class MisPuntosInteres extends AppCompatActivity implements OnMapReadyCal
         }
     }
 
-    public void borrarPuntoDeInteres(int id_punto_interes)
+    public boolean borrarPuntoDeInteres(int id_punto_interes)
     {
         try{
             String resultado = new ConsultorDELETEAPI("punto-de-interes/" + String.valueOf(id_punto_interes) + "/delete", token_usuario_actual, BORRAR_PUNTO_DE_INTERES, null).execute().get();
             StringBuilder mensaje_error = new StringBuilder();
             if(ParserJSON.esError(resultado, mensaje_error)){
-                Toast.makeText(this, mensaje_error, Toast.LENGTH_LONG).show();
+                return false;
+            }else{
+                return true;
             }
         }catch (Exception e){
-            Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
+            return false;
         }
     }
 }

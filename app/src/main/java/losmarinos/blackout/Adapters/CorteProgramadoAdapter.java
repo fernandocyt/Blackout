@@ -1,5 +1,6 @@
 package losmarinos.blackout.Adapters;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import losmarinos.blackout.Actividades.MisCortesProgramados;
 import losmarinos.blackout.Actividades.MisPuntosInteres;
+import losmarinos.blackout.Aviso;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.Global;
 import losmarinos.blackout.Objetos.Corte;
@@ -34,6 +36,8 @@ public class CorteProgramadoAdapter extends BaseAdapter implements ListAdapter {
     //TextView textview_activo;
     //Button button_activar;
     Button button_resolver;
+
+    ProgressDialog progress_dialog;
 
     public CorteProgramadoAdapter(List<Corte> list, Context context, MisCortesProgramados actividad) {
         this.list = list;
@@ -80,15 +84,26 @@ public class CorteProgramadoAdapter extends BaseAdapter implements ListAdapter {
         button_resolver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MisCortesProgramados mis_cortes_programados = (MisCortesProgramados)context;
-                boolean correcto = mis_cortes_programados.resolverCorteProgramado(list.get(position));
-                if(correcto){
-                    Toast.makeText(context, "Corte resuelto", Toast.LENGTH_LONG).show();
-                    mis_cortes_programados.cargarListView();
-                    mis_cortes_programados.cargarMapa();
-                }else{
-                    Toast.makeText(context, "No se pudo resolver el corte", Toast.LENGTH_LONG).show();
-                }
+                progress_dialog = Aviso.showProgressDialog(CorteProgramadoAdapter.actividad, "Resolviendo corte programado");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        boolean correcto = CorteProgramadoAdapter.actividad.resolverCorteProgramado(list.get(position));
+                        if(correcto){
+                            CorteProgramadoAdapter.actividad.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    CorteProgramadoAdapter.actividad.cargarListView();
+                                    CorteProgramadoAdapter.actividad.cargarMapa();
+                                }
+                            });
+                            Aviso.showToast(CorteProgramadoAdapter.actividad, "Corte resuelto");
+                        }else{
+                            Aviso.showToast(CorteProgramadoAdapter.actividad, "No se pudo resolver el corte");
+                        }
+                        Aviso.hideProgressDialog(CorteProgramadoAdapter.actividad, progress_dialog);
+                    }
+                }).start();
             }
         });
 

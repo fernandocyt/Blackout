@@ -1,5 +1,6 @@
 package losmarinos.blackout.Adapters;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import java.util.List;
 
 import losmarinos.blackout.Actividades.MisPuntosInteres;
 import losmarinos.blackout.Actividades.MisReportes;
+import losmarinos.blackout.Aviso;
 import losmarinos.blackout.Global;
 import losmarinos.blackout.Objetos.PuntoInteres;
 import losmarinos.blackout.Objetos.Reporte;
@@ -32,6 +34,8 @@ public class PuntoInteresAdapter extends BaseAdapter implements ListAdapter {
     //TextView textview_activo;
     //Button button_activar;
     Button button_borrar;
+
+    ProgressDialog progress_dialog;
 
     public PuntoInteresAdapter(List<PuntoInteres> list, Context context, MisPuntosInteres actividad) {
         this.list = list;
@@ -100,11 +104,27 @@ public class PuntoInteresAdapter extends BaseAdapter implements ListAdapter {
         button_borrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MisPuntosInteres mis_puntos_interes = (MisPuntosInteres)context;
-                mis_puntos_interes.borrarPuntoDeInteres(list.get(position).getId());
-                Global.usuario_actual.actualizarPuntosInteres(PuntoInteresAdapter.actividad);
-                mis_puntos_interes.cargarListView();
-                PuntoInteresAdapter.actividad.cargarMapa();
+                progress_dialog = Aviso.showProgressDialog(PuntoInteresAdapter.actividad, "Borrando punto de interes");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        boolean correcto = PuntoInteresAdapter.actividad.borrarPuntoDeInteres(list.get(position).getId());
+                        if(correcto) {
+                            Global.usuario_actual.actualizarPuntosInteres(PuntoInteresAdapter.actividad);
+                            PuntoInteresAdapter.actividad.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    PuntoInteresAdapter.actividad.cargarListView();
+                                    PuntoInteresAdapter.actividad.cargarMapa();
+                                }
+                            });
+                            Aviso.showToast(PuntoInteresAdapter.actividad, "Punto de interes borrado");
+                        }else{
+                            Aviso.showToast(PuntoInteresAdapter.actividad, "No se pudo borrar el punto de interes");
+                        }
+                        Aviso.hideProgressDialog(PuntoInteresAdapter.actividad, progress_dialog);
+                    }
+                }).start();
             }
         });
 

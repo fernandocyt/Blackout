@@ -121,16 +121,18 @@ public class VerSucursales extends AppCompatActivity implements OnMapReadyCallba
         }
     }
 
-    public void borrarSucursal(int id_sucursal)
+    public boolean borrarSucursal(int id_sucursal)
     {
         try{
             String resultado = new ConsultorDELETEAPI("sucursal/" + String.valueOf(id_sucursal) + "/delete", token_usuario_actual, BORRAR_SUCURSAL, null).execute().get();
             StringBuilder mensaje_error = new StringBuilder();
             if(ParserJSON.esError(resultado, mensaje_error)){
-                Toast.makeText(this, mensaje_error, Toast.LENGTH_LONG).show();
+                return false;
+            }else{
+                return true;
             }
         }catch (Exception e){
-            Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
+            return false;
         }
     }
 

@@ -1,5 +1,6 @@
 package losmarinos.blackout.Adapters;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import java.util.List;
 
 import losmarinos.blackout.Actividades.MisReportes;
 import losmarinos.blackout.Actividades.VerSucursales;
+import losmarinos.blackout.Aviso;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.Global;
 import losmarinos.blackout.Objetos.Empresa;
@@ -34,6 +36,8 @@ public class SucursalAdapter extends BaseAdapter implements ListAdapter {
     TextView textview_texto;
     Button button_borrar;
     Empresa empresa_actual;
+
+    ProgressDialog progress_dialog;
 
     public SucursalAdapter(Empresa empresa, Context context, VerSucursales actividad) {
         this.empresa_actual = empresa;
@@ -80,13 +84,27 @@ public class SucursalAdapter extends BaseAdapter implements ListAdapter {
         button_borrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VerSucursales ver_sucursales = (VerSucursales)context;
-                ver_sucursales.borrarSucursal(list.get(position).getId());
-
-                empresa_actual.actualizarSucursales(SucursalAdapter.actividad);
-
-                ver_sucursales.cargarListView();
-                SucursalAdapter.actividad.cargarMapa();
+                progress_dialog = Aviso.showProgressDialog(SucursalAdapter.actividad, "Borrando sucursal");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        boolean correcto = SucursalAdapter.actividad.borrarSucursal(list.get(position).getId());
+                        if(correcto){
+                            empresa_actual.actualizarSucursales(SucursalAdapter.actividad);
+                            SucursalAdapter.actividad.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    SucursalAdapter.actividad.cargarListView();
+                                    SucursalAdapter.actividad.cargarMapa();
+                                }
+                            });
+                            Aviso.showToast(SucursalAdapter.actividad, "Sucursal borrada");
+                        }else{
+                            Aviso.showToast(SucursalAdapter.actividad, "No se pudo borrar sucursal");
+                        }
+                        Aviso.hideProgressDialog(SucursalAdapter.actividad, progress_dialog);
+                    }
+                }).start();
             }
         });
 
