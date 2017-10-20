@@ -1,5 +1,6 @@
 package losmarinos.blackout.Actividades;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import java.util.List;
 
 import losmarinos.blackout.Adapters.CorteProgramadoAdapter;
 import losmarinos.blackout.Adapters.PuntoInteresAdapter;
+import losmarinos.blackout.Aviso;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorDELETEAPI;
 import losmarinos.blackout.ConsultorPOSTAPI;
@@ -41,11 +43,15 @@ public class MisCortesProgramados extends AppCompatActivity implements OnMapRead
     GoogleMap map_mis_cortes_programados;
     Empresa empresaActual;
 
+    ProgressDialog progress_dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("Mis Cortes Programados");
         setContentView(R.layout.activity_mis_cortes_programados);
+
+        progress_dialog = Aviso.showProgressDialog(this, "Cargando cortes programados...");
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map_mis_cortes_programados);
@@ -54,6 +60,8 @@ public class MisCortesProgramados extends AppCompatActivity implements OnMapRead
         empresaActual = Global.encontrarEmpresaPorId(Global.usuario_actual.getSubId());
 
         this.cargarListView();
+
+        Aviso.hideProgressDialog(this, progress_dialog);
     }
 
     @Override
@@ -97,6 +105,10 @@ public class MisCortesProgramados extends AppCompatActivity implements OnMapRead
 
     public void cargarMapa()
     {
+        if(map_mis_cortes_programados == null){
+            return;
+        }
+
         map_mis_cortes_programados.clear();
 
         List<Corte> cortes_programados = empresaActual.obtenerCortesProgramados();

@@ -1,5 +1,6 @@
 package losmarinos.blackout.Actividades;
 
+import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -29,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import losmarinos.blackout.Aviso;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.GPSTracker;
@@ -61,6 +63,8 @@ public class CrearCorteProgramado extends AppCompatActivity implements OnMapRead
 
     // Otros
     private LatLng posicion_gps = null;
+
+    ProgressDialog progress_dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,22 +119,40 @@ public class CrearCorteProgramado extends AppCompatActivity implements OnMapRead
             return;
         }
 
-        try{
-            JSONObject nuevo_corte_prog = ParserJSON.crearJSONCorteProgramado(servicio, empresa_actual.getSubId(), posicion, radio, fecha_inicio.toString(), fecha_fin.toString());
+        progress_dialog = Aviso.showProgressDialog(this, "Creando corte programado...");
 
-            String resultado = new ConsultorPOSTAPI("corte-programado", Global.token_usuario_actual, nuevo_corte_prog, REGISTRAR_CORTE_PROGRAMADO, null).execute().get();
-            StringBuilder mensaje_error = new StringBuilder();
-            if(ParserJSON.esError(resultado, mensaje_error)){
-                Toast.makeText(this, mensaje_error, Toast.LENGTH_LONG).show();
+        final Constantes.SERVICIO f_servicio = servicio;
+        final int f_id_empresa = empresa_actual.getSubId();
+        final LatLng f_posicion = posicion;
+        final int f_radio = radio;
+        final String f_fecha_inicio = fecha_inicio.toString();
+        final String f_fecha_fin = fecha_fin.toString();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+            try{
+                JSONObject nuevo_corte_prog = ParserJSON.crearJSONCorteProgramado(f_servicio, f_id_empresa, f_posicion, f_radio, f_fecha_inicio, f_fecha_fin);
+
+                String resultado = new ConsultorPOSTAPI("corte-programado", Global.token_usuario_actual, nuevo_corte_prog, REGISTRAR_CORTE_PROGRAMADO, null).execute().get();
+                StringBuilder mensaje_error = new StringBuilder();
+                if(ParserJSON.esError(resultado, mensaje_error)){
+                    Aviso.hideProgressDialog(CrearCorteProgramado.this, progress_dialog);
+                    Aviso.showToast(CrearCorteProgramado.this, mensaje_error.toString());
+                }else{
+                    Aviso.hideProgressDialog(CrearCorteProgramado.this, progress_dialog);
+                    Aviso.showToast(CrearCorteProgramado.this, "Corte programado creado exitosamente");
+                    radio_corte_programado = null;
+                    marcador_posicion_corte_programado = null;
+                    map_crear_corte_programado = null;
+                    finish();
+                }
+            }catch (Exception e){
+                Aviso.hideProgressDialog(CrearCorteProgramado.this, progress_dialog);
+                Aviso.showToast(CrearCorteProgramado.this, "Error");
             }
-        }catch (Exception e){
-            Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
-        }
-
-        this.radio_corte_programado = null;
-        this.marcador_posicion_corte_programado = null;
-        this.map_crear_corte_programado = null;
-        this.finish();
+            }
+        }).start();
     }
 
     public boolean construirFechas(StringBuilder fecha_inicio, StringBuilder fecha_fin){

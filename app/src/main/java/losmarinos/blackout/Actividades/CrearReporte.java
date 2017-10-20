@@ -158,74 +158,78 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
 
     public void crearReporte(View view)
     {
+
+        if(marcador_posicion_reporte == null){
+            Aviso.showToast(CrearReporte.this, "Debe marcar una posicion en el mapa");
+            return;
+        }
+
+        String nombre_servicio = spinner_servicios.getSelectedItem().toString();
+        Constantes.SERVICIO servicio = Constantes.stringToServicio(nombre_servicio);
+
+        // Me fijo si hay mas de 2 reportes activos con el mismo servicio no lo agrego
+        int cant_mismo_servicio_activos = 0;
+
+        boolean correcto = Global.usuario_actual.actualizarReportes(CrearReporte.this);
+        if(!correcto){
+            Aviso.hideProgressDialog(CrearReporte.this, progress_dialog);
+            return;
+        }
+
+        List<Reporte> reportes_usuario = Global.usuario_actual.getReportes();
+        for(int i = 0; i < reportes_usuario.size(); i++){
+            if(reportes_usuario.get(i).getServicio() == servicio && !reportes_usuario.get(i).isResuelto()){
+                cant_mismo_servicio_activos++;
+            }
+        }
+        if(cant_mismo_servicio_activos >= 2){
+            Aviso.showToast(CrearReporte.this, "No puedes tener mas de 2 reportes de un servicio activos a la vez");
+            return;
+        }
+
+        String nombre_empresa = spinner_empresas.getSelectedItem().toString();
+
+        int id_empresa = -1;
+        if (!nombre_empresa.equals("No especificar")) {
+            id_empresa = Global.encontrarEmpresaPorNombre(nombre_empresa).getSubId();
+        }
+
+        LatLng posicion = marcador_posicion_reporte.getPosition();
+        int radio = seekbar_radio.getProgress();
+        if(radio < 10){
+            radio = 10;
+        }
+
         progress_dialog = Aviso.showProgressDialog(this, "Creando reporte...");
+
+        final Constantes.SERVICIO f_servicio = servicio;
+        final int f_id_empresa = id_empresa;
+        final LatLng f_posicion = posicion;
+        final int f_radio = radio;
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if(marcador_posicion_reporte == null){
-                    Aviso.showToast(CrearReporte.this, "Debe marcar una posicion en el mapa");
-                    Aviso.hideProgressDialog(CrearReporte.this, progress_dialog);
-                    return;
-                }
-
-                String nombre_servicio = spinner_servicios.getSelectedItem().toString();
-                Constantes.SERVICIO servicio = Constantes.stringToServicio(nombre_servicio);
-
-                // Me fijo si hay mas de 2 reportes activos con el mismo servicio no lo agrego
-                int cant_mismo_servicio_activos = 0;
-
-                boolean correcto = Global.usuario_actual.actualizarReportes(CrearReporte.this);
-                if(!correcto){
-                    Aviso.hideProgressDialog(CrearReporte.this, progress_dialog);
-                    return;
-                }
-
-                List<Reporte> reportes_usuario = Global.usuario_actual.getReportes();
-                for(int i = 0; i < reportes_usuario.size(); i++){
-                    if(reportes_usuario.get(i).getServicio() == servicio && !reportes_usuario.get(i).isResuelto()){
-                        cant_mismo_servicio_activos++;
-                    }
-                }
-                if(cant_mismo_servicio_activos >= 2){
-                    Aviso.showToast(CrearReporte.this, "No puedes tener mas de 2 reportes de un servicio activos a la vez");
-                    Aviso.hideProgressDialog(CrearReporte.this, progress_dialog);
-                    return;
-                }
-
-                String nombre_empresa = spinner_empresas.getSelectedItem().toString();
-
-                int id_empresa = -1;
-                if (!nombre_empresa.equals("No especificar")) {
-                    id_empresa = Global.encontrarEmpresaPorNombre(nombre_empresa).getSubId();
-                }
-
-                LatLng posicion = marcador_posicion_reporte.getPosition();
-                int radio = seekbar_radio.getProgress();
-                if(radio < 10){
-                    radio = 10;
-                }
-
                 try {
-                    JSONObject nuevo_rep = ParserJSON.crearJSONReporte(Global.usuario_actual.getIdUsuario(), servicio, id_empresa, posicion, radio);
+                    JSONObject nuevo_rep = ParserJSON.crearJSONReporte(Global.usuario_actual.getIdUsuario(), f_servicio, f_id_empresa, f_posicion, f_radio);
 
                     String resultado = new ConsultorPOSTAPI("reporte", Global.token_usuario_actual, nuevo_rep, REGISTRAR_REPORTE, null).execute().get();
                     StringBuilder mensaje_error = new StringBuilder();
                     if (ParserJSON.esError(resultado, mensaje_error)) {
+                        Aviso.hideProgressDialog(CrearReporte.this, progress_dialog);
                         Aviso.showToast(CrearReporte.this, mensaje_error.toString());
                     } else {
+                        Aviso.hideProgressDialog(CrearReporte.this, progress_dialog);
                         Aviso.showToast(CrearReporte.this, "Reporte creado exitosamente");
+                        radio_reporte = null;
+                        marcador_posicion_reporte = null;
+                        map_crear_reporte = null;
+                        CrearReporte.this.finish();
                     }
                 } catch (Exception e) {
+                    Aviso.hideProgressDialog(CrearReporte.this, progress_dialog);
                     Aviso.showToast(CrearReporte.this, "Error");
                 }
-
-                Aviso.hideProgressDialog(CrearReporte.this, progress_dialog);
-
-                radio_reporte = null;
-                marcador_posicion_reporte = null;
-                map_crear_reporte = null;
-                CrearReporte.this.finish();
             }
         }).start();
 

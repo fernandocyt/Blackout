@@ -1,5 +1,6 @@
 package losmarinos.blackout.Actividades;
 
+import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.CompoundButton;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import losmarinos.blackout.Adapters.ReportesAdapter;
 import losmarinos.blackout.Adapters.RespuestaAdapter;
+import losmarinos.blackout.Aviso;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.Global;
@@ -30,11 +32,15 @@ public class MisReportes extends AppCompatActivity implements OnMapReadyCallback
     GoogleMap map_mis_reportes = null;
     Switch switch_ver_historico;
 
+    ProgressDialog progress_dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("Mis Reportes");
         setContentView(R.layout.activity_mis_reportes);
+
+        progress_dialog = Aviso.showProgressDialog(this, "Cargando reportes...");
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map_mis_reportes);
@@ -43,8 +49,20 @@ public class MisReportes extends AppCompatActivity implements OnMapReadyCallback
         switch_ver_historico = (Switch)findViewById(R.id.switch_ver_historico_mis_reportes);
         switch_ver_historico.setOnCheckedChangeListener(this);
 
-        Global.usuario_actual.actualizarReportes(this);
-        this.cargarListView();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Global.usuario_actual.actualizarReportes(MisReportes.this);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        cargarListView();
+                        cargarMapa();
+                        Aviso.hideProgressDialog(MisReportes.this, progress_dialog);
+                    }
+                });
+            }
+        }).start();
     }
 
     @Override

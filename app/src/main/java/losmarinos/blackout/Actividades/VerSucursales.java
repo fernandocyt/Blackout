@@ -1,5 +1,6 @@
 package losmarinos.blackout.Actividades;
 
+import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import losmarinos.blackout.Adapters.ReportesAdapter;
 import losmarinos.blackout.Adapters.SucursalAdapter;
+import losmarinos.blackout.Aviso;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorDELETEAPI;
 import losmarinos.blackout.ConsultorGETAPI;
@@ -41,10 +43,14 @@ public class VerSucursales extends AppCompatActivity implements OnMapReadyCallba
     GoogleMap map_sucursales;
     Empresa empresa;
 
+    ProgressDialog progress_dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ver_sucursales);
+
+        progress_dialog = Aviso.showProgressDialog(this, "Cargando sucursales...");
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map_ver_sucursales);
@@ -58,6 +64,21 @@ public class VerSucursales extends AppCompatActivity implements OnMapReadyCallba
         this.empresa.actualizarSucursales(this);
 
         this.cargarListView();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                empresa.actualizarSucursales(VerSucursales.this);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        cargarListView();
+                        cargarMapa();
+                        Aviso.hideProgressDialog(VerSucursales.this, progress_dialog);
+                    }
+                });
+            }
+        }).start();
     }
 
     @Override
@@ -81,6 +102,10 @@ public class VerSucursales extends AppCompatActivity implements OnMapReadyCallba
 
     public void cargarMapa()
     {
+        if(map_sucursales == null){
+            return;
+        }
+
         map_sucursales.clear();
 
         List<Sucursal> sucursales = empresa.getSucursales();

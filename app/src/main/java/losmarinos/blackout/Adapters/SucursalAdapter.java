@@ -83,7 +83,7 @@ public class SucursalAdapter extends BaseAdapter implements ListAdapter {
                 VerSucursales ver_sucursales = (VerSucursales)context;
                 ver_sucursales.borrarSucursal(list.get(position).getId());
 
-                empresa_actual.actualizarSucursales(context);
+                empresa_actual.actualizarSucursales(SucursalAdapter.actividad);
 
                 ver_sucursales.cargarListView();
                 SucursalAdapter.actividad.cargarMapa();

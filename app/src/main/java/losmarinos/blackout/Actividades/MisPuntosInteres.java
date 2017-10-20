@@ -1,5 +1,6 @@
 package losmarinos.blackout.Actividades;
 
+import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
@@ -21,6 +22,7 @@ import java.util.List;
 import losmarinos.blackout.Adapters.PuntoInteresAdapter;
 import losmarinos.blackout.Adapters.ReportesAdapter;
 import losmarinos.blackout.Adapters.RespuestaAdapter;
+import losmarinos.blackout.Aviso;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorDELETEAPI;
 import losmarinos.blackout.ConsultorPOSTAPI;
@@ -38,17 +40,23 @@ public class MisPuntosInteres extends AppCompatActivity implements OnMapReadyCal
 
     GoogleMap map_mis_puntos_interes;
 
+    ProgressDialog progress_dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("Mis Puntos de Interes");
         setContentView(R.layout.activity_mis_puntos_de_interes);
 
+        progress_dialog = Aviso.showProgressDialog(this, "Cargando puntos de interes...");
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map_mis_puntos_de_interes);
         mapFragment.getMapAsync(this);
 
         this.cargarListView();
+
+        Aviso.hideProgressDialog(this, progress_dialog);
     }
 
     @Override
@@ -72,6 +80,10 @@ public class MisPuntosInteres extends AppCompatActivity implements OnMapReadyCal
 
     public void cargarMapa()
     {
+        if(map_mis_puntos_interes == null){
+            return;
+        }
+
         map_mis_puntos_interes.clear();
 
         List<PuntoInteres> puntos_interes = Global.usuario_actual.getPuntosInteres();

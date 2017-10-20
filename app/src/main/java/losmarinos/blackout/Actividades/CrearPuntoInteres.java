@@ -1,5 +1,6 @@
 package losmarinos.blackout.Actividades;
 
+import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +26,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import losmarinos.blackout.Aviso;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.GPSTracker;
@@ -59,6 +61,8 @@ public class CrearPuntoInteres extends AppCompatActivity implements OnMapReadyCa
 
     // Otros
     private LatLng posicion_gps = null;
+
+    ProgressDialog progress_dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,25 +175,40 @@ public class CrearPuntoInteres extends AppCompatActivity implements OnMapReadyCa
         //PuntoInteres nuevo_punto_interes = new PuntoInteres(servicio, id_empresa, posicion, radio);
         //Global.usuario_actual.addPuntoInteres(nuevo_punto_interes);
 
-        try{
-            JSONObject nuevo_pto_interes = ParserJSON.crearJSONPuntoDeInteres(Global.usuario_actual.getIdUsuario(), servicio, id_empresa, posicion, radio);
+        progress_dialog = Aviso.showProgressDialog(this, "Creando punto de interes...");
 
-            String resultado = new ConsultorPOSTAPI("punto-de-interes", Global.token_usuario_actual, nuevo_pto_interes, REGISTRAR_PUNTO_DE_INTERES, null).execute().get();
-            StringBuilder mensaje_error = new StringBuilder();
-            if(ParserJSON.esError(resultado, mensaje_error)){
-                Toast.makeText(this, mensaje_error, Toast.LENGTH_LONG).show();
+        final Constantes.SERVICIO f_servicio = servicio;
+        final int f_id_empresa = id_empresa;
+        final LatLng f_posicion = posicion;
+        final int f_radio = radio;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    JSONObject nuevo_pto_interes = ParserJSON.crearJSONPuntoDeInteres(Global.usuario_actual.getIdUsuario(), f_servicio, f_id_empresa, f_posicion, f_radio);
+
+                    String resultado = new ConsultorPOSTAPI("punto-de-interes", Global.token_usuario_actual, nuevo_pto_interes, REGISTRAR_PUNTO_DE_INTERES, null).execute().get();
+                    StringBuilder mensaje_error = new StringBuilder();
+                    if(ParserJSON.esError(resultado, mensaje_error)){
+                        Aviso.hideProgressDialog(CrearPuntoInteres.this, progress_dialog);
+                        Aviso.showToast(CrearPuntoInteres.this, mensaje_error.toString());
+                    }else{
+                        Aviso.hideProgressDialog(CrearPuntoInteres.this, progress_dialog);
+                        Aviso.showToast(CrearPuntoInteres.this, "Punto de interes creado exitosamente");
+                        Global.usuario_actual.actualizarPuntosInteres(CrearPuntoInteres.this);
+                        radio_punto_interes = null;
+                        marcador_posicion_punto_interes = null;
+                        map_crear_punto_interes = null;
+
+                        CrearPuntoInteres.this.finish();
+                    }
+                }catch (Exception e){
+                    Aviso.hideProgressDialog(CrearPuntoInteres.this, progress_dialog);
+                    Aviso.showToast(CrearPuntoInteres.this,  "Error");
+                }
             }
-        }catch (Exception e){
-            Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
-        }
-
-        this.radio_punto_interes = null;
-        this.marcador_posicion_punto_interes = null;
-        this.map_crear_punto_interes = null;
-
-        Global.usuario_actual.actualizarPuntosInteres(this);
-
-        this.finish();
+        }).start();
     }
 
     @Override

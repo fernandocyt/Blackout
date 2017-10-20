@@ -149,13 +149,13 @@ public class Usuario {
         return lista_cortes;
     }
 
-    public boolean actualizarReportes(Context context){
+    public boolean actualizarReportes(Activity activity){
         try {
             String respuesta = new ConsultorGETAPI("usuarios/" + String.valueOf(this.id) + "/reportes", Global.token_usuario_actual, OBTENER_REPORTES_POR_USUARIO, null).execute().get();
             StringBuilder msg_error = new StringBuilder();
             if(ParserJSON.esError(respuesta, msg_error)){
-                if(context != null) {
-                    Toast.makeText(context, "No es posible obtener los reportes", Toast.LENGTH_LONG).show();
+                if(activity != null) {
+                    Aviso.showToast(activity, "No es posible obtener los reportes");
                 }
                 return false;
             }else{
@@ -167,13 +167,13 @@ public class Usuario {
         return true;
     }
 
-    public void actualizarPuntosInteres(Context context){
+    public void actualizarPuntosInteres(Activity activity){
         try {
             String respuesta = new ConsultorGETAPI("usuarios/" + String.valueOf(this.id) + "/puntos-de-interes", Global.token_usuario_actual, OBTENER_PUNTOSINTERES_POR_USUARIO, null).execute().get();
             StringBuilder msg_error = new StringBuilder();
             if(ParserJSON.esError(respuesta, msg_error)){
-                if(context != null) {
-                    Toast.makeText(context, "No es posible obtener los puntos de interes", Toast.LENGTH_LONG).show();
+                if(activity != null) {
+                    Aviso.showToast(activity, "No es posible obtener los puntos de interes");
                 }
                 return;
             }else{

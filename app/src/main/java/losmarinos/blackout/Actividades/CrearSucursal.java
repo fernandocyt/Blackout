@@ -1,5 +1,6 @@
 package losmarinos.blackout.Actividades;
 
+import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -24,6 +25,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import losmarinos.blackout.Aviso;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.GPSTracker;
@@ -52,6 +54,8 @@ public class CrearSucursal extends AppCompatActivity implements OnMapReadyCallba
 
     // Otros
     private LatLng posicion_gps = null;
+
+    ProgressDialog progress_dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,21 +98,38 @@ public class CrearSucursal extends AppCompatActivity implements OnMapReadyCallba
 
         LatLng posicion = marcador_posicion_sucursal.getPosition();
 
-        try{
-            JSONObject nueva_sucursal = ParserJSON.crearJSONSucursal(empresa_actual.getSubId(), textview_telefono.getText().toString(), textview_direccion.getText().toString(), posicion);
+        progress_dialog = Aviso.showProgressDialog(this, "Creando sucursal...");
 
-            String resultado = new ConsultorPOSTAPI("sucursal", Global.token_usuario_actual, nueva_sucursal, REGISTRAR_SUCURSAL, null).execute().get();
-            StringBuilder mensaje_error = new StringBuilder();
-            if(ParserJSON.esError(resultado, mensaje_error)){
-                Toast.makeText(this, mensaje_error, Toast.LENGTH_LONG).show();
+        final String f_telefono = textview_telefono.getText().toString();
+        final String f_direccion = textview_direccion.getText().toString();
+        final LatLng f_posicion = posicion;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    JSONObject nueva_sucursal = ParserJSON.crearJSONSucursal(empresa_actual.getSubId(), f_telefono, f_direccion, f_posicion);
+
+                    String resultado = new ConsultorPOSTAPI("sucursal", Global.token_usuario_actual, nueva_sucursal, REGISTRAR_SUCURSAL, null).execute().get();
+                    StringBuilder mensaje_error = new StringBuilder();
+                    if(ParserJSON.esError(resultado, mensaje_error)){
+                        Aviso.hideProgressDialog(CrearSucursal.this, progress_dialog);
+                        Aviso.showToast(CrearSucursal.this, mensaje_error.toString());
+                    }else{
+                        Aviso.hideProgressDialog(CrearSucursal.this, progress_dialog);
+                        Aviso.showToast(CrearSucursal.this, "Sucursal creada exitosamente");
+                        marcador_posicion_sucursal = null;
+                        map_crear_sucursal = null;
+                        CrearSucursal.this.finish();
+                    }
+                }catch (Exception e){
+                    Aviso.hideProgressDialog(CrearSucursal.this, progress_dialog);
+                    Aviso.showToast(CrearSucursal.this, "Error");
+                }
+
+
             }
-        }catch (Exception e){
-            Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
-        }
-
-        this.marcador_posicion_sucursal = null;
-        this.map_crear_sucursal = null;
-        this.finish();
+        }).start();
     }
 
 
