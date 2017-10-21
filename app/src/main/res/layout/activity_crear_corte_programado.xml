@@ -93,6 +93,9 @@
 
         </LinearLayout>
 
+
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -112,70 +115,23 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
-
-            <EditText
-                android:id="@+id/txt_fecha_inicio_dia_crear_corte_programado"
+            <TextView
+                android:id="@+id/lbl_fecha_inicio_crear_corte_programado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxLength="2"
-                android:inputType="number"
-                android:hint="dd" />
+                android:text="Fecha"
+                android:textSize="20sp"
+                android:layout_marginRight="20dp"
+                android:background="#E6E6E6"/>
 
             <TextView
+                android:id="@+id/lbl_hora_inicio_crear_corte_programado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="/"
-                android:textSize="25sp"/>
+                android:text="Hora"
+                android:textSize="20sp"
+                android:background="#E6E6E6"/>
 
-            <EditText
-                android:id="@+id/txt_fecha_inicio_mes_crear_corte_programado"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLength="2"
-                android:inputType="number"
-                android:hint="mm"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="/"
-                android:textSize="25sp"/>
-
-            <EditText
-                android:id="@+id/txt_fecha_inicio_anio_crear_corte_programado"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLength="4"
-                android:inputType="number"
-                android:hint="aaaa"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" - "
-                android:textSize="25sp"/>
-
-            <EditText
-                android:id="@+id/txt_fecha_inicio_hora_crear_corte_programado"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLength="2"
-                android:inputType="number"
-                android:hint="hh" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=":"
-                android:textSize="25sp"/>
-
-            <EditText
-                android:id="@+id/txt_fecha_inicio_minutos_crear_corte_programado"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLength="2"
-                android:inputType="number"
-                android:hint="mm" />
         </LinearLayout>
 
 
@@ -199,69 +155,23 @@
                 android:layout_weight="1" />
 
 
-            <EditText
-                android:id="@+id/txt_fecha_fin_dia_crear_corte_programado"
+            <TextView
+                android:id="@+id/lbl_fecha_fin_crear_corte_programado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxLength="2"
-                android:inputType="number"
-                android:hint="dd" />
+                android:text="Fecha"
+                android:textSize="20sp"
+                android:layout_marginRight="20dp"
+                android:background="#E6E6E6"/>
 
             <TextView
+                android:id="@+id/lbl_hora_fin_crear_corte_programado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="/"
-                android:textSize="25sp"/>
+                android:text="Hora"
+                android:textSize="20sp"
+                android:background="#E6E6E6" />
 
-            <EditText
-                android:id="@+id/txt_fecha_fin_mes_crear_corte_programado"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLength="2"
-                android:inputType="number"
-                android:hint="mm"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="/"
-                android:textSize="25sp"/>
-
-            <EditText
-                android:id="@+id/txt_fecha_fin_anio_crear_corte_programado"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLength="4"
-                android:inputType="number"
-                android:hint="aaaa"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" - "
-                android:textSize="25sp"/>
-
-            <EditText
-                android:id="@+id/txt_fecha_fin_hora_crear_corte_programado"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLength="2"
-                android:inputType="number"
-                android:hint="hh" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=":"
-                android:textSize="25sp"/>
-
-            <EditText
-                android:id="@+id/txt_fecha_fin_minutos_crear_corte_programado"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLength="2"
-                android:inputType="number"
-                android:hint="mm" />
         </LinearLayout>
 
         <Space

@@ -1,6 +1,8 @@
 package losmarinos.blackout.Actividades;
 
 import android.app.ProgressDialog;
+import android.location.Address;
+import android.location.Geocoder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -24,6 +26,8 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Locale;
 
 import losmarinos.blackout.Aviso;
 import losmarinos.blackout.Constantes;
@@ -39,7 +43,6 @@ import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_CORTE_PROGRAMADO;
 import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_SUCURSAL;
 
 public class CrearSucursal extends AppCompatActivity implements OnMapReadyCallback,
-        ObservadorGPS,
         GoogleMap.OnMapLongClickListener{
 
     Empresa empresa_actual;
@@ -52,8 +55,7 @@ public class CrearSucursal extends AppCompatActivity implements OnMapReadyCallba
     TextView textview_telefono;
     TextView textview_direccion;
 
-    // Otros
-    private LatLng posicion_gps = null;
+    Geocoder geocoder;
 
     ProgressDialog progress_dialog;
 
@@ -72,7 +74,7 @@ public class CrearSucursal extends AppCompatActivity implements OnMapReadyCallba
         this.textview_direccion = (TextView)findViewById(R.id.txt_direccion_crear_sucursal);
         this.textview_telefono = (TextView)findViewById(R.id.txt_telefono_crear_sucursal);
 
-        GPSTracker.addObserver(this);
+        geocoder = new Geocoder(this, Locale.getDefault());
 
         Toast.makeText(this, "Para seleccionar ubicación mantener presionado el mapa", Toast.LENGTH_LONG).show();
     }
@@ -82,11 +84,6 @@ public class CrearSucursal extends AppCompatActivity implements OnMapReadyCallba
         map_crear_sucursal = googleMap;
         map_crear_sucursal.setOnMapLongClickListener(this);
         map_crear_sucursal.animateCamera(CameraUpdateFactory.newLatLngZoom(Constantes.BSAS, 11.0f));
-
-        if(posicion_gps != null)
-        {
-            this.actualizarMapaCrearSucursal(posicion_gps);
-        }
     }
 
     public void crearSucursal(View view)
@@ -132,18 +129,6 @@ public class CrearSucursal extends AppCompatActivity implements OnMapReadyCallba
         }).start();
     }
 
-
-    @Override
-    public void actualizarPosicionActual(LatLng posicion)
-    {
-        this.posicion_gps = posicion;
-
-        if (map_crear_sucursal != null && this.marcador_posicion_sucursal == null)
-        {
-            this.actualizarMapaCrearSucursal(posicion);
-        }
-    }
-
     @Override
     public void onMapLongClick(LatLng point) {
         this.actualizarMapaCrearSucursal(point);
@@ -168,6 +153,19 @@ public class CrearSucursal extends AppCompatActivity implements OnMapReadyCallba
             this.marcador_posicion_sucursal.setPosition(posicion_marcador);
 
         }
+
+        try {
+            List<Address> addresses = geocoder.getFromLocation(posicion_marcador.latitude, posicion_marcador.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+            String address = addresses.get(0).getAddressLine(0);
+            String[] separado_coma = address.split(",");
+            if(separado_coma.length > 0) {
+                textview_direccion.setText(separado_coma[0]);
+            }else{
+                textview_direccion.setText(address);
+            }
+        }catch (Exception e){
+
+        }
     }
 
     public void centrarMapaEnMarcador(View view)
@@ -177,15 +175,6 @@ public class CrearSucursal extends AppCompatActivity implements OnMapReadyCallba
                     new LatLng(this.marcador_posicion_sucursal.getPosition().latitude,
                             this.marcador_posicion_sucursal.getPosition().longitude),
                     14.0f));
-        }
-    }
-
-    public void marcarMapaEnPosicionGPS(View view)
-    {
-        if(this.posicion_gps != null)
-        {
-            this.actualizarMapaCrearSucursal(this.posicion_gps);
-            this.centrarMapaEnMarcador(view);
         }
     }
 }

@@ -1,15 +1,19 @@
 package losmarinos.blackout.Actividades;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,6 +32,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import losmarinos.blackout.Aviso;
@@ -46,7 +52,6 @@ import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_CORTE_PROGRAMADO;
 import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_REPORTE;
 
 public class CrearCorteProgramado extends AppCompatActivity implements OnMapReadyCallback,
-        ObservadorGPS,
         GoogleMap.OnMapLongClickListener,
         SeekBar.OnSeekBarChangeListener{
 
@@ -60,9 +65,19 @@ public class CrearCorteProgramado extends AppCompatActivity implements OnMapRead
     // Interfaz
     TextView textview_km_radio;
     SeekBar seekbar_radio;
+    TextView textview_fecha_inicio;
+    TextView textview_hora_inicio;
+    TextView textview_fecha_fin;
+    TextView textview_hora_fin;
 
-    // Otros
-    private LatLng posicion_gps = null;
+    DatePickerDialog.OnDateSetListener date_inicio;
+    DatePickerDialog.OnDateSetListener date_fin;
+    TimePickerDialog.OnTimeSetListener time_inicio;
+    TimePickerDialog.OnTimeSetListener time_fin;
+
+    Calendar calendar;
+    Calendar calendar_inicio;
+    Calendar calendar_fin;
 
     ProgressDialog progress_dialog;
 
@@ -83,7 +98,113 @@ public class CrearCorteProgramado extends AppCompatActivity implements OnMapRead
         this.seekbar_radio.setOnSeekBarChangeListener(this);
         this.seekbar_radio.setMax(500);
 
-        GPSTracker.addObserver(this);
+        calendar = Calendar.getInstance();
+        calendar_inicio = Calendar.getInstance();
+        calendar_fin = Calendar.getInstance();
+
+        date_inicio = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                calendar_inicio.set(Calendar.YEAR, year);
+                calendar_inicio.set(Calendar.MONTH, monthOfYear);
+                calendar_inicio.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+                textview_fecha_inicio.setText(df.format(calendar_inicio.getTime()));
+            }
+        };
+        date_fin = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                calendar_fin.set(Calendar.YEAR, year);
+                calendar_fin.set(Calendar.MONTH, monthOfYear);
+                calendar_fin.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+                textview_fecha_fin.setText(df.format(calendar_fin.getTime()));
+            }
+        };
+        time_inicio = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                calendar_inicio.set(Calendar.HOUR_OF_DAY, selectedHour);
+                calendar_inicio.set(Calendar.MINUTE, selectedMinute);
+
+                DateFormat df = new SimpleDateFormat("HH:mm");
+                textview_hora_inicio.setText(df.format(calendar_inicio.getTime()));
+            }
+        };
+        time_fin = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                calendar_fin.set(Calendar.HOUR_OF_DAY, selectedHour);
+                calendar_fin.set(Calendar.MINUTE, selectedMinute);
+
+                DateFormat df = new SimpleDateFormat("HH:mm");
+                textview_hora_fin.setText(df.format(calendar_fin.getTime()));
+            }
+        };
+
+        DateFormat df_fecha = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat df_hora = new SimpleDateFormat("HH:mm");
+
+        this.textview_fecha_inicio = (TextView)findViewById(R.id.lbl_fecha_inicio_crear_corte_programado);
+        this.textview_fecha_inicio.setText(df_fecha.format(calendar_inicio.getTime()));
+        this.textview_fecha_inicio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DatePickerDialog(CrearCorteProgramado.this,
+                        date_inicio,
+                        calendar_inicio.get(Calendar.YEAR),
+                        calendar_inicio.get(Calendar.MONTH),
+                        calendar_inicio.get(Calendar.DAY_OF_MONTH)
+                ).show();
+            }
+        });
+
+        this.textview_fecha_fin = (TextView)findViewById(R.id.lbl_fecha_fin_crear_corte_programado);
+        this.textview_fecha_fin.setText(df_fecha.format(calendar_fin.getTime()));
+        this.textview_fecha_fin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DatePickerDialog(CrearCorteProgramado.this,
+                        date_fin,
+                        calendar_fin.get(Calendar.YEAR),
+                        calendar_fin.get(Calendar.MONTH),
+                        calendar_fin.get(Calendar.DAY_OF_MONTH)
+                ).show();
+            }
+        });
+
+        this.textview_hora_inicio = (TextView)findViewById(R.id.lbl_hora_inicio_crear_corte_programado);
+        this.textview_hora_inicio.setText(df_hora.format(calendar_inicio.getTime()));
+        this.textview_hora_inicio.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 new TimePickerDialog(CrearCorteProgramado.this,
+                 time_inicio,
+                 calendar_inicio.get(Calendar.HOUR_OF_DAY),
+                 calendar_inicio.get(Calendar.MINUTE),
+                 true // es de 24 hs
+                 ).show();
+             }
+         });
+
+        this.textview_hora_fin = (TextView)findViewById(R.id.lbl_hora_fin_crear_corte_programado);
+        this.textview_hora_fin.setText(df_hora.format(calendar_fin.getTime()));
+        this.textview_hora_fin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new TimePickerDialog(CrearCorteProgramado.this,
+                        time_fin,
+                        calendar_fin.get(Calendar.HOUR_OF_DAY),
+                        calendar_fin.get(Calendar.MINUTE),
+                        true // es de 24 hs
+                ).show();
+            }
+        });
 
         Toast.makeText(this, "Para seleccionar ubicación mantener presionado el mapa", Toast.LENGTH_LONG).show();
     }
@@ -93,11 +214,6 @@ public class CrearCorteProgramado extends AppCompatActivity implements OnMapRead
         map_crear_corte_programado = googleMap;
         map_crear_corte_programado.setOnMapLongClickListener(this);
         map_crear_corte_programado.animateCamera(CameraUpdateFactory.newLatLngZoom(Constantes.BSAS, 11.0f));
-
-        if(posicion_gps != null)
-        {
-            this.actualizarMapaCrearCorteProgramado(posicion_gps);
-        }
     }
 
     public void crearCorteProgramado(View view)
@@ -157,35 +273,16 @@ public class CrearCorteProgramado extends AppCompatActivity implements OnMapRead
 
     public boolean construirFechas(StringBuilder fecha_inicio, StringBuilder fecha_fin){
 
-        String dia_inicio = ((EditText)findViewById(R.id.txt_fecha_inicio_dia_crear_corte_programado)).getText().toString();
-        String mes_inicio = ((EditText)findViewById(R.id.txt_fecha_inicio_mes_crear_corte_programado)).getText().toString();
-        String anio_inicio = ((EditText)findViewById(R.id.txt_fecha_inicio_anio_crear_corte_programado)).getText().toString();
-        String hora_inicio = ((EditText)findViewById(R.id.txt_fecha_inicio_hora_crear_corte_programado)).getText().toString();
-        String mins_inicio = ((EditText)findViewById(R.id.txt_fecha_inicio_minutos_crear_corte_programado)).getText().toString();
+        String str_fecha_inicio = textview_fecha_inicio.getText().toString() + " " + textview_hora_inicio.getText().toString();
+        String str_fecha_fin = textview_fecha_fin.getText().toString() + " " + textview_hora_fin.getText().toString();
 
-        String dia_fin = ((EditText)findViewById(R.id.txt_fecha_fin_dia_crear_corte_programado)).getText().toString();
-        String mes_fin = ((EditText)findViewById(R.id.txt_fecha_fin_mes_crear_corte_programado)).getText().toString();
-        String anio_fin = ((EditText)findViewById(R.id.txt_fecha_fin_anio_crear_corte_programado)).getText().toString();
-        String hora_fin = ((EditText)findViewById(R.id.txt_fecha_fin_hora_crear_corte_programado)).getText().toString();
-        String mins_fin = ((EditText)findViewById(R.id.txt_fecha_fin_minutos_crear_corte_programado)).getText().toString();
+        DateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        Date date_inicio = null;
+        Date date_fin = null;
 
-        if(dia_inicio.isEmpty() || mes_inicio.isEmpty() || anio_inicio.isEmpty() || hora_inicio.isEmpty() || mins_inicio.isEmpty()){
-            Toast.makeText(this, "Debe completar la fecha y hora de inicio", Toast.LENGTH_LONG).show();
-            return false;
-        }
-
-        if(dia_fin.isEmpty() || mes_fin.isEmpty() || anio_fin.isEmpty() || hora_fin.isEmpty() || mins_fin.isEmpty()){
-            Toast.makeText(this, "Debe completar la fecha y hora de finalizado", Toast.LENGTH_LONG).show();
-            return false;
-        }
-
-        String str_fecha_inicio = anio_inicio + "-" + mes_inicio + "-" + dia_inicio + " " + hora_inicio + ":" + mins_inicio;
-        String str_fecha_fin = anio_fin + "-" + mes_fin + "-" + dia_fin + " " + hora_fin + ":" + mins_fin;
-
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         try {
             df.setLenient(false);
-            df.parse(str_fecha_inicio);
+            date_inicio = df.parse(str_fecha_inicio);
         } catch (ParseException e) {
             Toast.makeText(this, "Error en el formato de fecha de inicio", Toast.LENGTH_LONG).show();
             return false;
@@ -193,27 +290,19 @@ public class CrearCorteProgramado extends AppCompatActivity implements OnMapRead
 
         try {
             df.setLenient(false);
-            df.parse(str_fecha_fin);
+            date_fin = df.parse(str_fecha_fin);
         } catch (ParseException e) {
             Toast.makeText(this, "Error en el formato de fecha de fin", Toast.LENGTH_LONG).show();
             return false;
         }
 
-        fecha_inicio.append(str_fecha_inicio);
-        fecha_fin.append(str_fecha_fin);
+        DateFormat df_base = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+
+        fecha_inicio.append(df_base.format(date_inicio));
+        fecha_fin.append(df_base.format(date_fin));
 
         return true;
-    }
-
-    @Override
-    public void actualizarPosicionActual(LatLng posicion)
-    {
-        this.posicion_gps = posicion;
-
-        if (map_crear_corte_programado != null && this.marcador_posicion_corte_programado == null)
-        {
-            this.actualizarMapaCrearCorteProgramado(posicion);
-        }
     }
 
     @Override
@@ -279,15 +368,6 @@ public class CrearCorteProgramado extends AppCompatActivity implements OnMapRead
                     new LatLng(this.marcador_posicion_corte_programado.getPosition().latitude,
                             this.marcador_posicion_corte_programado.getPosition().longitude),
                     14.0f));
-        }
-    }
-
-    public void marcarMapaEnPosicionGPS(View view)
-    {
-        if(this.posicion_gps != null)
-        {
-            this.actualizarMapaCrearCorteProgramado(this.posicion_gps);
-            this.centrarMapaEnMarcador(view);
         }
     }
 }

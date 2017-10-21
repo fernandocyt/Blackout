@@ -60,66 +60,42 @@
 
         </RelativeLayout>
 
-        <LinearLayout
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dirección"
+            android:layout_margin="5dp"
+            android:textSize="20sp"/>
+
+        <EditText
+            android:id="@+id/txt_direccion_crear_sucursal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_margin="10dp">
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:ems="10" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Dirección"
-                android:layout_margin="5dp"
-                android:textSize="20sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Teléfono"
+            android:layout_margin="5dp"
+            android:textSize="20sp"/>
 
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <EditText
-                android:id="@+id/txt_direccion_crear_sucursal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10" />
-
-
-        </LinearLayout>
-
-
-        <LinearLayout
+        <EditText
+            android:id="@+id/txt_telefono_crear_sucursal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_margin="10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Teléfono"
-                android:layout_margin="5dp"
-                android:textSize="20sp"/>
-
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <EditText
-                android:id="@+id/txt_telefono_crear_sucursal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10" />
-
-        </LinearLayout>
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:ems="10" />
 
         <Space
-            android:layout_width="match_parent"
+            android:layout_width="368dp"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            tools:layout_editor_absoluteY="0dp"
+            tools:layout_editor_absoluteX="8dp" />
 
         <Button
             android:id="@+id/btn_crear_sucursal"

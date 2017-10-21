@@ -8,7 +8,6 @@ import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.Objetos.PuntoInteres;
 import losmarinos.blackout.Objetos.Sucursal;
-import losmarinos.blackout.ProgressTask;
 import losmarinos.blackout.R;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ObservadorGPS;
