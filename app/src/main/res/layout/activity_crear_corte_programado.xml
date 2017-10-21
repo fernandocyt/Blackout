@@ -48,14 +48,6 @@
                     app:srcCompat="@android:drawable/ic_menu_mapmode"
                     android:onClick="centrarMapaEnMarcador"/>
 
-                <ImageButton
-                    android:id="@+id/btn_centrar_gps_crear_corte_programado"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
-                    app:srcCompat="@android:drawable/ic_menu_mylocation"
-                    android:onClick="marcarMapaEnPosicionGPS"/>
-
             </LinearLayout>
 
         </RelativeLayout>
