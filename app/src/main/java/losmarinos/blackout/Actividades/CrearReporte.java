@@ -44,6 +44,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static losmarinos.blackout.Constantes.RADIO_MINIMO;
 import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_REPORTE;
 
 public class CrearReporte extends AppCompatActivity implements OnMapReadyCallback,
@@ -82,7 +83,7 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
         this.seekbar_radio = (SeekBar)findViewById(R.id.skb_radio_crear_reporte);
         this.seekbar_radio.setOnSeekBarChangeListener(this);
         this.seekbar_radio.setMax(500);
-        this.seekbar_radio.setProgress(10);
+        this.seekbar_radio.setProgress(RADIO_MINIMO);
 
         this.spinner_servicios = (Spinner) findViewById(R.id.spn_servicios_crear_reporte);
         this.spinner_servicios.setOnItemSelectedListener(this);
@@ -196,8 +197,8 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
 
         LatLng posicion = marcador_posicion_reporte.getPosition();
         int radio = seekbar_radio.getProgress();
-        if(radio < 10){
-            radio = 10;
+        if(radio < RADIO_MINIMO){
+            radio = RADIO_MINIMO;
         }
 
         progress_dialog = Aviso.showProgressDialog(this, "Creando reporte...");
@@ -253,8 +254,8 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        if(progress < 10){
-            progress = 10;
+        if(progress < RADIO_MINIMO){
+            progress = RADIO_MINIMO;
         }
 
         this.textview_km_radio.setText(String.valueOf(progress) + "m");
@@ -290,8 +291,8 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
 
 
             int radio = seekbar_radio.getProgress();
-            if(radio < 10){
-                radio = 10;
+            if(radio < RADIO_MINIMO){
+                radio = RADIO_MINIMO;
             }
             // Agrego radio
             this.radio_reporte = map_crear_reporte.addCircle(new CircleOptions()

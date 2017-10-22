@@ -100,7 +100,9 @@
                     android:id="@+id/btn_centrar_marcador_crear_reporte"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@android:drawable/ic_menu_mapmode"
+                    app:srcCompat="@drawable/icono_centrar_marcador"
+                    android:background="@android:color/transparent"
+                    android:layout_margin="5dp"
                     android:onClick="centrarMapaEnMarcador"/>
 
                 <ImageButton
@@ -108,7 +110,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="15dp"
-                    app:srcCompat="@android:drawable/ic_menu_mylocation"
+                    app:srcCompat="@drawable/icono_centrar_usuario"
+                    android:background="@android:color/transparent"
+                    android:layout_margin="5dp"
                     android:onClick="marcarMapaEnPosicionGPS"/>
 
             </LinearLayout>

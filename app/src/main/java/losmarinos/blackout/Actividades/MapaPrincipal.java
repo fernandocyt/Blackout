@@ -18,7 +18,9 @@ import losmarinos.blackout.ServicioPeriodico;
 
 import android.Manifest;
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.opengl.Visibility;
 import android.os.Bundle;
@@ -74,6 +76,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
     ProgressBar progress_bar;
     TextView textview_carga;
     List<String> textos_carga;
+
+    public static boolean flag_cerrar_sesion = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,21 +225,44 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             Intent i = new Intent(getApplicationContext(), CrearEmpresa.class);
             startActivity(i);
         } else if (id == R.id.drawer_cerrar_sesion){
-            LocalDB.borrarArchivoJSONUsuario(this);
-            Global.vaciarTodo();
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which){
+                        case DialogInterface.BUTTON_POSITIVE:
+                            cerrarSesion();
+                            break;
 
-            // TODO: ARREGLAR ESTE CRASH
-            //if(isMyServiceRunning(ServicioPeriodico.class))
-            //    stopService(new Intent(this, ServicioPeriodico.class));
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            //No button clicked
+                            break;
+                    }
+                }
+            };
 
-            Intent i = new Intent(getApplicationContext(), Login.class);
-            startActivity(i);
-            this.finish();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("¿Seguro que quieres cerrar sesión?")
+                    .setPositiveButton("Si", dialogClickListener)
+                    .setNegativeButton("No", dialogClickListener)
+                    .show();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void cerrarSesion(){
+        LocalDB.borrarArchivoJSONUsuario(this);
+        Global.vaciarTodo();
+
+        // TODO: ARREGLAR ESTE CRASH
+        //if(isMyServiceRunning(ServicioPeriodico.class))
+        //    stopService(new Intent(this, ServicioPeriodico.class));
+
+        Intent i = new Intent(getApplicationContext(), Login.class);
+        startActivity(i);
+        this.finish();
     }
 
     @Override
@@ -345,6 +372,11 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
     @Override
     protected void onResume() {
         super.onResume();
+
+        if(flag_cerrar_sesion){
+            flag_cerrar_sesion = false;
+            this.cerrarSesion();
+        }
 
         if(mMap != null)
             this.actualizarMapaPrincipal(null);

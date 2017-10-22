@@ -1,5 +1,8 @@
 package losmarinos.blackout.Actividades;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,10 +12,16 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import losmarinos.blackout.Aviso;
+import losmarinos.blackout.ConsultorGETAPI;
+import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.Global;
 import losmarinos.blackout.LocalDB;
+import losmarinos.blackout.ParserJSON;
 import losmarinos.blackout.R;
 import losmarinos.blackout.Validador;
+
+import static losmarinos.blackout.Constantes.TAGAPI.DESHABILITAR_USUARIO;
 
 public class Preferencias extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener{
 
@@ -30,6 +39,8 @@ public class Preferencias extends AppCompatActivity implements CompoundButton.On
     EditText edittext_mail_usuario;
     EditText edittext_pass_usuario;
     EditText edittext_pass2_usuario;
+
+    ProgressDialog progress_dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +128,51 @@ public class Preferencias extends AppCompatActivity implements CompoundButton.On
     }
 
     public void bajaUsuario(View view){
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        realizarBajaUsuario();
+                        break;
 
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //No button clicked
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("¿Seguro que quieres dar de bara tu usuario?")
+                .setPositiveButton("Si", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener)
+                .show();
+    }
+
+    public void realizarBajaUsuario(){
+        progress_dialog = Aviso.showProgressDialog(this, "Dando de baja usuario");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int id = Global.usuario_actual.getIdUsuario();
+                try {
+                    String respuesta = new ConsultorGETAPI("user/deshabilitar", Global.token_usuario_actual, DESHABILITAR_USUARIO, null).execute().get();
+                    StringBuilder mensaje_error = new StringBuilder();
+                    if(ParserJSON.esError(respuesta, mensaje_error)){
+                        Aviso.hideProgressDialog(Preferencias.this, progress_dialog);
+                        Aviso.showToast(Preferencias.this, mensaje_error.toString());
+                    }else{
+                        Aviso.hideProgressDialog(Preferencias.this, progress_dialog);
+                        Aviso.showToast(Preferencias.this, "El usuario fue dado de baja exitosamente");
+                        MapaPrincipal.flag_cerrar_sesion = true;
+                        Preferencias.this.finish();
+                    }
+                }catch (Exception e){
+                    Aviso.hideProgressDialog(Preferencias.this, progress_dialog);
+                    Aviso.showToast(Preferencias.this, "Error");
+                }
+            }
+        }).start();
     }
 }

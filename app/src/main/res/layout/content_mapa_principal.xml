@@ -53,7 +53,9 @@
                 android:id="@+id/btn_actualizar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/ic_menu_rotate"
+                app:srcCompat="@drawable/icono_actualizar"
+                android:background="@android:color/transparent"
+                android:layout_marginBottom="10dp"
                 android:onClick="actualizarMapaPrincipal"/>
 
 
@@ -61,7 +63,9 @@
                 android:id="@+id/btn_centrar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/ic_menu_mylocation"
+                app:srcCompat="@drawable/icono_centrar_usuario"
+                android:background="@android:color/transparent"
+                android:layout_margin="10dp"
                 android:onClick="centrarMapaPrincipal"/>
 
         </LinearLayout>

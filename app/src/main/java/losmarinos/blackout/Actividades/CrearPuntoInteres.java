@@ -38,6 +38,7 @@ import losmarinos.blackout.ObservadorGPS;
 import losmarinos.blackout.ParserJSON;
 import losmarinos.blackout.R;
 
+import static losmarinos.blackout.Constantes.RADIO_MINIMO;
 import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_PUNTO_DE_INTERES;
 import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_REPORTE;
 
@@ -77,7 +78,8 @@ public class CrearPuntoInteres extends AppCompatActivity implements OnMapReadyCa
         this.textview_km_radio = (TextView)findViewById(R.id.lbl_km_radio_crear_punto_interes);
         this.seekbar_radio = (SeekBar)findViewById(R.id.skb_radio_crear_punto_interes);
         this.seekbar_radio.setOnSeekBarChangeListener(this);
-        this.seekbar_radio.setMax(500);
+        this.seekbar_radio.setMax(10000);
+        this.seekbar_radio.setProgress(RADIO_MINIMO);
         this.spinner_servicios = (Spinner) findViewById(R.id.spn_servicios_crear_punto_interes);
         this.spinner_servicios.setOnItemSelectedListener(this);
         this.spinner_empresas = (Spinner) findViewById(R.id.spn_empresas_crear_punto_interes);
@@ -171,6 +173,9 @@ public class CrearPuntoInteres extends AppCompatActivity implements OnMapReadyCa
 
         LatLng posicion = marcador_posicion_punto_interes.getPosition();
         int radio = seekbar_radio.getProgress();
+        if(radio < RADIO_MINIMO){
+            radio = RADIO_MINIMO;
+        }
 
         //PuntoInteres nuevo_punto_interes = new PuntoInteres(servicio, id_empresa, posicion, radio);
         //Global.usuario_actual.addPuntoInteres(nuevo_punto_interes);
@@ -229,6 +234,10 @@ public class CrearPuntoInteres extends AppCompatActivity implements OnMapReadyCa
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if(progress < RADIO_MINIMO){
+            progress = RADIO_MINIMO;
+        }
+
         this.textview_km_radio.setText(String.valueOf(progress) + "m");
 
         if(this.radio_punto_interes != null)
@@ -260,10 +269,15 @@ public class CrearPuntoInteres extends AppCompatActivity implements OnMapReadyCa
             this.marcador_posicion_punto_interes = map_crear_punto_interes.addMarker(new MarkerOptions()
                     .position(posicion_marcador));
 
+            int radio = seekbar_radio.getProgress();
+            if(radio < RADIO_MINIMO){
+                radio = RADIO_MINIMO;
+            }
+
             // Agrego radio
             this.radio_punto_interes = map_crear_punto_interes.addCircle(new CircleOptions()
                     .center(posicion_marcador)
-                    .radius(seekbar_radio.getProgress())
+                    .radius(radio)
                     .strokeColor(Constantes.STROKE_COLOR_CIRCLE)
                     .fillColor(Constantes.COLOR_CIRCLE)
                     .strokeWidth(5));

@@ -29,6 +29,8 @@ public class Constantes {
     // CALCULOS
     public static final int RADIO_SECU = 1000;
 
+    public static final int RADIO_MINIMO = 10;
+
 
     public enum TIPOSUSUARIO
     {
@@ -72,6 +74,7 @@ public class Constantes {
         BORRAR_RESPUESTA,
         BORRAR_COMENTARIO,
         DESHABILITAR_EMPRESA,
+        DESHABILITAR_USUARIO,
     }
 
     public enum SERVICIO

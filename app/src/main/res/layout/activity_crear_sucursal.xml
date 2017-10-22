@@ -45,7 +45,9 @@
                     android:id="@+id/btn_centrar_marcador_crear_sucursal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@android:drawable/ic_menu_mapmode"
+                    app:srcCompat="@drawable/icono_centrar_marcador"
+                    android:background="@android:color/transparent"
+                    android:layout_margin="5dp"
                     android:onClick="centrarMapaEnMarcador"/>
 
             </LinearLayout>
