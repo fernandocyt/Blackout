@@ -129,18 +129,20 @@ public class Empresa extends Usuario {
         return cortes;
     }
 
-    public void actualizarSucursales(Activity activity){
+    public boolean actualizarSucursales(Activity activity){
         try {
             String respuesta = new ConsultorGETAPI("empresa/"+String.valueOf(this.getSubId())+"/sucursales",
                     Global.token_usuario_actual, OBTENER_SUCURSALES_POR_EMPRESA, null).execute().get();
             StringBuilder msg_error = new StringBuilder();
             if(ParserJSON.esError(respuesta, msg_error)){
-                Aviso.showToast(activity, "No es posible cargar sucursales");
-                return;
+                return false;
             }else{
                 this.sucursales = ParserJSON.obtenerSucursales(respuesta);
+                return true;
             }
-        }catch (Exception e){}
+        }catch (Exception e){
+            return false;
+        }
     }
 
     public void actualizarComentarios(Activity activity){

@@ -35,6 +35,14 @@ public class Global implements ObservadorAPI {
     public static List<Empresa> empresas = new ArrayList<>();
     public static List<Reporte> reportes = new ArrayList<>();
 
+    public static boolean cargo_usuarios = true;
+    public static boolean cargo_empresas = true;
+    public static boolean cargo_cortes_interes = true;
+    public static boolean cargo_cortes = true;
+    public static boolean cargo_reportes = true;
+    public static boolean cargo_puntos_interes = true;
+    public static boolean cargo_sucursales = true;
+
     public static MapaPrincipal mapa_principal;
 
     public static void vaciarTodo(){
@@ -51,69 +59,60 @@ public class Global implements ObservadorAPI {
             switch(tag){
                 case OBTENER_CORTES:
                         if(ParserJSON.esError(respuesta, msg_error)){
-                            this.mostrarToastEnMapaPrincipal("Error al obtener cortes");
-                            return;
+                            this.cargo_cortes = false;
                         }else{
+                            this.cargo_cortes = true;
                             Global.cortes = ParserJSON.obtenerCortes(respuesta);
-                            this.cargarCortesEnMapaPrincipal();
                         }
+                        this.cargarCortesEnMapaPrincipal();
                     break;
                 case OBTENER_EMPRESAS:
                     if(ParserJSON.esError(respuesta, msg_error)){
-                        this.mostrarToastEnMapaPrincipal("Error al obtener empresas");
-                        return;
+                        this.cargo_empresas = false;
                     }else{
+                        this.cargo_empresas = true;
                         Global.empresas = ParserJSON.obtenerEmpresas(respuesta);
                     }
+                    this.cargarEmpresasEnMapaPrincipal();
                     break;
                 case OBTENER_REPORTES:
                     if(ParserJSON.esError(respuesta, msg_error)){
-                        this.mostrarToastEnMapaPrincipal("Error al obtener reportes");
-                        return;
+                        this.cargo_reportes = false;
                     }else{
+                        this.cargo_reportes = true;
                         Global.reportes = ParserJSON.obtenerReportes(respuesta);
-                        this.cargarReportesEnMapaPrincipal();
                     }
+                    this.cargarReportesEnMapaPrincipal();
                     break;
                 case OBTENER_USUARIOS:
                     if(ParserJSON.esError(respuesta, msg_error)){
-                        this.mostrarToastEnMapaPrincipal("Error al obtener usuarios");
-                        return;
+                        this.cargo_usuarios = false;
                     }else{
+                        this.cargo_usuarios = true;
                         Global.usuarios = ParserJSON.obtenerUsuarios(respuesta);
                     }
+                    this.cargarUsuariosEnMapaPrincipal();
                     break;
                 case OBTENER_PUNTOSINTERES_POR_USUARIO:
                     if(ParserJSON.esError(respuesta, msg_error)){
-                        this.mostrarToastEnMapaPrincipal("Error al obtener puntos de interes del usuario");
-                        return;
+                        this.cargo_puntos_interes = false;
                     }else{
+                        this.cargo_puntos_interes = true;
                         Global.usuario_actual.setPuntosInteres(ParserJSON.obtenerPuntosInteres(respuesta));
-                        this.cargarPuntosDeInteresEnMapaPrincipal();
                     }
+                    this.cargarPuntosDeInteresEnMapaPrincipal();
                     break;
                 case OBTENER_CORTESINTERES_POR_USUARIO:
                     if(ParserJSON.esError(respuesta, msg_error)){
-                        this.mostrarToastEnMapaPrincipal("Error al obtener cortes de interes del usuario");
-                        return;
+                        this.cargo_cortes_interes = false;
                     }else{
+                        this.cargo_cortes_interes = true;
                         Global.usuario_actual.setCortesInteres(ParserJSON.obtenerCortesInteres(respuesta));
                     }
+                    this.cargarCortesInteresEnMapaPrincipal();
                     break;
             }
         }catch (Exception e){}
-    }
-
-    public void mostrarToastEnMapaPrincipal(String mensaje){
-        final String mensaje_mostrar = mensaje;
-        if(mapa_principal != null) {
-            mapa_principal.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(mapa_principal, mensaje_mostrar, Toast.LENGTH_LONG).show();
-                }
-            });
-        }
     }
 
     public void cargarReportesEnMapaPrincipal(){
@@ -144,6 +143,39 @@ public class Global implements ObservadorAPI {
                 @Override
                 public void run() {
                     mapa_principal.cargarPuntosInteresEnMapa();
+                }
+            });
+        }
+    }
+
+    public void cargarEmpresasEnMapaPrincipal(){
+        if(mapa_principal != null) {
+            mapa_principal.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mapa_principal.cargarEmpresas();
+                }
+            });
+        }
+    }
+
+    public void cargarUsuariosEnMapaPrincipal(){
+        if(mapa_principal != null) {
+            mapa_principal.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mapa_principal.cargarUsuarios();
+                }
+            });
+        }
+    }
+
+    public void cargarCortesInteresEnMapaPrincipal(){
+        if(mapa_principal != null) {
+            mapa_principal.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mapa_principal.cargarCortesInteres();
                 }
             });
         }

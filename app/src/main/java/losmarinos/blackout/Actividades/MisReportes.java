@@ -52,15 +52,20 @@ public class MisReportes extends AppCompatActivity implements OnMapReadyCallback
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Global.usuario_actual.actualizarReportes(MisReportes.this);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        cargarListView();
-                        cargarMapa();
-                        Aviso.hideProgressDialog(MisReportes.this, progress_dialog);
-                    }
-                });
+                boolean correcto = Global.usuario_actual.actualizarReportes(MisReportes.this);
+                if(correcto) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            cargarListView();
+                            cargarMapa();
+                            Aviso.hideProgressDialog(MisReportes.this, progress_dialog);
+                        }
+                    });
+                }else{
+                    Aviso.showToast(MisReportes.this, "Error al obtener reportes");
+                    MisReportes.this.finish();
+                }
             }
         }).start();
     }

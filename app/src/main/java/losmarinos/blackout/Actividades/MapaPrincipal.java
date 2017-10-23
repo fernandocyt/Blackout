@@ -1,5 +1,6 @@
 package losmarinos.blackout.Actividades;
 
+import losmarinos.blackout.Aviso;
 import losmarinos.blackout.Calculos;
 import losmarinos.blackout.ConsultorGETAPI;
 import losmarinos.blackout.Global;
@@ -73,9 +74,21 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
     Marker marcador_posicion_actual = null;
     Circle radio_reporte_seleccionado = null;
 
+    List<Marker> marcadores_cortes = new ArrayList<>();
+    List<Circle> radios_cortes = new ArrayList<>();
+
+    List<Marker> marcadores_reportes = new ArrayList<>();
+
+    List<Marker> marcadores_puntos_interes = new ArrayList<>();
+    List<Circle> radios_puntos_interes = new ArrayList<>();
+
+    List<Marker> marcadores_sucursales = new ArrayList<>();
+
+    // Cargando
     ProgressBar progress_bar;
     TextView textview_carga;
     List<String> textos_carga;
+
 
     public static boolean flag_cerrar_sesion = false;
 
@@ -116,7 +129,10 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         new ConsultorGETAPI("usuarios/" + String.valueOf(Global.usuario_actual.getIdUsuario()) + "/puntos-de-interes", Global.token_usuario_actual, OBTENER_PUNTOSINTERES_POR_USUARIO, new Global()).execute();
         new ConsultorGETAPI("usuarios/" + String.valueOf(Global.usuario_actual.getIdUsuario()) + "/cortes-de-interes", Global.token_usuario_actual, OBTENER_CORTESINTERES_POR_USUARIO, new Global()).execute();
 
+        textos_carga.add("Cargando empresas...");
+        textos_carga.add("Cargando usuarios...");
         textos_carga.add("Cargando puntos de interes...");
+        textos_carga.add("Cargando cortes de interes...");
         this.inicioCarga();
     }
 
@@ -341,7 +357,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
     public void actualizarMapaPrincipal(View view)
     {
-        mMap.clear();
+        //mMap.clear();
 
         new ConsultorGETAPI("cortes", Global.token_usuario_actual, OBTENER_CORTES, new Global()).execute();
         new ConsultorGETAPI("reporte", Global.token_usuario_actual, OBTENER_REPORTES, new Global()).execute();
@@ -352,16 +368,29 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         this.inicioCarga();
 
         if(FiltrarMapaPrincipal.mostrar_sucursales && FiltrarMapaPrincipal.id_empresa != -1){
-            Empresa empresa = Global.encontrarEmpresaPorId(FiltrarMapaPrincipal.id_empresa);
+            final Empresa empresa = Global.encontrarEmpresaPorId(FiltrarMapaPrincipal.id_empresa);
             textos_carga.add("Cargando sucursales...");
-            empresa.actualizarSucursales(this);
-            this.cargarSucursalesEnMapa(empresa);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Global.cargo_sucursales = empresa.actualizarSucursales(MapaPrincipal.this);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            cargarSucursalesEnMapa(empresa);
+                        }
+                    });
+                }
+            }).start();
+        }else{
+            vaciarListaMarcadores(marcadores_sucursales);
         }
 
         //Global.calcularNuevosCortes();
 
         //this.cargarCortesEnMapa();
         //this.cargarReportesEnMapa();
+        textos_carga.add("Cargando puntos de interes...");
         this.cargarPuntosInteresEnMapa();
 
         this.marcador_posicion_actual = null;
@@ -382,31 +411,51 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             this.actualizarMapaPrincipal(null);
     }
 
+    public void cargarEmpresas(){
+        this.terminoCarga();
+    }
+
+    public void cargarUsuarios(){
+        this.terminoCarga();
+    }
+
+    public void cargarCortesInteres(){
+        this.terminoCarga();
+    }
 
     public void cargarPuntosInteresEnMapa()
     {
         if (!FiltrarMapaPrincipal.mostrar_puntos_interes){
+            vaciarListaMarcadores(marcadores_puntos_interes);
+            vaciarListaRadios(radios_puntos_interes);
             this.terminoCarga();
             return;
         }
 
-        List<PuntoInteres> puntos = Global.usuario_actual.getPuntosInteres();
-        for(int i = 0; i < puntos.size(); i++) {
-            PuntoInteres punto_actual = puntos.get(i);
+        if(Global.cargo_puntos_interes) {
+            vaciarListaMarcadores(marcadores_puntos_interes);
+            vaciarListaRadios(radios_puntos_interes);
 
-            Marker punto = mMap.addMarker(new MarkerOptions()
-                    .position(punto_actual.getUbicacion())
-                    .title("Punto de interes")
-                    .snippet(punto_actual.generarTexto())
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_punto_interes)));
-            punto.setTag(punto_actual);
+            List<PuntoInteres> puntos = Global.usuario_actual.getPuntosInteres();
+            for (int i = 0; i < puntos.size(); i++) {
+                PuntoInteres punto_actual = puntos.get(i);
 
-            mMap.addCircle(new CircleOptions()
-                    .center(punto_actual.getUbicacion())
-                    .radius(punto_actual.getRadio())
-                    .strokeColor(Constantes.STROKE_COLOR_CIRCLE)
-                    .fillColor(0x30ff0000)
-                    .strokeWidth(5));
+                Marker punto = mMap.addMarker(new MarkerOptions()
+                        .position(punto_actual.getUbicacion())
+                        .title("Punto de interes")
+                        .snippet(punto_actual.generarTexto())
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_punto_interes)));
+                punto.setTag(punto_actual);
+                marcadores_puntos_interes.add(punto);
+
+                Circle radio = mMap.addCircle(new CircleOptions()
+                        .center(punto_actual.getUbicacion())
+                        .radius(punto_actual.getRadio())
+                        .strokeColor(Constantes.STROKE_COLOR_CIRCLE)
+                        .fillColor(0x30ff0000)
+                        .strokeWidth(5));
+                radios_puntos_interes.add(radio);
+            }
         }
 
         this.terminoCarga();
@@ -414,54 +463,60 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
     public void cargarCortesEnMapa() {
         if (!FiltrarMapaPrincipal.mostrar_cortes){
+            vaciarListaMarcadores(marcadores_cortes);
+            vaciarListaRadios(radios_cortes);
             this.terminoCarga();
             return;
         }
 
-        List<Corte> cortes = Global.cortes;
-        for(int i = 0; i < cortes.size(); i++)
-        {
-            Corte corte_actual = cortes.get(i);
+        if(Global.cargo_cortes) {
+            vaciarListaMarcadores(marcadores_cortes);
+            vaciarListaRadios(radios_cortes);
 
-            if(corte_actual.isResuelto()) {
-                continue;
+            List<Corte> cortes = Global.cortes;
+            for (int i = 0; i < cortes.size(); i++) {
+                Corte corte_actual = cortes.get(i);
+
+                if (corte_actual.isResuelto()) {
+                    continue;
+                }
+
+                if (FiltrarMapaPrincipal.id_empresa != -1 &&
+                        FiltrarMapaPrincipal.id_empresa != corte_actual.getIdEmpresa()) {
+                    continue;
+                }
+
+                if (FiltrarMapaPrincipal.servicio != null &&
+                        FiltrarMapaPrincipal.servicio != corte_actual.getServicio()) {
+                    continue;
+                }
+
+                boolean programado = corte_actual.isProgramado();
+                boolean interes = Global.usuario_actual.esCorteDeInteres(corte_actual.getId());
+
+                if (programado && !interes && !FiltrarMapaPrincipal.mostrar_cortes_programados) {
+                    continue;
+                }
+
+                if (interes && !programado && !FiltrarMapaPrincipal.mostrar_cortes_interes) {
+                    continue;
+                }
+
+                Marker corte = mMap.addMarker(new MarkerOptions()
+                        .position(corte_actual.getUbicacion())
+                        .title("Corte")
+                        .icon(Constantes.getIconoCorte(corte_actual.getServicio(), programado, interes)));
+                corte.setTag(corte_actual);
+                marcadores_cortes.add(corte);
+
+                Circle radio = mMap.addCircle(new CircleOptions()
+                        .center(corte_actual.getUbicacion())
+                        .radius(corte_actual.getRadio())
+                        .strokeColor(Constantes.STROKE_COLOR_CIRCLE)
+                        .fillColor(Constantes.COLOR_CIRCLE)
+                        .strokeWidth(5));
+                radios_cortes.add(radio);
             }
-
-            if(FiltrarMapaPrincipal.id_empresa != -1 &&
-                FiltrarMapaPrincipal.id_empresa != corte_actual.getIdEmpresa())
-            {
-                continue;
-            }
-
-            if(FiltrarMapaPrincipal.servicio != null &&
-                    FiltrarMapaPrincipal.servicio != corte_actual.getServicio())
-            {
-                continue;
-            }
-
-            boolean programado = corte_actual.isProgramado();
-            boolean interes = Global.usuario_actual.esCorteDeInteres(corte_actual.getId());
-
-            if(programado && !interes && !FiltrarMapaPrincipal.mostrar_cortes_programados){
-                continue;
-            }
-
-            if(interes && !programado && !FiltrarMapaPrincipal.mostrar_cortes_interes){
-                continue;
-            }
-
-            Marker corte = mMap.addMarker(new MarkerOptions()
-                    .position(corte_actual.getUbicacion())
-                    .title("Corte")
-                    .icon(Constantes.getIconoCorte(corte_actual.getServicio(), programado, interes)));
-            corte.setTag(corte_actual);
-
-            mMap.addCircle(new CircleOptions()
-                    .center(corte_actual.getUbicacion())
-                    .radius(corte_actual.getRadio())
-                    .strokeColor(Constantes.STROKE_COLOR_CIRCLE)
-                    .fillColor(Constantes.COLOR_CIRCLE)
-                    .strokeWidth(5));
         }
         this.terminoCarga();
     }
@@ -469,37 +524,40 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
     public void cargarReportesEnMapa()
     {
         if(!FiltrarMapaPrincipal.mostrar_reportes) {
+            vaciarListaMarcadores(marcadores_reportes);
             this.terminoCarga();
             return;
         }
 
-        List<Reporte> reportes = Global.reportes;
-        for(int i = 0; i < reportes.size(); i++)
-        {
-            Reporte rep_actual = reportes.get(i);
+        if(Global.cargo_reportes) {
+            vaciarListaMarcadores(marcadores_reportes);
 
-            if(FiltrarMapaPrincipal.id_empresa != -1 &&
-                    FiltrarMapaPrincipal.id_empresa != rep_actual.getIdEmpresa())
-            {
-                continue;
+            List<Reporte> reportes = Global.reportes;
+            for (int i = 0; i < reportes.size(); i++) {
+                Reporte rep_actual = reportes.get(i);
+
+                if (FiltrarMapaPrincipal.id_empresa != -1 &&
+                        FiltrarMapaPrincipal.id_empresa != rep_actual.getIdEmpresa()) {
+                    continue;
+                }
+
+                if (FiltrarMapaPrincipal.servicio != null &&
+                        FiltrarMapaPrincipal.servicio != rep_actual.getServicio()) {
+                    continue;
+                }
+
+                if (rep_actual.isResuelto()) {
+                    continue;
+                }
+
+                Marker reporte = mMap.addMarker(new MarkerOptions()
+                        .position(rep_actual.getUbicacion())
+                        .title("Reporte")
+                        .snippet(rep_actual.generarSnippet())
+                        .icon(Constantes.getIconoReporte(rep_actual.getServicio())));
+                reporte.setTag(rep_actual);
+                marcadores_reportes.add(reporte);
             }
-
-            if(FiltrarMapaPrincipal.servicio != null &&
-                    FiltrarMapaPrincipal.servicio != rep_actual.getServicio())
-            {
-                continue;
-            }
-
-            if(rep_actual.isResuelto()) {
-                continue;
-            }
-
-            mMap.addMarker(new MarkerOptions()
-                    .position(rep_actual.getUbicacion())
-                    .title("Reporte")
-                    .snippet(rep_actual.generarSnippet())
-                    .icon(Constantes.getIconoReporte(rep_actual.getServicio())))
-            .setTag(rep_actual);
         }
 
         this.terminoCarga();
@@ -507,17 +565,20 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
     public void cargarSucursalesEnMapa(Empresa empresa)
     {
-        List<Sucursal> sucursales = empresa.getSucursales();
-        for(int i = 0; i < sucursales.size(); i++)
-        {
-            Sucursal sucursal = sucursales.get(i);
+        if(Global.cargo_sucursales) {
+            vaciarListaMarcadores(marcadores_sucursales);
 
-            mMap.addMarker(new MarkerOptions()
-                    .position(sucursales.get(i).getUbicacion())
-                    .title("Sucursal " + empresa.getNombre())
-                    .snippet(sucursal.getDireccion() + " (Tel: " + sucursal.getTelefono() + ")")
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_sucursal)));
+            List<Sucursal> sucursales = empresa.getSucursales();
+            for (int i = 0; i < sucursales.size(); i++) {
+                Marker sucursal = mMap.addMarker(new MarkerOptions()
+                        .position(sucursales.get(i).getUbicacion())
+                        .title("Sucursal " + empresa.getNombre())
+                        .snippet(sucursales.get(i).getDireccion() + " (Tel: " + sucursales.get(i).getTelefono() + ")")
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_sucursal)));
+                marcadores_sucursales.add(sucursal);
+            }
         }
+        terminoCarga();
     }
 
     public void inicioCarga(){
@@ -534,6 +595,11 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             textos_carga.clear();
             textview_carga.setVisibility(View.GONE);
             progress_bar.setVisibility(View.GONE);
+
+            if(!Global.cargo_usuarios || !Global.cargo_empresas || !Global.cargo_cortes
+                    || !Global.cargo_reportes || !Global.cargo_puntos_interes || !Global.cargo_cortes_interes){
+                Aviso.showToast(this, "Error al actualizar datos. Compruebe su conexión a internet.");
+            }
         }
     }
 
@@ -547,6 +613,20 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
                 throw e;
             }
         }
+    }
+
+    public void vaciarListaMarcadores(List<Marker> lista){
+        for(int i = 0; i < lista.size(); i++){
+            lista.get(i).remove();
+        }
+        lista.clear();
+    }
+
+    public void vaciarListaRadios(List<Circle> lista){
+        for(int i = 0; i < lista.size(); i++){
+            lista.get(i).remove();
+        }
+        lista.clear();
     }
 }
 

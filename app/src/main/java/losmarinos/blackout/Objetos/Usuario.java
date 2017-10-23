@@ -154,9 +154,6 @@ public class Usuario {
             String respuesta = new ConsultorGETAPI("usuarios/" + String.valueOf(this.id) + "/reportes", Global.token_usuario_actual, OBTENER_REPORTES_POR_USUARIO, null).execute().get();
             StringBuilder msg_error = new StringBuilder();
             if(ParserJSON.esError(respuesta, msg_error)){
-                if(activity != null) {
-                    Aviso.showToast(activity, "No es posible obtener los reportes");
-                }
                 return false;
             }else{
                 this.reportes = ParserJSON.obtenerReportesPorUsuario(respuesta);
