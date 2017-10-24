@@ -50,7 +50,7 @@
                 android:layout_weight="1" />
 
             <ImageButton
-                android:id="@+id/btn_actualizar"
+                android:id="@+id/btn_actualizar_mapa_principal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/icono_actualizar"
@@ -60,7 +60,7 @@
 
 
             <ImageButton
-                android:id="@+id/btn_centrar"
+                android:id="@+id/btn_centrar_mapa_principal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/icono_centrar_usuario"

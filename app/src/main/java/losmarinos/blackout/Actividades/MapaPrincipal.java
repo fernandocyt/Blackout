@@ -35,6 +35,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -71,6 +73,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
                                                                 GoogleMap.OnMarkerClickListener,
                                                                 ObservadorGPS{
     GoogleMap mMap;
+    ImageButton button_actualizar;
     Marker marcador_posicion_actual = null;
     Circle radio_reporte_seleccionado = null;
 
@@ -96,6 +99,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapa_principal);
+
+        button_actualizar = (ImageButton)findViewById(R.id.btn_actualizar_mapa_principal);
 
         // SERVICIO
         if(!isMyServiceRunning(ServicioPeriodico.class))
@@ -358,9 +363,14 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
     public void actualizarMapaPrincipal(View view)
     {
         //mMap.clear();
+        button_actualizar.setVisibility(View.GONE);
+        textos_carga.clear();
+        textview_carga.setVisibility(View.GONE);
+        progress_bar.setVisibility(View.GONE);
 
         new ConsultorGETAPI("cortes", Global.token_usuario_actual, OBTENER_CORTES, new Global()).execute();
         new ConsultorGETAPI("reporte", Global.token_usuario_actual, OBTENER_REPORTES, new Global()).execute();
+        new ConsultorGETAPI("usuarios/" + String.valueOf(Global.usuario_actual.getIdUsuario()) + "/puntos-de-interes", Global.token_usuario_actual, OBTENER_PUNTOSINTERES_POR_USUARIO, new Global()).execute();
 
         textos_carga.add("Cargando cortes...");
         textos_carga.add("Cargando reportes...");
@@ -386,16 +396,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             vaciarListaMarcadores(marcadores_sucursales);
         }
 
-        //Global.calcularNuevosCortes();
-
-        //this.cargarCortesEnMapa();
-        //this.cargarReportesEnMapa();
         textos_carga.add("Cargando puntos de interes...");
         this.cargarPuntosInteresEnMapa();
-
-        this.marcador_posicion_actual = null;
-        if(GPSTracker.ubicacion_actual != null)
-            this.actualizarPosicionActual(GPSTracker.ubicacion_actual);
     }
 
     @Override
@@ -595,6 +597,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             textos_carga.clear();
             textview_carga.setVisibility(View.GONE);
             progress_bar.setVisibility(View.GONE);
+            button_actualizar.setVisibility(View.VISIBLE);
 
             if(!Global.cargo_usuarios || !Global.cargo_empresas || !Global.cargo_cortes
                     || !Global.cargo_reportes || !Global.cargo_puntos_interes || !Global.cargo_cortes_interes){
