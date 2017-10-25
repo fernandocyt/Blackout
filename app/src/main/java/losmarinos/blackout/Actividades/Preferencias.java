@@ -144,7 +144,7 @@ public class Preferencias extends AppCompatActivity implements CompoundButton.On
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("¿Seguro que quieres dar de bara tu usuario?")
+        builder.setMessage("¿Seguro que quieres dar de baja tu usuario?")
                 .setPositiveButton("Si", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener)
                 .show();

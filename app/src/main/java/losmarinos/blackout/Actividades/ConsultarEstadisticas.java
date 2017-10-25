@@ -87,7 +87,7 @@ public class ConsultarEstadisticas extends AppCompatActivity implements AdapterV
         List<String> spinnerArray =  new ArrayList<String>();
         spinnerArray.add("Mayor a menor");
         spinnerArray.add("Menor a mayor");
-        spinnerArray.add("Alfabeticamente");
+        spinnerArray.add("Alfabéticamente");
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, spinnerArray);

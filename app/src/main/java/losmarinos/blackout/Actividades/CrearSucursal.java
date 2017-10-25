@@ -89,7 +89,7 @@ public class CrearSucursal extends AppCompatActivity implements OnMapReadyCallba
     public void crearSucursal(View view)
     {
         if(this.marcador_posicion_sucursal == null){
-            Toast.makeText(this, "Debe marcar una posicion en el mapa", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Debe marcar una posición en el mapa", Toast.LENGTH_LONG).show();
             return;
         }
 

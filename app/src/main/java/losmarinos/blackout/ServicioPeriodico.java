@@ -245,7 +245,7 @@ public class ServicioPeriodico extends Service implements Runnable, ObservadorAP
 
                     LocalDB.agregarArchivoJSONCortesAvisados(this.context, corte_actual.getId(), false);
 
-                    this.notificar("Nuevo corte de " + Constantes.servicioToString(corte_actual.getServicio()) + " en tu punto de interes");
+                    this.notificar("Nuevo corte de " + Constantes.servicioToString(corte_actual.getServicio()) + " en tu punto de interés");
                 }
             }
         }
@@ -272,7 +272,7 @@ public class ServicioPeriodico extends Service implements Runnable, ObservadorAP
             {
                 LocalDB.agregarArchivoJSONCortesAvisados(this.context, corte_actual.getId(), true);
 
-                this.notificar("Tu corte de interes fue resuelto");
+                this.notificar("Tu corte de interés fue resuelto");
             }
         }
     }
@@ -299,7 +299,7 @@ public class ServicioPeriodico extends Service implements Runnable, ObservadorAP
                 reporte_actual.resolver();
 
                 String str_servicio = Constantes.servicioToString(reporte_actual.getServicio());
-                this.notificar("Se resolvio el reporte de " + str_servicio);
+                this.notificar("Se resolvió el reporte de " + str_servicio);
             }
         }
     }
@@ -320,7 +320,7 @@ public class ServicioPeriodico extends Service implements Runnable, ObservadorAP
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("ATENCION")
+                .setContentTitle("ATENCIÓN")
                 .setContentText(mensaje);
 
         if(sonar[0] == 1){

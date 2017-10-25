@@ -219,7 +219,7 @@ public class CrearCorteProgramado extends AppCompatActivity implements OnMapRead
     public void crearCorteProgramado(View view)
     {
         if(this.marcador_posicion_corte_programado == null){
-            Toast.makeText(this, "Debe marcar una posicion en el mapa", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Debe marcar una posición en el mapa", Toast.LENGTH_LONG).show();
             return;
         }
 

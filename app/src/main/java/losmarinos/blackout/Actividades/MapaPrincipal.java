@@ -136,8 +136,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
         textos_carga.add("Cargando empresas...");
         textos_carga.add("Cargando usuarios...");
-        textos_carga.add("Cargando puntos de interes...");
-        textos_carga.add("Cargando cortes de interes...");
+        textos_carga.add("Cargando puntos de interés...");
+        textos_carga.add("Cargando cortes de interés...");
         this.inicioCarga();
     }
 
@@ -396,7 +396,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             vaciarListaMarcadores(marcadores_sucursales);
         }
 
-        textos_carga.add("Cargando puntos de interes...");
+        textos_carga.add("Cargando puntos de interés...");
         this.cargarPuntosInteresEnMapa();
     }
 
@@ -444,7 +444,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
                 Marker punto = mMap.addMarker(new MarkerOptions()
                         .position(punto_actual.getUbicacion())
-                        .title("Punto de interes")
+                        .title("Punto de interés")
                         .snippet(punto_actual.generarTexto())
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_punto_interes)));
                 punto.setTag(punto_actual);

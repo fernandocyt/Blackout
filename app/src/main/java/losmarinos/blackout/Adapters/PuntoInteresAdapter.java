@@ -104,7 +104,7 @@ public class PuntoInteresAdapter extends BaseAdapter implements ListAdapter {
         button_borrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progress_dialog = Aviso.showProgressDialog(PuntoInteresAdapter.actividad, "Borrando punto de interes");
+                progress_dialog = Aviso.showProgressDialog(PuntoInteresAdapter.actividad, "Borrando punto de interés");
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -118,9 +118,9 @@ public class PuntoInteresAdapter extends BaseAdapter implements ListAdapter {
                                     PuntoInteresAdapter.actividad.cargarMapa();
                                 }
                             });
-                            Aviso.showToast(PuntoInteresAdapter.actividad, "Punto de interes borrado");
+                            Aviso.showToast(PuntoInteresAdapter.actividad, "Punto de interés borrado");
                         }else{
-                            Aviso.showToast(PuntoInteresAdapter.actividad, "No se pudo borrar el punto de interes");
+                            Aviso.showToast(PuntoInteresAdapter.actividad, "No se pudo borrar el punto de interés");
                         }
                         Aviso.hideProgressDialog(PuntoInteresAdapter.actividad, progress_dialog);
                     }

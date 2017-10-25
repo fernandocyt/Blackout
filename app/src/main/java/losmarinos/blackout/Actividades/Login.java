@@ -174,7 +174,7 @@ public class Login extends AppCompatActivity {
                 catch (Exception e)
                 {
                     Aviso.hideProgressDialog(Login.this, dialog);
-                    Aviso.showToast(Login.this, "Se ah producido un error logeando");
+                    Aviso.showToast(Login.this, "Se ha producido un error logeando");
                     return;
                 }
             }

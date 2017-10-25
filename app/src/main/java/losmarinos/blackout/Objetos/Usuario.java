@@ -170,7 +170,7 @@ public class Usuario {
             StringBuilder msg_error = new StringBuilder();
             if(ParserJSON.esError(respuesta, msg_error)){
                 if(activity != null) {
-                    Aviso.showToast(activity, "No es posible obtener los puntos de interes");
+                    Aviso.showToast(activity, "No es posible obtener los puntos de interés");
                 }
                 return;
             }else{
@@ -185,7 +185,7 @@ public class Usuario {
             StringBuilder msg_error = new StringBuilder();
             if(ParserJSON.esError(respuesta, msg_error)){
                 if(activity != null) {
-                    Aviso.showToast(activity, "No es posible actualizar los cortes de interes");
+                    Aviso.showToast(activity, "No es posible actualizar los cortes de interés");
                 }
                 return;
             }else{

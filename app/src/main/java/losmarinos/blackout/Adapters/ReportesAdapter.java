@@ -102,7 +102,7 @@ public class ReportesAdapter extends BaseAdapter implements ListAdapter {
         Date ahora = Calendar.getInstance().getTime();
         long dif_horas_conf_horas = (ahora.getTime() - fecha_confirm.getTime()) / (60 * 60 * 1000);
 
-        textview_confirmacion.setText("Ultima confirmacion:\n" + str_fecha + " (hace " + String.valueOf(dif_horas_conf_horas) + "hs)");
+        textview_confirmacion.setText("Ultima confirmación:\n" + str_fecha + " (hace " + String.valueOf(dif_horas_conf_horas) + "hs)");
 
 
         button_resolver.setOnClickListener(new View.OnClickListener() {
@@ -123,7 +123,7 @@ public class ReportesAdapter extends BaseAdapter implements ListAdapter {
                             });
                             Aviso.showToast(ReportesAdapter.actividad, "Reporte de " + Constantes.servicioToString(list.get(position).getServicio()) + " resuelto");
                         }else{
-                            Aviso.showToast(ReportesAdapter.actividad, "No se pudo resolver reporte");
+                            Aviso.showToast(ReportesAdapter.actividad, "No se pudo resolver el reporte");
                         }
                         Aviso.hideProgressDialog(ReportesAdapter.actividad, progress_dialog);
                     }

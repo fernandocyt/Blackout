@@ -246,7 +246,7 @@ public class Calculos {
                 valorEmpresa nuevo_stat = new valorEmpresa();
                 nuevo_stat.id_empresa = empresas.get(i).getSubId();
                 nuevo_stat.valor = -1;
-                nuevo_stat.unidad = "dias";
+                nuevo_stat.unidad = "días";
                 stat_empresas.add(nuevo_stat);
             }
         }

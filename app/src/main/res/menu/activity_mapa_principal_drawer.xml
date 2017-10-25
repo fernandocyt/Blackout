@@ -12,7 +12,7 @@
             android:title="Reporte" />
         <item
             android:id="@+id/drawer_agregar_punto_interes"
-            android:title="Punto de Interes" />
+            android:title="Punto de Interés" />
         <item
             android:id="@+id/drawer_agregar_corte_programado"
             android:title="Corte programado" />
@@ -31,7 +31,7 @@
                 android:title="Mis Cortes Programados" />
             <item
                 android:id="@+id/drawer_mis_puntos_interes"
-                android:title="Mis Puntos de Interes" />
+                android:title="Mis Puntos de Interés" />
         </menu>
     </item>
     <item android:title="Acciones">
@@ -50,7 +50,7 @@
                 android:title="Preferencias" />
             <item
                 android:id="@+id/drawer_cerrar_sesion"
-                android:title="Cerrar Sesion" />
+                android:title="Cerrar Sesión" />
         </menu>
     </item>
 </menu>

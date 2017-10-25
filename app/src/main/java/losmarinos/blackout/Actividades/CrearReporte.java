@@ -169,7 +169,7 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
 
                 if(marcador_posicion_reporte == null){
                     Aviso.hideProgressDialog(CrearReporte.this, progress_dialog);
-                    Aviso.showToast(CrearReporte.this, "Debe marcar una posicion en el mapa");
+                    Aviso.showToast(CrearReporte.this, "Debe marcar una posición en el mapa");
                     return;
                 }
 
@@ -182,7 +182,7 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
                 boolean correcto = Global.usuario_actual.actualizarReportes(CrearReporte.this);
                 if(!correcto){
                     Aviso.hideProgressDialog(CrearReporte.this, progress_dialog);
-                    Aviso.showToast(CrearReporte.this, "Error. Comprueba tu conexion a internet.");
+                    Aviso.showToast(CrearReporte.this, "Error. Compruebe su conexión a internet.");
                     return;
                 }
 
@@ -194,7 +194,7 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
                 }
                 if(cant_mismo_servicio_activos >= 2){
                     Aviso.hideProgressDialog(CrearReporte.this, progress_dialog);
-                    Aviso.showToast(CrearReporte.this, "No puedes tener mas de 2 reportes de un servicio activos a la vez");
+                    Aviso.showToast(CrearReporte.this, "No puedes tener más de 2 reportes de un mismo servicio activos a la vez");
                     return;
                 }
 

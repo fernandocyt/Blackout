@@ -45,10 +45,10 @@ public class MisPuntosInteres extends AppCompatActivity implements OnMapReadyCal
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle("Mis Puntos de Interes");
+        setTitle("Mis Puntos de Interés");
         setContentView(R.layout.activity_mis_puntos_de_interes);
 
-        progress_dialog = Aviso.showProgressDialog(this, "Cargando puntos de interes...");
+        progress_dialog = Aviso.showProgressDialog(this, "Cargando puntos de interés...");
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map_mis_puntos_de_interes);
@@ -93,7 +93,7 @@ public class MisPuntosInteres extends AppCompatActivity implements OnMapReadyCal
 
             map_mis_puntos_interes.addMarker(new MarkerOptions()
                     .position(pi_actual.getUbicacion())
-                    .title("PuntoInteres")
+                    .title("PuntoInterés")
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_punto_interes)));
 
             map_mis_puntos_interes.addCircle(new CircleOptions()

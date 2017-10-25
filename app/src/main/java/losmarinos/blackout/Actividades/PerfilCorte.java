@@ -144,9 +144,9 @@ public class PerfilCorte extends AppCompatActivity {
         }
 
         if(Global.usuario_actual.esCorteDeInteres(this.corte.getId())){
-            button_de_interes.setText("Desmarcar de interes");
+            button_de_interes.setText("Desmarcar de interés");
         }else{
-            button_de_interes.setText("Marcar de interes");
+            button_de_interes.setText("Marcar de interés");
         }
 
         if(Global.usuario_actual.getTipo() == Constantes.TIPOSUSUARIO.EMPRESA &&
@@ -253,7 +253,7 @@ public class PerfilCorte extends AppCompatActivity {
 
     public void marcarCorteDeInteres(View view){
 
-        progress_dialog = Aviso.showProgressDialog(this, "Actualizando corte de interes...");
+        progress_dialog = Aviso.showProgressDialog(this, "Actualizando corte de interés...");
 
         new Thread(new Runnable() {
             @Override
@@ -269,7 +269,7 @@ public class PerfilCorte extends AppCompatActivity {
                         if (ParserJSON.esError(resultado, mensaje_error)) {
                             Aviso.showToast(PerfilCorte.this, mensaje_error.toString());
                         } else {
-                            Aviso.showToast(PerfilCorte.this, "Corte de interes agregado");
+                            Aviso.showToast(PerfilCorte.this, "Corte de interés agregado");
                         }
                     } catch (Exception e) {
                         Aviso.showToast(PerfilCorte.this, "Error");
@@ -279,7 +279,7 @@ public class PerfilCorte extends AppCompatActivity {
                     try{
                         int id_corte_interes = Global.usuario_actual.getIdCorteInteres(corte.getId());
                         if(id_corte_interes == -1){
-                            Aviso.showToast(PerfilCorte.this, "No se pudo encontrar corte de interes");
+                            Aviso.showToast(PerfilCorte.this, "No se pudo encontrar corte de interés");
                             return;
                         }
 
@@ -288,7 +288,7 @@ public class PerfilCorte extends AppCompatActivity {
                         if(ParserJSON.esError(resultado, mensaje_error)){
                             Aviso.showToast(PerfilCorte.this, mensaje_error.toString());
                         } else {
-                            Aviso.showToast(PerfilCorte.this, "Corte de interes borrado");
+                            Aviso.showToast(PerfilCorte.this, "Corte de interés borrado");
                         }
                     }catch (Exception e){
                         Aviso.showToast(PerfilCorte.this, "Error");

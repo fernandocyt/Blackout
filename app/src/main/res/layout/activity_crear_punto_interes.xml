@@ -155,7 +155,7 @@
             android:id="@+id/btn_crear_punto_interes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Crear Punto de Interes"
+            android:text="Crear Punto de Interés"
             android:layout_gravity="center"
             android:onClick="crearPuntoInteres"
             tools:layout_editor_absoluteY="0dp"

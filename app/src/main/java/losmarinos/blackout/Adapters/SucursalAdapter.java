@@ -100,7 +100,7 @@ public class SucursalAdapter extends BaseAdapter implements ListAdapter {
                             });
                             Aviso.showToast(SucursalAdapter.actividad, "Sucursal borrada");
                         }else{
-                            Aviso.showToast(SucursalAdapter.actividad, "No se pudo borrar sucursal");
+                            Aviso.showToast(SucursalAdapter.actividad, "No se pudo borrar la sucursal");
                         }
                         Aviso.hideProgressDialog(SucursalAdapter.actividad, progress_dialog);
                     }

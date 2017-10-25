@@ -158,7 +158,7 @@ public class CrearPuntoInteres extends AppCompatActivity implements OnMapReadyCa
     public void crearPuntoInteres(View view)
     {
         if(this.marcador_posicion_punto_interes == null){
-            Toast.makeText(this, "Debe marcar una posicion en el mapa", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Debe marcar una posición en el mapa", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -180,7 +180,7 @@ public class CrearPuntoInteres extends AppCompatActivity implements OnMapReadyCa
         //PuntoInteres nuevo_punto_interes = new PuntoInteres(servicio, id_empresa, posicion, radio);
         //Global.usuario_actual.addPuntoInteres(nuevo_punto_interes);
 
-        progress_dialog = Aviso.showProgressDialog(this, "Creando punto de interes...");
+        progress_dialog = Aviso.showProgressDialog(this, "Creando punto de interés...");
 
         final Constantes.SERVICIO f_servicio = servicio;
         final int f_id_empresa = id_empresa;
@@ -200,7 +200,7 @@ public class CrearPuntoInteres extends AppCompatActivity implements OnMapReadyCa
                         Aviso.showToast(CrearPuntoInteres.this, mensaje_error.toString());
                     }else{
                         Aviso.hideProgressDialog(CrearPuntoInteres.this, progress_dialog);
-                        Aviso.showToast(CrearPuntoInteres.this, "Punto de interes creado exitosamente");
+                        Aviso.showToast(CrearPuntoInteres.this, "Punto de interés creado exitosamente");
                         Global.usuario_actual.actualizarPuntosInteres(CrearPuntoInteres.this);
                         radio_punto_interes = null;
                         marcador_posicion_punto_interes = null;

@@ -82,7 +82,7 @@ public class ConsultorGETAPI extends AsyncTask<Void, Long, String> {
             JSONObject error = new JSONObject();
             try{
                 error.put("error", "Timeout");
-                error.put("message", "Imposible establecer conexion.");
+                error.put("message", "Imposible establecer conexión.");
             }catch (JSONException jsone){}
 
             if(this.observador != null) {
