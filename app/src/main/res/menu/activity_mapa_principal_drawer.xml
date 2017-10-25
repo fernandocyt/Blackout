@@ -6,31 +6,38 @@
         android:title="FILTRAR MAPA" />
 
     <item android:title="Agregar">
-    <menu>
-        <item
-            android:id="@+id/drawer_crear_reporte"
-            android:title="Reporte" />
-        <item
-            android:id="@+id/drawer_agregar_punto_interes"
-            android:title="Punto de Interés" />
-        <item
-            android:id="@+id/drawer_agregar_corte_programado"
-            android:title="Corte programado" />
-        <item
-            android:id="@+id/drawer_agregar_sucursal"
-            android:title="Sucursal" />
-    </menu>
+        <menu>
+            <item
+                android:id="@+id/drawer_crear_reporte"
+                android:icon="@drawable/menu_icono_reporte"
+                android:title="Reporte"/>
+            <item
+                android:id="@+id/drawer_agregar_corte_programado"
+                android:icon="@drawable/menu_icono_corte_programado"
+                android:title="Corte programado" />
+            <item
+                android:id="@+id/drawer_agregar_punto_interes"
+                android:icon="@drawable/menu_icono_punto_interes"
+                android:title="Punto de Interés" />
+            <item
+                android:id="@+id/drawer_agregar_sucursal"
+                android:icon="@drawable/menu_icono_sucursal"
+                android:title="Sucursal" />
+        </menu>
     </item>
     <item android:title="Consultar">
         <menu>
             <item
                 android:id="@+id/drawer_mis_reportes"
+                android:icon="@drawable/menu_icono_reporte"
                 android:title="Mis Reportes" />
             <item
                 android:id="@+id/drawer_mis_cortes_programados"
+                android:icon="@drawable/menu_icono_corte_programado"
                 android:title="Mis Cortes Programados" />
             <item
                 android:id="@+id/drawer_mis_puntos_interes"
+                android:icon="@drawable/menu_icono_punto_interes"
                 android:title="Mis Puntos de Interés" />
         </menu>
     </item>
@@ -38,18 +45,23 @@
         <menu>
             <item
                 android:id="@+id/drawer_crear_empresa"
+                android:icon="@drawable/menu_icono_gestionar"
                 android:title="Gestionar Empresas" />
             <item
                 android:id="@+id/drawer_buscar_empresa"
+                android:icon="@drawable/menu_icono_buscar"
                 android:title="Buscar Empresa" />
             <item
                 android:id="@+id/drawer_estadisticas"
+                android:icon="@drawable/menu_icono_estadisticas"
                 android:title="Consultar Estadisticas" />
             <item
                 android:id="@+id/drawer_preferencias"
+                android:icon="@drawable/menu_icono_preferencias"
                 android:title="Preferencias" />
             <item
                 android:id="@+id/drawer_cerrar_sesion"
+                android:icon="@drawable/menu_icono_cerrar_sesion"
                 android:title="Cerrar Sesión" />
         </menu>
     </item>
