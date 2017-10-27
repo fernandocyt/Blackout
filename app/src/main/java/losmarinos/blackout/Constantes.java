@@ -22,6 +22,7 @@ public class Constantes {
     // MAPA
     public static final int STROKE_COLOR_CIRCLE = Color.TRANSPARENT;
     public static final int COLOR_CIRCLE = 0x220000FF;
+    public static final int COLOR_CIRCLE_ROJO = 0x30ff0000;
 
     // API
     public static final String LINK_API = "http://45.79.78.110/api/";

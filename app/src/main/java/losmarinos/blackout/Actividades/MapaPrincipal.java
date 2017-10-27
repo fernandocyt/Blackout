@@ -59,6 +59,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import static losmarinos.blackout.Constantes.COLOR_CIRCLE_ROJO;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_CORTES;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_CORTESINTERES_POR_USUARIO;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_EMPRESAS;
@@ -454,7 +455,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
                         .center(punto_actual.getUbicacion())
                         .radius(punto_actual.getRadio())
                         .strokeColor(Constantes.STROKE_COLOR_CIRCLE)
-                        .fillColor(0x30ff0000)
+                        .fillColor(COLOR_CIRCLE_ROJO)
                         .strokeWidth(5));
                 radios_puntos_interes.add(radio);
             }

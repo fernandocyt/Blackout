@@ -1,8 +1,10 @@
 package losmarinos.blackout.Actividades;
 
 import losmarinos.blackout.Aviso;
+import losmarinos.blackout.Calculos;
 import losmarinos.blackout.Global;
 import losmarinos.blackout.LocalDB;
+import losmarinos.blackout.Objetos.Corte;
 import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.ParserJSON;
 import losmarinos.blackout.R;
@@ -64,6 +66,8 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
     Spinner spinner_servicios;
     Spinner spinner_empresas;
 
+    List<Circle> radios_cortes_programados_iguales = new ArrayList<>();
+
     // Otros
     private LatLng posicion_gps = null;
 
@@ -88,6 +92,7 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
         this.spinner_servicios = (Spinner) findViewById(R.id.spn_servicios_crear_reporte);
         this.spinner_servicios.setOnItemSelectedListener(this);
         this.spinner_empresas = (Spinner) findViewById(R.id.spn_empresas_crear_reporte);
+        this.spinner_empresas.setOnItemSelectedListener(this);
 
         GPSTracker.addObserver(this);
 
@@ -135,9 +140,16 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-        String servicio = this.spinner_servicios.getSelectedItem().toString();
-
-        this.cargarSpinnerEmpresas(Constantes.stringToServicio(servicio));
+        Spinner spinner = (Spinner) parentView;
+        if(spinner.getId() == this.spinner_servicios.getId())
+        {
+            String servicio = this.spinner_servicios.getSelectedItem().toString();
+            this.cargarSpinnerEmpresas(Constantes.stringToServicio(servicio));
+        }
+        else if(spinner.getId() == this.spinner_empresas.getId())
+        {
+            this.cargarCortesProgramadosMismaEmpresaEnMapa();
+        }
     }
 
     @Override
@@ -150,6 +162,8 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
         map_crear_reporte = googleMap;
         map_crear_reporte.setOnMapLongClickListener(this);
         map_crear_reporte.animateCamera(CameraUpdateFactory.newLatLngZoom(Constantes.BSAS, 11.0f));
+
+        this.cargarCortesProgramadosMismaEmpresaEnMapa();
 
         if(posicion_gps != null)
         {
@@ -205,10 +219,15 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
                     id_empresa = Global.encontrarEmpresaPorNombre(nombre_empresa).getSubId();
                 }
 
-
                 int radio = seekbar_radio.getProgress();
                 if(radio < RADIO_MINIMO){
                     radio = RADIO_MINIMO;
+                }
+
+                if(!validarUbicacion(id_empresa, posicion, radio)){
+                    Aviso.hideProgressDialog(CrearReporte.this, progress_dialog);
+                    Aviso.showToast(CrearReporte.this, "Ubicación invalida. Existe un corte programado activo en la zona.");
+                    return;
                 }
 
                 final Constantes.SERVICIO f_servicio = servicio;
@@ -333,6 +352,80 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
         {
             this.actualizarMapaCrearReporte(this.posicion_gps);
             this.centrarMapaEnMarcador(view);
+        }
+    }
+
+    public boolean validarUbicacion(int id_empresa, LatLng ubicacion, double radio){
+        List<Corte> cortes = this.obtenerCortesProgramadosActivosMismaEmpresa(id_empresa);
+
+        // Para que no intersecte un corte programado de su mismo tipo
+        for(int i = 0; i < cortes.size(); i++){
+            Corte corte = cortes.get(i);
+
+            if(Calculos.hayInterseccion(ubicacion, radio, corte.getUbicacion(), corte.getRadio())){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public List<Corte> obtenerCortesProgramadosActivosMismaEmpresa(int id_empresa){
+        List<Corte> cortes = Global.cortes;
+        List<Corte> cortes_retornar = new ArrayList<>();
+
+        for(int i = 0; i < cortes.size(); i++){
+            Corte corte = cortes.get(i);
+            if(!corte.isProgramado())
+                continue;
+
+            if(corte.isResuelto())
+                continue;
+
+            Date actual = Calendar.getInstance().getTime();
+            if(corte.getFechaInicio() != null && corte.getFechaFin() != null){
+                if(!(actual.after(corte.getFechaInicio()) && actual.before(corte.getFechaFin()))){
+                    continue;
+                }
+            }else{
+                continue;
+            }
+
+            if(corte.getIdEmpresa() == id_empresa){
+                cortes_retornar.add(corte);
+            }
+        }
+        return cortes_retornar;
+    }
+
+    public void cargarCortesProgramadosMismaEmpresaEnMapa(){
+        if(map_crear_reporte != null){
+
+            String nombre_empresa = spinner_empresas.getSelectedItem().toString();
+            int id_empresa = -1;
+            if (!nombre_empresa.equals("No especificar")) {
+                id_empresa = Global.encontrarEmpresaPorNombre(nombre_empresa).getSubId();
+            }
+            if(id_empresa == -1)
+                return;
+
+
+            for(int i = 0; i < this.radios_cortes_programados_iguales.size(); i++){
+                this.radios_cortes_programados_iguales.get(i).remove();
+            }
+            this.radios_cortes_programados_iguales.clear();
+
+            List<Corte> cortes = obtenerCortesProgramadosActivosMismaEmpresa(id_empresa);
+            for(int i = 0; i < cortes.size(); i++){
+
+                Circle circulo = map_crear_reporte.addCircle(new CircleOptions()
+                        .center(cortes.get(i).getUbicacion())
+                        .radius(cortes.get(i).getRadio())
+                        .strokeColor(Constantes.STROKE_COLOR_CIRCLE)
+                        .fillColor(Constantes.COLOR_CIRCLE_ROJO)
+                        .strokeWidth(5));
+
+                this.radios_cortes_programados_iguales.add(circulo);
+            }
         }
     }
 }
