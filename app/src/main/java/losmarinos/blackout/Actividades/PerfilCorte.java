@@ -48,6 +48,7 @@ public class PerfilCorte extends AppCompatActivity {
     TextView textview_motivo;
     TextView textview_fecha_inicio;
     TextView textview_fecha_fin;
+    TextView textview_no_respuestas;
     EditText edittext_respuesta;
     Button button_de_interes;
     Button button_agregar_respuesta;
@@ -79,6 +80,7 @@ public class PerfilCorte extends AppCompatActivity {
         button_agregar_respuesta = (Button)findViewById(R.id.btn_agregar_respuesta_perfil_corte);
         button_borrar_respuesta = (Button)findViewById(R.id.btn_borrar_respuesta_perfil_corte);
         imageview_servicio = (ImageView)findViewById(R.id.img_perfil_corte);
+        textview_no_respuestas = (TextView)findViewById(R.id.txt_no_respuestas_perfil_corte);
 
         new Thread(new Runnable() {
             @Override
@@ -178,6 +180,12 @@ public class PerfilCorte extends AppCompatActivity {
     public void cargarListView(){
         List<Respuesta> respuestas_usuarios = new ArrayList<>(this.corte.getRespuestas());
         List<Respuesta> respuesta_empresa = new ArrayList<>();
+
+        if(respuestas_usuarios.size() == 0){
+            textview_no_respuestas.setVisibility(View.VISIBLE);
+        }else{
+            textview_no_respuestas.setVisibility(View.GONE);
+        }
 
         for(int i = 0; i < respuestas_usuarios.size(); i++) {
             if(respuestas_usuarios.get(i).getUsuario().getTipo() == Constantes.TIPOSUSUARIO.EMPRESA)

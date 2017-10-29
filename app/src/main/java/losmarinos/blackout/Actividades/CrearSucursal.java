@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +39,7 @@ import losmarinos.blackout.Objetos.Empresa;
 import losmarinos.blackout.ObservadorGPS;
 import losmarinos.blackout.ParserJSON;
 import losmarinos.blackout.R;
+import losmarinos.blackout.Validador;
 
 import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_CORTE_PROGRAMADO;
 import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_SUCURSAL;
@@ -93,6 +95,10 @@ public class CrearSucursal extends AppCompatActivity implements OnMapReadyCallba
             return;
         }
 
+        if (!Validador.validarCamposVacios(this, (LinearLayout) findViewById(R.id.lyt_crear_sucursal))) {
+            return;
+        }
+
         LatLng posicion = marcador_posicion_sucursal.getPosition();
 
         progress_dialog = Aviso.showProgressDialog(this, "Creando sucursal...");
@@ -141,17 +147,12 @@ public class CrearSucursal extends AppCompatActivity implements OnMapReadyCallba
         }
 
         if(this.marcador_posicion_sucursal == null) {
-
-            // Agrego marcador
             this.marcador_posicion_sucursal = map_crear_sucursal.addMarker(new MarkerOptions()
                     .position(posicion_marcador));
-
         }
         else
         {
-            // Si el marcador ya fue agregado y solo hay que actualizar posicion
             this.marcador_posicion_sucursal.setPosition(posicion_marcador);
-
         }
 
         try {

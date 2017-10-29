@@ -243,6 +243,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:maxLength="100"
                     android:hint="Escribir comentario..."/>
 
 
@@ -271,6 +272,16 @@
                     android:layout_marginRight="10dp"
                     android:onClick="borrarComentario"/>
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/txt_no_comentarios_perfil_empresa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textStyle="italic"
+                android:layout_margin="10dp"
+                android:visibility="gone"
+                android:text="(No hay comentarios en este perfil)" />
 
             <ListView
                 android:id="@+id/lst_comentario_perfil_empresa"

@@ -27,12 +27,21 @@
             android:layout_width="match_parent"
             android:layout_height="250dp" />
 
-
         <Switch
             android:id="@+id/switch_ver_historico_mis_reportes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Ver historico    " />
+
+        <TextView
+            android:id="@+id/txt_no_reportes_mis_reportes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textStyle="italic"
+            android:layout_margin="10dp"
+            android:visibility="gone"
+            android:text="(No tienes reportes para ver)"/>
 
         <ListView
             android:id="@+id/lst_reportes_mis_reportes"

@@ -3,9 +3,11 @@ package losmarinos.blackout.Actividades;
 import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -91,6 +93,13 @@ public class MisReportes extends AppCompatActivity implements OnMapReadyCallback
 
     public void cargarListView(){
         List<Reporte> reportes = this.obtenerReportesAMostrar();
+
+        TextView no_reportes = (TextView)findViewById(R.id.txt_no_reportes_mis_reportes);
+        if(reportes.size() == 0){
+            no_reportes.setVisibility(View.VISIBLE);
+        }else{
+            no_reportes.setVisibility(View.GONE);
+        }
 
         ReportesAdapter adapter = new ReportesAdapter(reportes, this, this);
         ListView mi_lista = (ListView)findViewById(R.id.lst_reportes_mis_reportes);

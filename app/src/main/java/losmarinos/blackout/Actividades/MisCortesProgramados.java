@@ -4,7 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -80,6 +82,14 @@ public class MisCortesProgramados extends AppCompatActivity implements OnMapRead
 
     public void cargarListView(){
         List<Corte> programados =  empresaActual.obtenerCortesProgramados();
+
+        TextView no_cortes = (TextView)findViewById(R.id.txt_no_cortes_mis_cortes_programados);
+        if(programados.size() == 0){
+            no_cortes.setVisibility(View.VISIBLE);
+        }else{
+            no_cortes.setVisibility(View.GONE);
+        }
+
         CorteProgramadoAdapter adapter = new CorteProgramadoAdapter(programados, this, this);
         ListView mi_lista = (ListView)findViewById(R.id.lst_cortes_mis_cortes_programados);
         mi_lista.setAdapter(adapter);

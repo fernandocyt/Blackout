@@ -3,7 +3,9 @@ package losmarinos.blackout.Actividades;
 import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -73,7 +75,16 @@ public class MisPuntosInteres extends AppCompatActivity implements OnMapReadyCal
     }
 
     public void cargarListView(){
-        PuntoInteresAdapter adapter = new PuntoInteresAdapter(Global.usuario_actual.getPuntosInteres(), this, this);
+        List<PuntoInteres> puntos = Global.usuario_actual.getPuntosInteres();
+
+        TextView no_puntos = (TextView)findViewById(R.id.txt_no_puntos_mis_puntos_de_interes);
+        if(puntos.size() == 0){
+            no_puntos.setVisibility(View.VISIBLE);
+        }else{
+            no_puntos.setVisibility(View.GONE);
+        }
+
+        PuntoInteresAdapter adapter = new PuntoInteresAdapter(puntos, this, this);
         ListView mi_lista = (ListView)findViewById(R.id.lst_puntos_mis_puntos_de_interes);
         mi_lista.setAdapter(adapter);
     }

@@ -89,10 +89,12 @@ public class ReportesAdapter extends BaseAdapter implements ListAdapter {
             textview_activo.setText("Resuelto");
             button_resolver.setVisibility(View.GONE);
             button_confirmar.setVisibility(View.GONE);
+            textview_confirmacion.setVisibility(View.GONE);
         }else{
             textview_activo.setText("Pendiente");
             button_resolver.setVisibility(View.VISIBLE);
             button_confirmar.setVisibility(View.VISIBLE);
+            textview_confirmacion.setVisibility(View.VISIBLE);
         }
 
         Date fecha_confirm = list.get(position).getFechaConfirmacion();

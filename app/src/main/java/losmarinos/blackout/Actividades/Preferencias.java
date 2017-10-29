@@ -33,7 +33,7 @@ public class Preferencias extends AppCompatActivity implements CompoundButton.On
     Switch switch_notificaciones;
     Switch switch_vibrar;
     Switch switch_sonar;
-    Switch switch_gps;
+    //Switch switch_gps;
 
     EditText edittext_nombre_usuario;
     EditText edittext_mail_usuario;
@@ -72,9 +72,9 @@ public class Preferencias extends AppCompatActivity implements CompoundButton.On
         switch_sonar.setChecked(Preferencias.notificaciones);
         switch_sonar.setOnCheckedChangeListener(this);
 
-        switch_gps = (Switch) findViewById(R.id.switch_gps_preferencias);
-        switch_gps.setChecked(Preferencias.notificaciones);
-        switch_gps.setOnCheckedChangeListener(this);
+        //switch_gps = (Switch) findViewById(R.id.switch_gps_preferencias);
+        //switch_gps.setChecked(Preferencias.notificaciones);
+        //switch_gps.setOnCheckedChangeListener(this);
 
         edittext_nombre_usuario = (EditText)findViewById(R.id.txt_nombre_preferencias);
         edittext_mail_usuario = (EditText)findViewById(R.id.txt_email_preferencias);
@@ -97,7 +97,7 @@ public class Preferencias extends AppCompatActivity implements CompoundButton.On
         Preferencias.notificaciones = switch_notificaciones.isChecked();
         Preferencias.vibrar = switch_vibrar.isChecked();
         Preferencias.sonar = switch_sonar.isChecked();
-        Preferencias.gps = switch_gps.isChecked();
+        //Preferencias.gps = switch_gps.isChecked();
     }
 
     public void guardarPreferencias(View view){

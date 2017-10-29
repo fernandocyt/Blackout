@@ -7,6 +7,7 @@
     tools:context="losmarinos.blackout.Actividades.CrearSucursal">
 
     <LinearLayout
+        android:id="@+id/lyt_crear_sucursal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"

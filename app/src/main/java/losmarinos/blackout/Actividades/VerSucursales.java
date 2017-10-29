@@ -3,7 +3,9 @@ package losmarinos.blackout.Actividades;
 import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -95,6 +97,15 @@ public class VerSucursales extends AppCompatActivity implements OnMapReadyCallba
     }
 
     public void cargarListView(){
+        List<Sucursal> suc = empresa.getSucursales();
+
+        TextView no_sucursales = (TextView)findViewById(R.id.txt_no_sucursales_ver_sucursales);
+        if(suc.size() == 0){
+            no_sucursales.setVisibility(View.VISIBLE);
+        }else{
+            no_sucursales.setVisibility(View.GONE);
+        }
+
         SucursalAdapter adapter = new SucursalAdapter(empresa, this, this);
         ListView mi_lista = (ListView)findViewById(R.id.lst_sucursal_ver_sucursales);
         mi_lista.setAdapter(adapter);

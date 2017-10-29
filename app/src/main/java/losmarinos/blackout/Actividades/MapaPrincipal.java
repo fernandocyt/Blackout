@@ -23,6 +23,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.opengl.Visibility;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -104,17 +105,19 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         button_actualizar = (ImageButton)findViewById(R.id.btn_actualizar_mapa_principal);
 
         // SERVICIO
-        if(!isMyServiceRunning(ServicioPeriodico.class))
+        if(!isMyServiceRunning(ServicioPeriodico.class)) {
             startService(new Intent(this, ServicioPeriodico.class));
+        }
 
         // GPS
-        if (!GPSTracker.checkPermission(this)) {
+        if (GPSTracker.checkPermission(this)) {
+            if(!isMyServiceRunning(GPSTracker.class)) {
+                startService(new Intent(this, GPSTracker.class));
+            }
+        }else{
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 0);
         }
 
-        if(!isMyServiceRunning(GPSTracker.class))
-            startService(new Intent(this, GPSTracker.class));
-        GPSTracker.addObserver(this);
 
         // MAPA
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -150,6 +153,15 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
             }
         }
         return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if (requestCode == 0 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if(!isMyServiceRunning(GPSTracker.class)) {
+                startService(new Intent(this, GPSTracker.class));
+            }
+        }
     }
 
     @Override
@@ -298,6 +310,8 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         mMap = googleMap;
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(Constantes.BSAS, 11.0f));
         mMap.setOnMarkerClickListener(this);
+
+        GPSTracker.addObserver(this);
 
         this.actualizarMapaPrincipal(null);
     }

@@ -41,6 +41,7 @@ public class PerfilEmpresa extends AppCompatActivity {
     TextView textview_servicio;
     TextView textview_email;
     TextView textview_pagina;
+    TextView textview_no_comentarios;
     EditText edittext_comentario;
     RatingBar rtb_calificacion;
     Button button_agregar_comentario;
@@ -75,7 +76,7 @@ public class PerfilEmpresa extends AppCompatActivity {
         button_agregar_comentario = (Button)findViewById(R.id.btn_agregar_comentario_perfil_empresa);
         button_borrar_comentario = (Button)findViewById(R.id.btn_borrar_comentario_perfil_empresa);
         button_modificar_perfil = (Button)findViewById(R.id.btn_modificar_perfil_empresa);
-
+        textview_no_comentarios = (TextView)findViewById(R.id.txt_no_comentarios_perfil_empresa);
 
         new Thread(new Runnable() {
             @Override
@@ -139,6 +140,12 @@ public class PerfilEmpresa extends AppCompatActivity {
 
     public void cargarListView(){
         List<Comentario> comentarios_usuarios = new ArrayList<>(this.empresa.getComentarios());
+
+        if(comentarios_usuarios.size() == 0){
+            textview_no_comentarios.setVisibility(View.VISIBLE);
+        }else{
+            textview_no_comentarios.setVisibility(View.GONE);
+        }
 
         ComentarioAdapter adapter = new ComentarioAdapter(comentarios_usuarios, this, this);
         ListView mi_lista_comentarios = (ListView)findViewById(R.id.lst_comentario_perfil_empresa);

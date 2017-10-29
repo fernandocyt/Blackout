@@ -48,6 +48,7 @@ import losmarinos.blackout.ParserJSON;
 import losmarinos.blackout.R;
 
 import static android.provider.Settings.System.DATE_FORMAT;
+import static losmarinos.blackout.Constantes.RADIO_MINIMO;
 import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_CORTE_PROGRAMADO;
 import static losmarinos.blackout.Constantes.TAGAPI.REGISTRAR_REPORTE;
 
@@ -96,7 +97,8 @@ public class CrearCorteProgramado extends AppCompatActivity implements OnMapRead
         this.textview_km_radio = (TextView)findViewById(R.id.lbl_km_radio_crear_corte_programado);
         this.seekbar_radio = (SeekBar)findViewById(R.id.skb_radio_crear_corte_programado);
         this.seekbar_radio.setOnSeekBarChangeListener(this);
-        this.seekbar_radio.setMax(500);
+        this.seekbar_radio.setMax(10000);
+        this.seekbar_radio.setProgress(RADIO_MINIMO);
 
         calendar = Calendar.getInstance();
         calendar_inicio = Calendar.getInstance();
@@ -147,7 +149,7 @@ public class CrearCorteProgramado extends AppCompatActivity implements OnMapRead
             }
         };
 
-        DateFormat df_fecha = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat df_fecha = new SimpleDateFormat("dd-MM-yyyy");
         DateFormat df_hora = new SimpleDateFormat("HH:mm");
 
         this.textview_fecha_inicio = (TextView)findViewById(R.id.lbl_fecha_inicio_crear_corte_programado);
@@ -227,6 +229,9 @@ public class CrearCorteProgramado extends AppCompatActivity implements OnMapRead
 
         LatLng posicion = marcador_posicion_corte_programado.getPosition();
         int radio = seekbar_radio.getProgress();
+        if(radio < RADIO_MINIMO){
+            radio = RADIO_MINIMO;
+        }
 
         StringBuilder fecha_inicio = new StringBuilder();
         StringBuilder fecha_fin = new StringBuilder();
@@ -281,7 +286,7 @@ public class CrearCorteProgramado extends AppCompatActivity implements OnMapRead
         Date date_fin = null;
 
         try {
-            df.setLenient(false);
+            //df.setLenient(false);
             date_inicio = df.parse(str_fecha_inicio);
         } catch (ParseException e) {
             Toast.makeText(this, "Error en el formato de fecha de inicio", Toast.LENGTH_LONG).show();
@@ -289,15 +294,26 @@ public class CrearCorteProgramado extends AppCompatActivity implements OnMapRead
         }
 
         try {
-            df.setLenient(false);
+            //df.setLenient(false);
             date_fin = df.parse(str_fecha_fin);
         } catch (ParseException e) {
             Toast.makeText(this, "Error en el formato de fecha de fin", Toast.LENGTH_LONG).show();
             return false;
         }
 
-        DateFormat df_base = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        if(date_inicio.after(date_fin)){
+            Toast.makeText(this, "Error: La fecha de inicio debe ser anterior a la de fin", Toast.LENGTH_LONG).show();
+            return false;
+        }
 
+        Date actual = Calendar.getInstance().getTime();
+        long diferencia_inicio = (date_inicio.getTime() - actual.getTime()) / 1000 / 60 / 60;
+        if(diferencia_inicio < 24){
+            Toast.makeText(this, "Error: La fecha de inicio debe ser por lo menos dentro de 24 horas", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        DateFormat df_base = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
         fecha_inicio.append(df_base.format(date_inicio));
         fecha_fin.append(df_base.format(date_fin));
@@ -312,6 +328,10 @@ public class CrearCorteProgramado extends AppCompatActivity implements OnMapRead
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if(progress < RADIO_MINIMO){
+            progress = RADIO_MINIMO;
+        }
+
         this.textview_km_radio.setText(String.valueOf(progress) + "m");
 
         if(this.radio_corte_programado != null)
@@ -343,10 +363,15 @@ public class CrearCorteProgramado extends AppCompatActivity implements OnMapRead
             this.marcador_posicion_corte_programado = map_crear_corte_programado.addMarker(new MarkerOptions()
                     .position(posicion_marcador));
 
+            int radio = seekbar_radio.getProgress();
+            if(radio < RADIO_MINIMO){
+                radio = RADIO_MINIMO;
+            }
+
             // Agrego radio
             this.radio_corte_programado = map_crear_corte_programado.addCircle(new CircleOptions()
                     .center(posicion_marcador)
-                    .radius(seekbar_radio.getProgress())
+                    .radius(radio)
                     .strokeColor(Constantes.STROKE_COLOR_CIRCLE)
                     .fillColor(Constantes.COLOR_CIRCLE)
                     .strokeWidth(5));
