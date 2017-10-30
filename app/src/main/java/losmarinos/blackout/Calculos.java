@@ -313,45 +313,6 @@ public class Calculos {
         return stat_empresas;
     }
 
-    public static List<valorEmpresa> porcentajeReportes(Constantes.SERVICIO servicio)
-    {
-        List<Reporte> reportes = Global.reportes;
-        List<Empresa> empresas = Global.empresas;
-        int total_reportes_servicio = 0;
-        List<valorEmpresa> stat_empresas = new ArrayList<>();
-
-        // Primero obtengo todas las empresas y las agrego a la lista a retornar
-        for(int i = 0; i < empresas.size(); i++){
-            if(servicio == null || empresas.get(i).getTipoServicio() == servicio) {
-                valorEmpresa nuevo_stat = new valorEmpresa();
-                nuevo_stat.id_empresa = empresas.get(i).getSubId();
-                nuevo_stat.valor = 0;
-                nuevo_stat.unidad = "%";
-                stat_empresas.add(nuevo_stat);
-            }
-        }
-
-        // Recorro todos los cortes
-        for(int i = 0; i < reportes.size(); i++){
-            if(servicio == null || reportes.get(i).getServicio() == servicio) {
-                total_reportes_servicio++;
-                int id_empresa = reportes.get(i).getIdEmpresa();
-                // Me fijo si estaba en la lista le sumo 1 al valor
-                for(int j = 0; j < stat_empresas.size(); j++){
-                    if(stat_empresas.get(j).id_empresa == id_empresa){
-                        stat_empresas.get(j).valor++;
-                    }
-                }
-            }
-        }
-
-        // Los valores, que hasta ahora eran la cantidad de cortes, los paso a %
-        for(int i = 0; i < stat_empresas.size(); i++){
-            stat_empresas.get(i).valor = stat_empresas.get(i).valor * 100 / total_reportes_servicio;
-        }
-        return stat_empresas;
-    }
-
     public static List<valorEmpresa> tiempoPromedioDeResolucionPorEmpresa(Constantes.SERVICIO servicio)
     {
         List<Corte> cortes = Global.cortes;
@@ -457,8 +418,10 @@ public class Calculos {
                 try {
                     List<Address> addresses = geocoder.getFromLocation(cortes.get(j).getUbicacion().latitude, cortes.get(j).getUbicacion().longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
                     barrio_elegido = addresses.get(0).getSubLocality() + " (" + addresses.get(0).getLocality() + ")";
-                    if(addresses.get(0).getSubLocality() == null){
+                    if(addresses.get(0).getSubLocality() == null && addresses.get(0).getLocality() == null) {
                         barrio_elegido = "no hay datos";
+                    }else if(addresses.get(0).getSubLocality() == null){
+                        barrio_elegido = addresses.get(0).getLocality();
                     }
                 }catch (Exception e){
                     barrio_elegido = "no hay datos";
