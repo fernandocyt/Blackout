@@ -72,8 +72,13 @@ public class ConsultarEstadisticas extends AppCompatActivity implements AdapterV
     {
         List<String> spinnerArray =  new ArrayList<String>();
         spinnerArray.add("Porcentaje de cortes total");
+        spinnerArray.add("Porcentaje de cortes programados");
+        spinnerArray.add("Porcentaje de reportes historico");
+        spinnerArray.add("Cantidad de cortes total");
         spinnerArray.add("Cantidad de cortes programados");
         spinnerArray.add("Tiempo promedio de resolución de cortes");
+        spinnerArray.add("Barrio de cortes mas frecuentes");
+        spinnerArray.add("Calificaciones Blackout");
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, spinnerArray);
@@ -120,10 +125,25 @@ public class ConsultarEstadisticas extends AppCompatActivity implements AdapterV
                 this.estadisticas = Calculos.porcentajeCortesTotal(this.servicio);
                 break;
             case 1:
-                this.estadisticas = Calculos.cantidadCortesProgramados(this.servicio);
+                this.estadisticas = Calculos.porcentajeCortesProgramados(this.servicio);
                 break;
             case 2:
+                this.estadisticas = Calculos.porcentajeReportes(this.servicio);
+                break;
+            case 3:
+                this.estadisticas = Calculos.cantidadCortesTotal(this.servicio);
+                break;
+            case 4:
+                this.estadisticas = Calculos.cantidadCortesProgramados(this.servicio);
+                break;
+            case 5:
                 this.estadisticas = Calculos.tiempoPromedioDeResolucionPorEmpresa(this.servicio);
+                break;
+            case 6:
+                this.estadisticas = Calculos.ocurrenciasBarrio(this, this.servicio);
+                break;
+            case 7:
+                this.estadisticas = Calculos.calificaciones(this.servicio);
                 break;
         }
 
