@@ -154,6 +154,11 @@
 
         </LinearLayout>
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
         <Button
             android:id="@+id/btn_crear_reporte"
             android:layout_width="wrap_content"
@@ -161,8 +166,8 @@
             android:text="Crear Reporte"
             android:layout_gravity="center"
             android:onClick="crearReporte"
-            tools:layout_editor_absoluteY="0dp"
-            tools:layout_editor_absoluteX="0dp" />
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="#FFFF"/>
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

@@ -153,9 +153,10 @@
                 android:id="@+id/btn_aplicar_filtrar_mapa_principal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Aplicar"
-                android:onClick="aplicarFiltros"/>
+                android:text="Aplicar filtros"
+                android:onClick="aplicarFiltros"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="#FFFF"/>
 
             <Space
                 android:layout_width="wrap_content"

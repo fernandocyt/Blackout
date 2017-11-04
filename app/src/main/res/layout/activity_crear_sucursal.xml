@@ -86,11 +86,9 @@
             android:ems="10" />
 
         <Space
-            android:layout_width="368dp"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            tools:layout_editor_absoluteY="0dp"
-            tools:layout_editor_absoluteX="8dp" />
+            android:layout_weight="1"/>
 
         <Button
             android:id="@+id/btn_crear_sucursal"
@@ -99,8 +97,8 @@
             android:text="Agregar sucursal"
             android:layout_gravity="center"
             android:onClick="crearSucursal"
-            tools:layout_editor_absoluteY="0dp"
-            tools:layout_editor_absoluteX="0dp" />
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="#FFFF" />
 
     </LinearLayout>
 

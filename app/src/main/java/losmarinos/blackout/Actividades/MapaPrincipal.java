@@ -191,27 +191,26 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         View header = navigationView.getHeaderView(0);
         TextView username_header = (TextView)header.findViewById(R.id.lbl_username_nav_header_mapa_principal);
         TextView mail_header = (TextView)header.findViewById(R.id.lbl_mail_nav_header_mapa_principal);
-
-        String tipo = "";
+        TextView tipo_header = (TextView)header.findViewById(R.id.lbl_tipo_nav_header_mapa_principal);
         if(Global.usuario_actual.getTipo() == Constantes.TIPOSUSUARIO.PERSONA) {
-            tipo = " (USUARIO)";
+            tipo_header.setText("Cliente");
             navigationView.getMenu().findItem(R.id.drawer_agregar_corte_programado).setVisible(false);
             navigationView.getMenu().findItem(R.id.drawer_agregar_sucursal).setVisible(false);
             navigationView.getMenu().findItem(R.id.drawer_mis_cortes_programados).setVisible(false);
             navigationView.getMenu().findItem(R.id.drawer_crear_empresa).setVisible(false);
         }else if(Global.usuario_actual.getTipo() == Constantes.TIPOSUSUARIO.EMPRESA){
-            tipo = " (EMPRESA)";
+            tipo_header.setText("Empresa");
             navigationView.getMenu().findItem(R.id.drawer_crear_reporte).setVisible(false);
             navigationView.getMenu().findItem(R.id.drawer_mis_reportes).setVisible(false);
             navigationView.getMenu().findItem(R.id.drawer_crear_empresa).setVisible(false);
         }else{
-            tipo = " (ADMIN)";
+            tipo_header.setText("Administrador");
             navigationView.getMenu().findItem(R.id.drawer_agregar_corte_programado).setVisible(false);
             navigationView.getMenu().findItem(R.id.drawer_agregar_sucursal).setVisible(false);
             navigationView.getMenu().findItem(R.id.drawer_mis_cortes_programados).setVisible(false);
         }
 
-        username_header.setText(Global.usuario_actual.getNombre() + tipo);
+        username_header.setText(Global.usuario_actual.getNombre());
         mail_header.setText(Global.usuario_actual.getMail());
 
     }

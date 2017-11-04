@@ -51,14 +51,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
                 android:text="Confirmar"
-                android:textSize="12sp"/>
+                android:textSize="12sp"
+                android:backgroundTint="#04B431"
+                android:textColor="#FFFF"/>
 
             <Button
                 android:id="@+id/btn_resolver_reporte_mis_objetos"
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
                 android:text="Resolver"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="#FFFF" />
 
         </LinearLayout>
     </LinearLayout>

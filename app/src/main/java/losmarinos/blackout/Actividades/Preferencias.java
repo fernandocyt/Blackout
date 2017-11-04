@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
 import losmarinos.blackout.Aviso;
 import losmarinos.blackout.ConsultorGETAPI;
 import losmarinos.blackout.ConsultorPOSTAPI;
@@ -21,6 +23,7 @@ import losmarinos.blackout.ParserJSON;
 import losmarinos.blackout.R;
 import losmarinos.blackout.Validador;
 
+import static losmarinos.blackout.Constantes.TAGAPI.ACTUALIZAR_USUARIO;
 import static losmarinos.blackout.Constantes.TAGAPI.DESHABILITAR_USUARIO;
 
 public class Preferencias extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener{
@@ -36,7 +39,7 @@ public class Preferencias extends AppCompatActivity implements CompoundButton.On
     //Switch switch_gps;
 
     EditText edittext_nombre_usuario;
-    EditText edittext_mail_usuario;
+    //EditText edittext_mail_usuario;
     EditText edittext_pass_usuario;
     EditText edittext_pass2_usuario;
 
@@ -77,12 +80,12 @@ public class Preferencias extends AppCompatActivity implements CompoundButton.On
         //switch_gps.setOnCheckedChangeListener(this);
 
         edittext_nombre_usuario = (EditText)findViewById(R.id.txt_nombre_preferencias);
-        edittext_mail_usuario = (EditText)findViewById(R.id.txt_email_preferencias);
+        //edittext_mail_usuario = (EditText)findViewById(R.id.txt_email_preferencias);
         edittext_pass_usuario = (EditText)findViewById(R.id.txt_password_preferencias);
         edittext_pass2_usuario = (EditText)findViewById(R.id.txt_password2_preferencias);
 
         edittext_nombre_usuario.setText(Global.usuario_actual.getNombre());
-        edittext_mail_usuario.setText(Global.usuario_actual.getMail());
+        //edittext_mail_usuario.setText(Global.usuario_actual.getMail());
         edittext_pass_usuario.setText(Global.usuario_actual.getPass());
         edittext_pass2_usuario.setText(Global.usuario_actual.getPass());
     }
@@ -111,19 +114,45 @@ public class Preferencias extends AppCompatActivity implements CompoundButton.On
     }
 
     public void modificarUsuario(View view){
-        String nombre = edittext_nombre_usuario.getText().toString();
-        String email = edittext_mail_usuario.getText().toString();
-        String pass = edittext_pass_usuario.getText().toString();
-        String pass2 = edittext_pass2_usuario.getText().toString();
+        final String nombre = edittext_nombre_usuario.getText().toString();
+        //String email = edittext_mail_usuario.getText().toString();
+        final String pass = edittext_pass_usuario.getText().toString();
+        final String pass2 = edittext_pass2_usuario.getText().toString();
 
         if(!Validador.validarCamposVacios(this, (LinearLayout)findViewById(R.id.lyt_preferencias)))
             return;
 
-        if(!Validador.validarMail(this, email))
-            return;
+        /*if(!Validador.validarMail(this, email))
+            return;*/
 
         if(!Validador.validarPasswords(this, pass, pass2))
             return;
+
+        progress_dialog = Aviso.showProgressDialog(this, "Modificando usuario");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int id = Global.usuario_actual.getIdUsuario();
+                try {
+                    JSONObject usuario = ParserJSON.crearJSONUsuario(nombre, Global.usuario_actual.getMail(), pass, pass);
+
+                    String respuesta = new ConsultorPOSTAPI("user/actualizar", Global.token_usuario_actual, usuario, ACTUALIZAR_USUARIO, null).execute().get();
+                    StringBuilder mensaje_error = new StringBuilder();
+                    if(ParserJSON.esError(respuesta, mensaje_error)){
+                        Aviso.hideProgressDialog(Preferencias.this, progress_dialog);
+                        Aviso.showToast(Preferencias.this, mensaje_error.toString());
+                    }else{
+                        Aviso.hideProgressDialog(Preferencias.this, progress_dialog);
+                        Aviso.showToast(Preferencias.this, "El usuario fue modificado exitosamente");
+                        MapaPrincipal.flag_cerrar_sesion = true;
+                        Preferencias.this.finish();
+                    }
+                }catch (Exception e){
+                    Aviso.hideProgressDialog(Preferencias.this, progress_dialog);
+                    Aviso.showToast(Preferencias.this, "Error");
+                }
+            }
+        }).start();
 
     }
 

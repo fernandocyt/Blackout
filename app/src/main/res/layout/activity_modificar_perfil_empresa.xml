@@ -162,7 +162,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Modificar"
-            android:onClick="modificarEmpresa"/>
+            android:onClick="modificarEmpresa"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="#FFFF"/>
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

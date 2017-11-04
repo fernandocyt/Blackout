@@ -206,14 +206,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:onClick="verSucursales"
-                    android:text="Ver sucursales" />
+                    android:text="Ver sucursales"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:textColor="#FFFF" />
 
                 <Button
                     android:id="@+id/btn_modificar_perfil_empresa"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:onClick="modificarPerfil"
-                    android:text="Modificar Perfil" />
+                    android:text="Modificar Perfil"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:textColor="#FFFF" />
 
             </LinearLayout>
 
@@ -262,7 +266,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:onClick="agregarComentario"
-                    android:text="Agregar" />
+                    android:text="Agregar"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:textColor="#FFFF" />
 
                 <Button
                     android:id="@+id/btn_borrar_comentario_perfil_empresa"
@@ -270,7 +276,9 @@
                     android:layout_height="wrap_content"
                     android:text="Borrar"
                     android:layout_marginRight="10dp"
-                    android:onClick="borrarComentario"/>
+                    android:onClick="borrarComentario"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:textColor="#FFFF"/>
             </LinearLayout>
 
             <TextView

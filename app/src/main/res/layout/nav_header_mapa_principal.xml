@@ -28,4 +28,12 @@
         android:layout_height="wrap_content"
         android:text="usuario@gmail.com" />
 
+    <TextView
+        android:id="@+id/lbl_tipo_nav_header_mapa_principal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cliente"
+        android:textStyle="italic"
+        android:textColor="#81DAF5"/>
+
 </LinearLayout>

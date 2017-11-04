@@ -40,7 +40,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:onClick="marcarCorteDeInteres"
-                android:text="Marcar de interés" />
+                android:text="Marcar de interés"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="#FFFF" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -234,7 +236,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
                         android:onClick="agregarRespuesta"
-                        android:text="Agregar" />
+                        android:text="Agregar"
+                        android:backgroundTint="@color/colorPrimary"
+                        android:textColor="#FFFF" />
 
                     <Button
                         android:id="@+id/btn_borrar_respuesta_perfil_corte"
@@ -242,7 +246,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
                         android:onClick="borrarRespuesta"
-                        android:text="Borrar" />
+                        android:text="Borrar"
+                        android:backgroundTint="@color/colorPrimary"
+                        android:textColor="#FFFF" />
                 </LinearLayout>
             </LinearLayout>
 
