@@ -98,7 +98,7 @@ public class Constantes {
             case LUZ: return "Luz";
             case GAS: return "Gas";
             case INTERNET: return "Internet";
-            case TELEFONO: return "Telefono";
+            case TELEFONO: return "Teléfono";
             case CABLE: return "Cable";
         }
         return null;
@@ -128,7 +128,7 @@ public class Constantes {
             return SERVICIO.GAS;
         }else if(servicio.equals("Internet")){
             return SERVICIO.INTERNET;
-        }else if(servicio.equals("Telefono")){
+        }else if(servicio.equals("Teléfono")){
             return SERVICIO.TELEFONO;
         }else if(servicio.equals("Cable")){
             return SERVICIO.CABLE;

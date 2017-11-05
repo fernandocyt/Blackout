@@ -2,16 +2,22 @@ package losmarinos.blackout.Adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.model.BitmapDescriptor;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -42,6 +48,7 @@ public class ReportesAdapter extends BaseAdapter implements ListAdapter {
     TextView textview_confirmacion;
     Button button_resolver;
     Button button_confirmar;
+    ImageView imagen_reporte;
 
     ProgressDialog progress_dialog;
 
@@ -84,6 +91,20 @@ public class ReportesAdapter extends BaseAdapter implements ListAdapter {
         textview_confirmacion = (TextView)view.findViewById(R.id.lbl_confirmacion_reporte_mis_objetos);
         button_resolver = (Button)view.findViewById(R.id.btn_resolver_reporte_mis_objetos);
         button_confirmar = (Button)view.findViewById(R.id.btn_confirmar_reporte_mis_objetos);
+
+        imagen_reporte = (ImageView)view.findViewById(R.id.img_reporte_mis_reportes);
+        Bitmap bm_servicio = null;
+        switch (list.get(position).getServicio()) {
+            case AGUA: bm_servicio = BitmapFactory.decodeResource(context.getResources(), R.drawable.icono_reporte_agua); break;
+            case LUZ: bm_servicio = BitmapFactory.decodeResource(context.getResources(), R.drawable.icono_reporte_luz); break;
+            case GAS: bm_servicio = BitmapFactory.decodeResource(context.getResources(), R.drawable.icono_reporte_gas); break;
+            case TELEFONO: bm_servicio = BitmapFactory.decodeResource(context.getResources(), R.drawable.icono_reporte_telefono); break;
+            case CABLE: bm_servicio = BitmapFactory.decodeResource(context.getResources(), R.drawable.icono_reporte_cable); break;
+            case INTERNET: bm_servicio = BitmapFactory.decodeResource(context.getResources(), R.drawable.icono_reporte_internet); break;
+        }
+        if(bm_servicio != null) {
+            imagen_reporte.setImageBitmap(bm_servicio);
+        }
 
         if(list.get(position).isResuelto()) {
             textview_activo.setText("Resuelto");

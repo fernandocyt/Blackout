@@ -151,11 +151,15 @@ public class Reporte implements Comparable<Reporte>{
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         String fecha = df.format(this.fecha);
 
+        if(this.servicio != null) {
+            texto = Constantes.servicioToString(this.servicio);
+        }
+
         Empresa emp = Global.encontrarEmpresaPorId(this.id_empresa);
         if(emp != null) {
-            texto = this.servicio + " - " + emp.getNombre() + " - " + fecha;
+            texto = texto + " - " + emp.getNombre() + " - " + fecha;
         }else{
-            texto = this.servicio + " - " + fecha;
+            texto = texto + " - " + fecha;
         }
 
         return texto;
