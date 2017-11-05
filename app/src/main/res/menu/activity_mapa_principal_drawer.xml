@@ -54,7 +54,7 @@
             <item
                 android:id="@+id/drawer_estadisticas"
                 android:icon="@drawable/menu_icono_estadisticas"
-                android:title="Consultar Estadisticas" />
+                android:title="Estadísticas" />
             <item
                 android:id="@+id/drawer_preferencias"
                 android:icon="@drawable/menu_icono_preferencias"

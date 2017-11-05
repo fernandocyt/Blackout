@@ -1,5 +1,6 @@
 package losmarinos.blackout.Actividades;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import losmarinos.blackout.Adapters.EmpresaAdapter;
 import losmarinos.blackout.Adapters.EstadisticaAdapter;
+import losmarinos.blackout.Aviso;
 import losmarinos.blackout.Calculos;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.Global;
@@ -30,9 +32,12 @@ public class ConsultarEstadisticas extends AppCompatActivity implements AdapterV
     List<Calculos.valorEmpresa> estadisticas = new ArrayList<>();
     Constantes.SERVICIO servicio = null;
 
+    ProgressDialog progress_dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Estadísticas");
         setContentView(R.layout.activity_consultar_estadisticas);
 
         spnServicios = (Spinner)findViewById(R.id.spn_servicios_consultar_estadisticas);
@@ -118,35 +123,50 @@ public class ConsultarEstadisticas extends AppCompatActivity implements AdapterV
     }
 
     public void actualizarEstadisticas(){
-        switch(spnEstadistica.getSelectedItemPosition())
-        {
-            case 0:
-                this.estadisticas = Calculos.porcentajeCortesTotal(this.servicio);
-                break;
-            case 1:
-                this.estadisticas = Calculos.porcentajeCortesProgramados(this.servicio);
-                break;
-            case 2:
-                this.estadisticas = Calculos.cantidadCortesTotal(this.servicio);
-                break;
-            case 3:
-                this.estadisticas = Calculos.cantidadCortesProgramados(this.servicio);
-                break;
-            case 4:
-                this.estadisticas = Calculos.tiempoPromedioDeResolucionPorEmpresa(this.servicio);
-                break;
-            case 5:
-                this.estadisticas = Calculos.ocurrenciasBarrio(this, this.servicio);
-                break;
-            case 6:
-                this.estadisticas = Calculos.calificaciones(this.servicio);
-                break;
-        }
+        progress_dialog = Aviso.showProgressDialog(this, "Generando estadisticas");
 
-        Calculos.valorEmpresa.ordenar = spnOrdenar.getSelectedItemPosition();
-        Collections.sort(this.estadisticas);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
 
-        this.cargarListView();
+                switch(spnEstadistica.getSelectedItemPosition())
+                {
+                    case 0:
+                        estadisticas = Calculos.porcentajeCortesTotal(servicio);
+                        break;
+                    case 1:
+                        estadisticas = Calculos.porcentajeCortesProgramados(servicio);
+                        break;
+                    case 2:
+                        estadisticas = Calculos.cantidadCortesTotal(servicio);
+                        break;
+                    case 3:
+                        estadisticas = Calculos.cantidadCortesProgramados(servicio);
+                        break;
+                    case 4:
+                        estadisticas = Calculos.tiempoPromedioDeResolucionPorEmpresa(servicio);
+                        break;
+                    case 5:
+                        estadisticas = Calculos.ocurrenciasBarrio(ConsultarEstadisticas.this, servicio);
+                        break;
+                    case 6:
+                        estadisticas = Calculos.calificaciones(servicio);
+                        break;
+                }
+
+                Calculos.valorEmpresa.ordenar = spnOrdenar.getSelectedItemPosition();
+                Collections.sort(estadisticas);
+
+                ConsultarEstadisticas.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        cargarListView();
+                    }
+                });
+
+                Aviso.hideProgressDialog(ConsultarEstadisticas.this, progress_dialog);
+            }
+        }).start();
     }
 
     public void irAPerfilEmpresa(int id_empresa){
