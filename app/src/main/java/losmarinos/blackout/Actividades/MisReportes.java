@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import losmarinos.blackout.Adapters.ReportesAdapter;
@@ -88,7 +89,7 @@ public class MisReportes extends AppCompatActivity implements OnMapReadyCallback
 
     public void centrarMapaEnPosicion(LatLng posicion)
     {
-        map_mis_reportes.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion, 13.0f));
+        map_mis_reportes.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion, 17.0f));
     }
 
     public void cargarListView(){
@@ -101,6 +102,7 @@ public class MisReportes extends AppCompatActivity implements OnMapReadyCallback
             no_reportes.setVisibility(View.GONE);
         }
 
+        Collections.sort(reportes);
         ReportesAdapter adapter = new ReportesAdapter(reportes, this, this);
         ListView mi_lista = (ListView)findViewById(R.id.lst_reportes_mis_reportes);
         mi_lista.setAdapter(adapter);

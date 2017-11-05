@@ -76,6 +76,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
                                                                 ObservadorGPS{
     GoogleMap mMap;
     ImageButton button_actualizar;
+    ImageButton button_centrar;
     Marker marcador_posicion_actual = null;
     Circle radio_reporte_seleccionado = null;
 
@@ -94,7 +95,6 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
     TextView textview_carga;
     List<String> textos_carga;
 
-
     public static boolean flag_cerrar_sesion = false;
 
     @Override
@@ -103,6 +103,7 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         setContentView(R.layout.activity_mapa_principal);
 
         button_actualizar = (ImageButton)findViewById(R.id.btn_actualizar_mapa_principal);
+        button_centrar = (ImageButton)findViewById(R.id.btn_centrar_mapa_principal);
 
         // SERVICIO
         if(!isMyServiceRunning(ServicioPeriodico.class)) {
@@ -324,6 +325,9 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
                         .title("Usuario")
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_ubicacion_usuario))
                         .zIndex(3));
+
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion, 13.0f));
+                button_centrar.setVisibility(View.VISIBLE);
             } else {
                 marcador_posicion_actual.setPosition(posicion);
             }

@@ -21,6 +21,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -65,6 +67,7 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
     SeekBar seekbar_radio;
     Spinner spinner_servicios;
     Spinner spinner_empresas;
+    ImageButton btn_centrar;
 
     List<Circle> radios_cortes_programados_iguales = new ArrayList<>();
 
@@ -83,6 +86,7 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map_crear_reporte);
         mapFragment.getMapAsync(this);
 
+        this.btn_centrar = (ImageButton)findViewById(R.id.btn_centrar_gps_crear_reporte);
         this.textview_km_radio = (TextView)findViewById(R.id.lbl_km_radio_crear_reporte);
         this.seekbar_radio = (SeekBar)findViewById(R.id.skb_radio_crear_reporte);
         this.seekbar_radio.setOnSeekBarChangeListener(this);
@@ -269,6 +273,8 @@ public class CrearReporte extends AppCompatActivity implements OnMapReadyCallbac
         {
             this.actualizarMapaCrearReporte(posicion);
         }
+
+        btn_centrar.setVisibility(View.VISIBLE);
     }
 
     @Override

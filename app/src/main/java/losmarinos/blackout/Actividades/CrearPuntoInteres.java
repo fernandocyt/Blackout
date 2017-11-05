@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -59,6 +60,7 @@ public class CrearPuntoInteres extends AppCompatActivity implements OnMapReadyCa
     SeekBar seekbar_radio;
     Spinner spinner_servicios;
     Spinner spinner_empresas;
+    ImageButton btn_centrar;
 
     // Otros
     private LatLng posicion_gps = null;
@@ -75,6 +77,7 @@ public class CrearPuntoInteres extends AppCompatActivity implements OnMapReadyCa
                 .findFragmentById(R.id.map_crear_punto_interes);
         mapFragment.getMapAsync(this);
 
+        this.btn_centrar = (ImageButton)findViewById(R.id.btn_centrar_gps_crear_punto_interes);
         this.textview_km_radio = (TextView)findViewById(R.id.lbl_km_radio_crear_punto_interes);
         this.seekbar_radio = (SeekBar)findViewById(R.id.skb_radio_crear_punto_interes);
         this.seekbar_radio.setOnSeekBarChangeListener(this);
@@ -225,6 +228,8 @@ public class CrearPuntoInteres extends AppCompatActivity implements OnMapReadyCa
         {
             this.actualizarMapaPuntoInteres(posicion);
         }
+
+        btn_centrar.setVisibility(View.VISIBLE);
     }
 
     @Override

@@ -65,11 +65,17 @@ public class GPSTracker extends Service implements LocationListener {
                             && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         return;
                     }
+                    Location ultima_conocida = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    ubicacion_actual = new LatLng(ultima_conocida.getLatitude(), ultima_conocida.getLongitude());
+
                     locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, null);
                     //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                 }
                 // If GPS enabled, get latitude/longitude using GPS Services
                 if (isGPSEnabled) {
+                    Location ultima_conocida = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    ubicacion_actual = new LatLng(ultima_conocida.getLatitude(), ultima_conocida.getLongitude());
+
                     locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null);
                     //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                 }

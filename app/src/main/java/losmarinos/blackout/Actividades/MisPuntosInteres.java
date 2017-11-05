@@ -71,7 +71,7 @@ public class MisPuntosInteres extends AppCompatActivity implements OnMapReadyCal
 
     public void centrarMapaEnPosicion(LatLng posicion)
     {
-        map_mis_puntos_interes.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion, 13.0f));
+        map_mis_puntos_interes.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion, 17.0f));
     }
 
     public void cargarListView(){

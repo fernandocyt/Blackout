@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.os.Handler;
 import android.os.IBinder;
@@ -33,6 +34,7 @@ import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_PUNTOSINTERES_POR_US
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_REPORTES;
 import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_REPORTES_POR_USUARIO;
 import static losmarinos.blackout.Constantes.TIEMPO_CHECKEO_SERVICIO;
+import static losmarinos.blackout.Constantes.TIEMPO_ENTRE_PEDIDOS;
 import static losmarinos.blackout.Constantes.TIEMPO_PEDIR_CONFIRMACION_REPORTES;
 import static losmarinos.blackout.Constantes.TIEMPO_RESOLVER_AUTOMATICAMENTE_REPORTES;
 
@@ -51,6 +53,7 @@ public class ServicioPeriodico extends Service implements Runnable, ObservadorAP
     public static List<CorteInteres> cortes_interes = null;
     public static List<Reporte> reportes = null;
 
+    public long ultimo_pedido_confirmacion = -1;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -289,18 +292,21 @@ public class ServicioPeriodico extends Service implements Runnable, ObservadorAP
             long dif_mins_conf_horas = (ahora.getTime() - fecha_conf.getTime()) / (60 * 1000);
 
             if(dif_mins_conf_horas > TIEMPO_PEDIR_CONFIRMACION_REPORTES &&
-                    dif_mins_conf_horas < TIEMPO_RESOLVER_AUTOMATICAMENTE_REPORTES)
+                    (ultimo_pedido_confirmacion == -1 || abs(dif_mins_conf_horas - ultimo_pedido_confirmacion) >= TIEMPO_ENTRE_PEDIDOS))
+                    //dif_mins_conf_horas < TIEMPO_RESOLVER_AUTOMATICAMENTE_REPORTES)
             {
+                ultimo_pedido_confirmacion = dif_mins_conf_horas;
+
                 String str_servicio = Constantes.servicioToString(reporte_actual.getServicio());
                 this.notificar("Confirma o resuelve tu reporte de " + str_servicio);
             }
-            else if (dif_mins_conf_horas > TIEMPO_RESOLVER_AUTOMATICAMENTE_REPORTES)
+            /*else if (dif_mins_conf_horas > TIEMPO_RESOLVER_AUTOMATICAMENTE_REPORTES)
             {
                 reporte_actual.resolver();
 
                 String str_servicio = Constantes.servicioToString(reporte_actual.getServicio());
                 this.notificar("Se resolvió el reporte de " + str_servicio);
-            }
+            }*/
         }
     }
 
@@ -320,6 +326,7 @@ public class ServicioPeriodico extends Service implements Runnable, ObservadorAP
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.mipmap.ic_launcher)
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher))
                 .setContentTitle("ATENCIÓN")
                 .setContentText(mensaje);
 
@@ -344,8 +351,12 @@ public class ServicioPeriodico extends Service implements Runnable, ObservadorAP
         Notification notification = mBuilder.build();
         //notification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
 
-        NotificationManager nm = (NotificationManager) this.context.getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.notify(1, notification);
+        try {
+            NotificationManager nm = (NotificationManager) this.context.getSystemService(Context.NOTIFICATION_SERVICE);
+            nm.notify(1, notification);
+        }catch (Exception e){
+            //int a  = 0;
+        }
     }
 
     @Override

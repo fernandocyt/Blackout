@@ -116,7 +116,8 @@
                     android:onClick="marcarMapaEnPosicionGPS"
                     app:srcCompat="@drawable/icono_centrar_usuario"
                     android:background="@android:color/transparent"
-                    android:layout_margin="5dp" />
+                    android:layout_margin="5dp"
+                    android:visibility="gone" />
 
             </LinearLayout>
         </RelativeLayout>

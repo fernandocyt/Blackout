@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import losmarinos.blackout.Calculos;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorGETAPI;
 import losmarinos.blackout.ConsultorPOSTAPI;
@@ -25,7 +26,7 @@ import static losmarinos.blackout.Constantes.TAGAPI.ACTUALIZAR_REPORTE_UPDATE_AT
  * Created by garci on 22/7/2017.
  */
 
-public class Reporte {
+public class Reporte implements Comparable<Reporte>{
     public static int proxima_id_reporte_global = 0;
 
     private int id;
@@ -38,6 +39,16 @@ public class Reporte {
     private Date fecha_confirmacion;
     private int resuelto;
     private boolean asociado;
+
+    @Override
+    public int compareTo(Reporte r) {
+        if (this.fecha.before(r.fecha)) {
+            return 1;
+        } else if (this.fecha.after(r.fecha)) {
+            return -1;
+        }
+        return 0;
+    }
 
     public Constantes.SERVICIO getServicio() {
         return servicio;
@@ -202,5 +213,6 @@ public class Reporte {
             return false;
         }
     }
+
 
 }

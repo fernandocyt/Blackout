@@ -18,6 +18,7 @@ public class Constantes {
     public static final int TIEMPO_CHECKEO_SERVICIO = 1000 * 30 * 1; //30 segundos
     public static final int TIEMPO_PEDIR_CONFIRMACION_REPORTES = 1440; // 1440 minutos (24hs)
     public static final int TIEMPO_RESOLVER_AUTOMATICAMENTE_REPORTES = 1500; // 1500 minutos (25hs)
+    public static final int TIEMPO_ENTRE_PEDIDOS = 10; // 10 minutos
 
     // MAPA
     public static final int STROKE_COLOR_CIRCLE = Color.TRANSPARENT;
