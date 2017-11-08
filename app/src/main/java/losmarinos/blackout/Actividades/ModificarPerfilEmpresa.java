@@ -1,5 +1,6 @@
 package losmarinos.blackout.Actividades;
 
+import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
+import losmarinos.blackout.Aviso;
 import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.Global;
 import losmarinos.blackout.Objetos.Empresa;
@@ -32,6 +34,8 @@ public class ModificarPerfilEmpresa extends AppCompatActivity {
     Button button_modificar;
 
     Empresa empresa;
+
+    ProgressDialog progress_dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,11 +64,11 @@ public class ModificarPerfilEmpresa extends AppCompatActivity {
     }
 
     public void modificarEmpresa(View view){
-        String nombre = textview_nombre.getText().toString();
-        String telefono = textview_telefono.getText().toString();
-        String direccion = textview_direccion.getText().toString();
-        String pagina = textview_pagina.getText().toString();
-        String email = textview_email.getText().toString();
+        final String nombre = textview_nombre.getText().toString();
+        final String telefono = textview_telefono.getText().toString();
+        final String direccion = textview_direccion.getText().toString();
+        final String pagina = textview_pagina.getText().toString();
+        final String email = textview_email.getText().toString();
 
         if(!Validador.validarCamposVacios(this, (LinearLayout)findViewById(R.id.lyt_modificar_perfil_empresa)))
             return;
@@ -72,24 +76,35 @@ public class ModificarPerfilEmpresa extends AppCompatActivity {
         if(!Validador.validarMail(this, email))
             return;
 
-        try{
-            JSONObject nuevo_rep = ParserJSON.crearJSONEmpresa(nombre, email, telefono, pagina, direccion);
+        progress_dialog = Aviso.showProgressDialog(ModificarPerfilEmpresa.this, "Modificando perfil de empresa");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    JSONObject nuevo_rep = ParserJSON.crearJSONEmpresa(nombre, email, telefono, pagina, direccion);
 
-            String resultado = new ConsultorPOSTAPI("empresa/" + String.valueOf(this.empresa.getSubId()) + "/actualizar", Global.token_usuario_actual, nuevo_rep, ACTUALIZAR_EMPRESA, null).execute().get();
-            StringBuilder mensaje_error = new StringBuilder();
-            if(ParserJSON.esError(resultado, mensaje_error)){
-                Toast.makeText(this, mensaje_error, Toast.LENGTH_LONG).show();
-            }else{
-                this.empresa.setNombre(nombre);
-                this.empresa.setTelefono(telefono);
-                this.empresa.setDireccion(direccion);
-                this.empresa.setPagina(pagina);
-                this.empresa.setMail(email);
+                    String resultado = new ConsultorPOSTAPI("empresa/" + String.valueOf(empresa.getSubId()) + "/actualizar", Global.token_usuario_actual, nuevo_rep, ACTUALIZAR_EMPRESA, null).execute().get();
+                    StringBuilder mensaje_error = new StringBuilder();
+                    if(ParserJSON.esError(resultado, mensaje_error)){
+                        if(mensaje_error.toString().equals("Error")){
+                            Aviso.showToast(ModificarPerfilEmpresa.this, "Error: Datos ingresados invalidos, revise ortografía y verifique email.");
+                        }else {
+                            Aviso.showToast(ModificarPerfilEmpresa.this, mensaje_error.toString());
+                        }
+                    }else{
+                        empresa.setNombre(nombre);
+                        empresa.setTelefono(telefono);
+                        empresa.setDireccion(direccion);
+                        empresa.setPagina(pagina);
+                        empresa.setMail(email);
+                    }
+                }catch (Exception e){
+                    Aviso.showToast(ModificarPerfilEmpresa.this, "Error");
+                }
+
+                Aviso.hideProgressDialog(ModificarPerfilEmpresa.this, progress_dialog);
+                ModificarPerfilEmpresa.this.finish();
             }
-        }catch (Exception e){
-            Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
-        }
-
-        this.finish();
+        }).start();
     }
 }

@@ -69,7 +69,11 @@ public class RegistrarUsuario extends AppCompatActivity {
                     StringBuilder msj_error = new StringBuilder();
                     if (ParserJSON.esError(respuesta, msj_error)) {
                         Aviso.hideProgressDialog(RegistrarUsuario.this, progress_dialog);
-                        Aviso.showToast(RegistrarUsuario.this, msj_error.toString());
+                        if(msj_error.toString().equals("Error")){
+                            Aviso.showToast(RegistrarUsuario.this, "Error: email utilizado por otro usuario.");
+                        }else{
+                            Aviso.showToast(RegistrarUsuario.this, msj_error.toString());
+                        }
                         return;
                     } else {
                         Aviso.hideProgressDialog(RegistrarUsuario.this, progress_dialog);

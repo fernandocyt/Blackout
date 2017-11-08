@@ -202,7 +202,11 @@ public class CrearEmpresa extends AppCompatActivity implements AdapterView.OnIte
 
                         StringBuilder msj_error = new StringBuilder();
                         if (ParserJSON.esError(respuesta, msj_error)) {
-                            Aviso.showToast(CrearEmpresa.this, msj_error.toString());
+                            if(msj_error.toString().equals("Error")){
+                                Aviso.showToast(CrearEmpresa.this, "Error: Datos ingresados invalidos, revise ortografía y verifique email.");
+                            }else {
+                                Aviso.showToast(CrearEmpresa.this, msj_error.toString());
+                            }
                             correcto = false;
                         } else {
                             Aviso.showToast(CrearEmpresa.this, "Empresa creada correctamente");
@@ -219,7 +223,11 @@ public class CrearEmpresa extends AppCompatActivity implements AdapterView.OnIte
 
                         StringBuilder msj_error = new StringBuilder();
                         if (ParserJSON.esError(respuesta, msj_error)) {
-                            Aviso.showToast(CrearEmpresa.this, msj_error.toString());
+                            if(msj_error.toString().equals("Error")){
+                                Aviso.showToast(CrearEmpresa.this, "Error: Datos ingresados invalidos, revise ortografía y verifique email.");
+                            }else {
+                                Aviso.showToast(CrearEmpresa.this, msj_error.toString());
+                            }
                             correcto = false;
                         } else {
                             Aviso.showToast(CrearEmpresa.this, "Empresa creada correctamente");
@@ -237,7 +245,11 @@ public class CrearEmpresa extends AppCompatActivity implements AdapterView.OnIte
 
                         StringBuilder msj_error = new StringBuilder();
                         if (ParserJSON.esError(respuesta, msj_error)) {
-                            Aviso.showToast(CrearEmpresa.this, msj_error.toString());
+                            if(msj_error.toString().equals("Error")){
+                                Aviso.showToast(CrearEmpresa.this, "Error: Datos ingresados invalidos, revise ortografía y verifique email.");
+                            }else {
+                                Aviso.showToast(CrearEmpresa.this, msj_error.toString());
+                            }
                             correcto = false;
                         } else {
                             Aviso.showToast(CrearEmpresa.this, "Usuario para empresa creado correctamente");

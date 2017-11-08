@@ -97,7 +97,7 @@ public class CrearCorteProgramado extends AppCompatActivity implements OnMapRead
         this.textview_km_radio = (TextView)findViewById(R.id.lbl_km_radio_crear_corte_programado);
         this.seekbar_radio = (SeekBar)findViewById(R.id.skb_radio_crear_corte_programado);
         this.seekbar_radio.setOnSeekBarChangeListener(this);
-        this.seekbar_radio.setMax(10000);
+        this.seekbar_radio.setMax(5000);
         this.seekbar_radio.setProgress(RADIO_MINIMO);
 
         calendar = Calendar.getInstance();

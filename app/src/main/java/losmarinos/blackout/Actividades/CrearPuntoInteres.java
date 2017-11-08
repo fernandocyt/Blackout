@@ -81,7 +81,7 @@ public class CrearPuntoInteres extends AppCompatActivity implements OnMapReadyCa
         this.textview_km_radio = (TextView)findViewById(R.id.lbl_km_radio_crear_punto_interes);
         this.seekbar_radio = (SeekBar)findViewById(R.id.skb_radio_crear_punto_interes);
         this.seekbar_radio.setOnSeekBarChangeListener(this);
-        this.seekbar_radio.setMax(10000);
+        this.seekbar_radio.setMax(3000);
         this.seekbar_radio.setProgress(RADIO_MINIMO);
         this.spinner_servicios = (Spinner) findViewById(R.id.spn_servicios_crear_punto_interes);
         this.spinner_servicios.setOnItemSelectedListener(this);

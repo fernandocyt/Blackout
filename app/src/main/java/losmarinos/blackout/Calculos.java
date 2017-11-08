@@ -55,8 +55,8 @@ public class Calculos {
                     }
                     break;
                 case 2:
-                    String emp1 = Global.encontrarEmpresaPorId(this.id_empresa).getNombre();
-                    String emp2 = Global.encontrarEmpresaPorId(v.id_empresa).getNombre();
+                    String emp1 = Global.encontrarEmpresaPorId(this.id_empresa).getNombre().toLowerCase();
+                    String emp2 = Global.encontrarEmpresaPorId(v.id_empresa).getNombre().toLowerCase();
                     int comp = emp1.compareTo(emp2);
                     if(comp != 0) {
                         return comp;

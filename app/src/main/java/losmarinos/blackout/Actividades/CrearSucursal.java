@@ -117,7 +117,11 @@ public class CrearSucursal extends AppCompatActivity implements OnMapReadyCallba
                     StringBuilder mensaje_error = new StringBuilder();
                     if(ParserJSON.esError(resultado, mensaje_error)){
                         Aviso.hideProgressDialog(CrearSucursal.this, progress_dialog);
-                        Aviso.showToast(CrearSucursal.this, mensaje_error.toString());
+                        if(mensaje_error.toString().equals("Error")){
+                            Aviso.showToast(CrearSucursal.this, "Error: Datos ingresados invalidos, revise ortografía.");
+                        }else {
+                            Aviso.showToast(CrearSucursal.this, mensaje_error.toString());
+                        }
                     }else{
                         Aviso.hideProgressDialog(CrearSucursal.this, progress_dialog);
                         Aviso.showToast(CrearSucursal.this, "Sucursal creada exitosamente");

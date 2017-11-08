@@ -13,6 +13,7 @@ import android.widget.Switch;
 import java.util.ArrayList;
 import java.util.List;
 
+import losmarinos.blackout.Aviso;
 import losmarinos.blackout.Constantes;
 import losmarinos.blackout.ConsultorPOSTAPI;
 import losmarinos.blackout.Global;
@@ -66,7 +67,15 @@ public class FiltrarMapaPrincipal extends AppCompatActivity
 
         switch_sucursales = (Switch) findViewById(R.id.switch_sucursales_filtrar_mapa_principal);
         switch_sucursales.setChecked(FiltrarMapaPrincipal.mostrar_sucursales);
-        switch_sucursales.setOnCheckedChangeListener(this);
+        switch_sucursales.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(spinner_empresas.getSelectedItemPosition() == 0 && b == true){
+                    switch_sucursales.setChecked(false);
+                    Aviso.showToast(FiltrarMapaPrincipal.this, "Debe seleccionar una empresa para ver sus sucursales");
+                }
+            }
+        });
 
         switch_cortes_programados = (Switch) findViewById(R.id.switch_cortes_programados_filtrar_mapa_principal);
         switch_cortes_programados.setChecked(FiltrarMapaPrincipal.mostrar_cortes_programados);
@@ -161,9 +170,6 @@ public class FiltrarMapaPrincipal extends AppCompatActivity
         else if(spinner.getId() == this.spinner_empresas.getId()) {
             if (this.spinner_empresas.getSelectedItemPosition() == 0) {
                 this.switch_sucursales.setChecked(false);
-                this.switch_sucursales.setVisibility(View.GONE);
-            } else {
-                this.switch_sucursales.setVisibility(View.VISIBLE);
             }
         }
 

@@ -8,10 +8,12 @@
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="vertical"
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -152,20 +154,24 @@
 
         </LinearLayout>
 
-        <Space
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="bottom">
 
-        <Button
-            android:id="@+id/btn_crear_punto_interes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Crear Punto de Interés"
-            android:layout_gravity="center"
-            android:onClick="crearPuntoInteres"
-            android:backgroundTint="@color/colorPrimary"
-            android:textColor="#FFFF" />
+            <Button
+                android:id="@+id/btn_crear_punto_interes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Crear Punto de Interés"
+                android:layout_gravity="center"
+                android:onClick="crearPuntoInteres"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="#FFFF"
+                android:layout_marginBottom="10dp" />
+        </LinearLayout>
 
     </LinearLayout>
 

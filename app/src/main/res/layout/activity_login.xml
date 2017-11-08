@@ -58,7 +58,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:onClick="loguearUsuario"
-            android:text="Ingresar" />
+            android:text="Ingresar"
+            android:backgroundTint="#FFFF"
+            android:textColor="@color/colorPrimary" />
 
         <TextView
             android:id="@+id/lbl_registrar_login"

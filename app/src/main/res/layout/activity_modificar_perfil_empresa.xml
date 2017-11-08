@@ -9,16 +9,17 @@
     <LinearLayout
         android:id="@+id/lyt_modificar_perfil_empresa"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
+        android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
-        tools:layout_constraintTop_creator="1">
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center">
 
         <TableLayout
             android:layout_width="match_parent"
@@ -164,7 +165,8 @@
             android:text="Modificar"
             android:onClick="modificarEmpresa"
             android:backgroundTint="@color/colorPrimary"
-            android:textColor="#FFFF"/>
+            android:textColor="#FFFF"
+            android:layout_marginBottom="15dp"/>
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
