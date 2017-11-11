@@ -93,7 +93,11 @@ public class Login extends AppCompatActivity {
                     StringBuilder msg_error = new StringBuilder();
                     if(ParserJSON.esError(respuesta, msg_error)){
                         Aviso.hideProgressDialog(Login.this, dialog);
-                        Aviso.showToast(Login.this, msg_error.toString());
+                        if(msg_error.toString().equals("The user credentials were incorrect.")){
+                            Aviso.showToast(Login.this, "El usuario no existe");
+                        }else {
+                            Aviso.showToast(Login.this, msg_error.toString());
+                        }
                     }else{
                         String access_token = ParserJSON.obtenerAccessToken(respuesta);
                         if(access_token == null){

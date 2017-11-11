@@ -195,17 +195,20 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         TextView tipo_header = (TextView)header.findViewById(R.id.lbl_tipo_nav_header_mapa_principal);
         if(Global.usuario_actual.getTipo() == Constantes.TIPOSUSUARIO.PERSONA) {
             tipo_header.setText("Cliente");
+            tipo_header.setVisibility(View.GONE);
             navigationView.getMenu().findItem(R.id.drawer_agregar_corte_programado).setVisible(false);
             navigationView.getMenu().findItem(R.id.drawer_agregar_sucursal).setVisible(false);
             navigationView.getMenu().findItem(R.id.drawer_mis_cortes_programados).setVisible(false);
             navigationView.getMenu().findItem(R.id.drawer_crear_empresa).setVisible(false);
         }else if(Global.usuario_actual.getTipo() == Constantes.TIPOSUSUARIO.EMPRESA){
             tipo_header.setText("Empresa");
+            tipo_header.setVisibility(View.VISIBLE);
             navigationView.getMenu().findItem(R.id.drawer_crear_reporte).setVisible(false);
             navigationView.getMenu().findItem(R.id.drawer_mis_reportes).setVisible(false);
             navigationView.getMenu().findItem(R.id.drawer_crear_empresa).setVisible(false);
         }else{
             tipo_header.setText("Administrador");
+            tipo_header.setVisibility(View.VISIBLE);
             navigationView.getMenu().findItem(R.id.drawer_agregar_corte_programado).setVisible(false);
             navigationView.getMenu().findItem(R.id.drawer_agregar_sucursal).setVisible(false);
             navigationView.getMenu().findItem(R.id.drawer_mis_cortes_programados).setVisible(false);
@@ -338,6 +341,11 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
     public boolean onMarkerClick(Marker marker) {
         marker.showInfoWindow();
 
+        if(this.radio_reporte_seleccionado != null){
+            this.radio_reporte_seleccionado.remove();
+            this.radio_reporte_seleccionado = null;
+        }
+
         if(marker.getTitle().equals("Corte"))
         {
             Corte corte_seleccionado = (Corte)marker.getTag();
@@ -354,10 +362,6 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
         }
         else if(marker.getTitle().equals("Reporte"))
         {
-            if(this.radio_reporte_seleccionado != null){
-                this.radio_reporte_seleccionado.remove();
-            }
-
             Reporte rep_actual = (Reporte)marker.getTag();
             this.radio_reporte_seleccionado = mMap.addCircle(new CircleOptions()
                     .center(rep_actual.getUbicacion())
@@ -543,6 +547,11 @@ public class MapaPrincipal extends AppCompatActivity implements NavigationView.O
 
     public void cargarReportesEnMapa()
     {
+        if(this.radio_reporte_seleccionado != null){
+            this.radio_reporte_seleccionado.remove();
+            this.radio_reporte_seleccionado = null;
+        }
+
         if(!FiltrarMapaPrincipal.mostrar_reportes) {
             vaciarListaMarcadores(marcadores_reportes);
             this.terminoCarga();

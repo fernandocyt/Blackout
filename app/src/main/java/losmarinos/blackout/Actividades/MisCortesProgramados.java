@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import losmarinos.blackout.Adapters.CorteProgramadoAdapter;
@@ -90,6 +91,7 @@ public class MisCortesProgramados extends AppCompatActivity implements OnMapRead
             no_cortes.setVisibility(View.GONE);
         }
 
+        Collections.sort(programados);
         CorteProgramadoAdapter adapter = new CorteProgramadoAdapter(programados, this, this);
         ListView mi_lista = (ListView)findViewById(R.id.lst_cortes_mis_cortes_programados);
         mi_lista.setAdapter(adapter);

@@ -28,7 +28,7 @@ import static losmarinos.blackout.Constantes.TAGAPI.OBTENER_RESPUESTAS_POR_CORTE
  * Created by garci on 23/7/2017.
  */
 
-public class Corte{
+public class Corte implements Comparable<Corte>{
     public static int proxima_id_corte_global = 0;
 
     private int id;
@@ -43,6 +43,22 @@ public class Corte{
     private int programado;
     private List<Respuesta> respuestas;
     private List<Reporte> reportes;
+
+
+    public int compareTo(Corte c) {
+        if (this.resuelto > c.resuelto) {
+            return 1;
+        } else if (this.resuelto < c.resuelto) {
+            return -1;
+        }else if(this.resuelto == c.resuelto){
+            if(this.fecha_inicio.before(c.fecha_inicio)){
+                return 1;
+            }else{
+                return -1;
+            }
+        }
+        return 0;
+    }
 
     public Constantes.SERVICIO getServicio() {
         return servicio;

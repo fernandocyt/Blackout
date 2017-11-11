@@ -167,10 +167,9 @@ public class FiltrarMapaPrincipal extends AppCompatActivity
             String servicio = this.spinner_servicios.getSelectedItem().toString();
             this.cargarSpinnerEmpresas(Constantes.stringToServicio(servicio));
         }
-        else if(spinner.getId() == this.spinner_empresas.getId()) {
-            if (this.spinner_empresas.getSelectedItemPosition() == 0) {
-                this.switch_sucursales.setChecked(false);
-            }
+
+        if (this.spinner_empresas.getSelectedItemPosition() == 0) {
+            this.switch_sucursales.setChecked(false);
         }
 
         this.spinner_presionado = false;
